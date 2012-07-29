@@ -1,0 +1,75 @@
+<?php
+/**
+ * Created V/20/07/2012
+ * Updated S/21/07/2012
+ * Version 3
+ *
+ * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * https://redmine.luigifab.info/projects/magento/wiki/modules
+ *
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
+ */
+
+$data = $this->helper('modules')->getModulesList();
+?>
+
+<?php foreach ($data as $codepool => $modules): ?>
+	<h4 style="margin:0.6em 0 0.5em;"><?php echo $codepool ?></h4>
+	<table>
+		<thead>
+			<tr>
+				<th colspan="2" style="text-align:center; padding-bottom:2px;"><?php echo $this->__('Module name') ?></th>
+				<th colspan="2" style="text-align:center; padding-bottom:2px;"><?php echo $this->__('Version') ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($modules as $module):
+				$check = $this->helper('modules')->checkModuleVersion($module['name'], $module['update']);
+				$module['name'] = str_replace('_', '/', $module['name']);
+			?>
+				<?php if (is_array($check) && !empty($check)): ?>
+					<?php if (version_compare($check['version'], $module['version'], '>')): ?>
+						<tr style="color:blue;">
+							<td>
+								<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-add.png') ?>" width="16" height="16" alt="<?php echo $this->__('Need update') ?>" title="<?php echo $this->__('Need update') ?>" />
+							</td>
+							<td style="padding:0 5px;">
+								<a href="<?php echo $check['url'] ?>" onclick="window.open(this.href); return false;" style="color:blue;"><?php echo $module['name'] ?></a>
+							</td>
+							<td><?php echo $module['version'] ?></td>
+							<td>» <?php echo $check['version'] ?></td>
+						</tr>
+					<?php else: ?>
+						<tr style="color:green;">
+							<td>
+								<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-accept.png') ?>" width="16" height="16" alt="<?php echo $this->__('Up to date') ?>" />
+							</td>
+							<td style="padding:0 5px;">
+								<a href="<?php echo $check['url'] ?>" onclick="window.open(this.href); return false;" style="color:green;"><?php echo $module['name'] ?></a>
+							</td>
+							<td><?php echo $module['version'] ?></td>
+							<td></td>
+						</tr>
+					<?php endif ?>
+				<?php else: ?>
+					<tr>
+						<td>
+							<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-blank.png') ?>" width="16" height="16" alt="<?php echo $this->__('N/A') ?>" />
+						</td>
+						<td style="padding:0 5px;"><?php echo $module['name'] ?></td>
+						<td><?php echo $module['version'] ?></td>
+						<td></td>
+					</tr>
+				<?php endif ?>
+			<?php endforeach ?>
+		</tbody>
+	</table>
+<?php endforeach ?>
