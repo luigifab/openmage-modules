@@ -1,18 +1,19 @@
 <?xml version="1.0"?>
 <package>
     <name>Luigifab_Modules</name>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <stability>stable</stability>
     <license uri="http://www.opensource.org/licenses/GPL-2.0">GPL</license>
     <channel>luigifab</channel>
     <extends/>
     <summary>Show modules list and status in Magento backend.</summary>
     <description>Show modules list and status in Magento backend.</description>
-    <notes>- Show modules list and status in Magento backend</notes>
+    <notes>- Add detection of beta version&#xD;
+- Deactivation of block caching</notes>
     <authors><author><name>Fabrice Creuzot</name><user>luigifab</user><email>code@luigifab.info</email></author></authors>
-    <date>2012-07-28</date>
-    <time>08:39:04</time>
-    <contents><target name="magecommunity"><dir name="Luigifab"><dir name="Modules"><dir name="Block"><file name="List.php" hash="fb6a2fb17ed0d54bdd54b23fe62856d0"/></dir><dir name="Helper"><file name="Data.php" hash="13c07c7618634682d3afeca6bb9036f7"/></dir><file name="changelog" hash="c87a8dcbdcaa3a045949472aedf22c4c"/><dir name="etc"><file name="adminhtml.xml" hash="503f65f4a91c87e9227d7e1725e6782c"/><file name="config.xml" hash="36a2f3d4a1247452487d141c6435232a"/><file name="system.xml" hash="7363e2aa7874011113a89c45d7cc1d07"/></dir><file name="license" hash="b819c62bf1b7f2d249241db9a4ab3c99"/><file name="readme" hash="1b43a42f73bcd76f9d7bbaa5d34b0cec"/></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="luigifab"><dir name="modules"><file name="list.phtml" hash="1d15f2a5fba54db0af96f63a1c751dd3"/></dir></dir></dir></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><dir name="luigifab"><dir name="modules"><file name="silk-accept.png" hash="9de0030539ce57617a603809879ff3b9"/><file name="silk-add.png" hash="b1c7645c74e754e633d49e93ba9b214d"/><file name="silk-blank.png" hash="778e071551214a270aaa216db3a47d96"/></dir></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Luigifab_Modules.xml" hash="f947f1e25fa076ecf6ab4ef909d30e32"/></dir></target><target name="magelocale"><dir name="fr_FR"><file name="Luigifab_Modules.csv" hash="c92343ae5b0dd99ae74b0584442adc41"/></dir></target></contents>
+    <date>2012-10-14</date>
+    <time>17:26:52</time>
+    <contents><target name="magecommunity"><dir name="Luigifab"><dir name="Modules"><dir name="Block"><file name="List.php" hash="283aefbbe78efb0df96e370fb4bf7e2d"/><file name="List.php.~1~" hash="2f9a6d528c3415e17791e9c112bb3bc6"/></dir><dir name="Helper"><file name="Data.php" hash="078ac921bd8bae53e69b9dcae37b7a53"/><file name="Data.php.~1~" hash="efebe06c59e76c62560577f6c8731d12"/></dir><file name="changelog" hash="207f721818e84d991d2373d583872597"/><dir name="etc"><file name="adminhtml.xml" hash="503f65f4a91c87e9227d7e1725e6782c"/><file name="config.xml" hash="63bc5918fce167c295626f681eba87cf"/><file name="config.xml.~1~" hash="1c294732729cd704059bf8fb869ba316"/><file name="system.xml" hash="7363e2aa7874011113a89c45d7cc1d07"/></dir><file name="license" hash="b819c62bf1b7f2d249241db9a4ab3c99"/><file name="readme" hash="1b43a42f73bcd76f9d7bbaa5d34b0cec"/></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="luigifab"><dir name="modules"><file name="list.phtml" hash="dfec60c007ed5c35b2c5b320df05353f"/><file name="list.phtml.~1~" hash="e49fb41ace3990a8400413c162ae21dc"/></dir></dir></dir></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><dir name="luigifab"><dir name="modules"><file name="silk-accept.png" hash="9de0030539ce57617a603809879ff3b9"/><file name="silk-add.png" hash="b1c7645c74e754e633d49e93ba9b214d"/><file name="silk-blank.png" hash="778e071551214a270aaa216db3a47d96"/><file name="silk-warning.png" hash="c847e1076da70df83ef5284622b82a74"/></dir></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Luigifab_Modules.xml" hash="7ed0c300cd23c615d09f0b02a893177a"/></dir></target><target name="magelocale"><dir name="fr_FR"><file name="Luigifab_Modules.csv" hash="5b36ba98b455f2e7328b8b10fc8f272e"/></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.2.0</min><max>5.9.9</max></php></required></dependencies>
 </package>

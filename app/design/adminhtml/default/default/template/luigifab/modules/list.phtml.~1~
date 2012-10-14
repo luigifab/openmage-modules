@@ -2,7 +2,7 @@
 /**
  * Created V/20/07/2012
  * Updated D/14/10/2012
- * Version 5
+ * Version 4
  *
  * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -27,7 +27,7 @@ $data = $this->helper('modules')->getModulesList();
 		<thead>
 			<tr>
 				<th colspan="2" style="text-align:center; padding-bottom:2px;"><?php echo $this->__('Module name') ?></th>
-				<th colspan="2" style="text-align:left; padding-bottom:2px;"><?php echo $this->__('Version') ?></th>
+				<th colspan="2" style="text-align:left; padding-bottom:2px;"><?php echo $this->__('currentVersion') ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,29 +35,55 @@ $data = $this->helper('modules')->getModulesList();
 				<?php if (is_string($module['lastVersion'])): ?>
 					<?php if (version_compare($module['lastVersion'], $module['currentVersion'], '>')): // module à mettre à jour ?>
 						<tr style="color:blue;">
-							<td><img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-add.png') ?>" width="16" height="16" alt="<?php echo $this->__('Need update') ?>" title="<?php echo $this->__('Need update') ?>" style="cursor:pointer;" /></td>
-							<td style="padding:0 5px;"><a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:blue;"><?php echo $module['name'] ?></a></td>
+							<td>
+								<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-add.png') ?>" width="16" height="16" alt="<?php echo $this->__('Need update') ?>" title="<?php echo $this->__('Need update') ?>" style="cursor:pointer;" />
+							</td>
+							<td style="padding:0 5px;">
+								<?php if (is_string($module['url'])): ?>
+									<a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:blue;"><?php echo $module['name'] ?></a>
+								<?php else: ?>
+									<?php echo $module['name'] ?>
+								<?php endif ?>
+							</td>
 							<td><?php echo $module['currentVersion'] ?></td>
 							<td>» <?php echo $module['lastVersion'] ?></td>
 						</tr>
 					<?php elseif (version_compare($module['lastVersion'], $module['currentVersion'], '<')): // module en version avancée ?>
 						<tr style="color:orange;">
-							<td><img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-warning.png') ?>" width="16" height="16" alt="<?php echo $this->__('Up to date, beta version') ?>" title="<?php echo $this->__('Up to date, beta version') ?>" style="cursor:pointer;" /></td>
-							<td style="padding:0 5px;"><a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:orange;"><?php echo $module['name'] ?></a></td>
+							<td>
+								<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-warning.png') ?>" width="16" height="16" alt="<?php echo $this->__('Up to date, beta version') ?>" title="<?php echo $this->__('Up to date, beta version') ?>" style="cursor:pointer;" />
+							</td>
+							<td style="padding:0 5px;">
+								<?php if (is_string($module['url'])): ?>
+									<a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:orange;"><?php echo $module['name'] ?></a>
+								<?php else: ?>
+									<?php echo $module['name'] ?>
+								<?php endif ?>
+							</td>
 							<td><?php echo $module['currentVersion'] ?></td>
 							<td>(<?php echo $module['lastVersion'] ?>)</td>
 						</tr>
 					<?php else: // module à jour ?>
 						<tr style="color:green;">
-							<td><img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-accept.png') ?>" width="16" height="16" alt="<?php echo $this->__('Up to date') ?>" title="<?php echo $this->__('Up to date') ?>" style="cursor:pointer;" /></td>
-							<td style="padding:0 5px;"><a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:green;"><?php echo $module['name'] ?></a></td>
+							<td>
+								<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-accept.png') ?>" width="16" height="16" alt="<?php echo $this->__('Up to date') ?>" title="<?php echo $this->__('Up to date') ?>" style="cursor:pointer;" />
+							</td>
+							<td style="padding:0 5px;">
+								<?php if (is_string($module['url'])): ?>
+									<a href="<?php echo $module['url'] ?>" onclick="window.open(this.href); return false;" style="color:green;"><?php echo $module['name'] ?></a>
+								<?php else: ?>
+									<?php echo $module['name'] ?>
+								<?php endif ?>
+							</td>
 							<td><?php echo $module['currentVersion'] ?></td>
 							<td></td>
 						</tr>
 					<?php endif ?>
 				<?php else: ?>
 					<tr>
-						<td><img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-blank.png') ?>" width="16" height="16" alt="<?php echo $this->__('N/A') ?>" /></td>
+						<td>
+							<img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-blank.png') ?>" width="16" height="16" alt="<?php echo $this->__('N/A') ?>" />
+						</td>
 						<td style="padding:0 5px;"><?php echo $module['name'] ?></td>
 						<td><?php echo $module['currentVersion'] ?></td>
 						<td></td>

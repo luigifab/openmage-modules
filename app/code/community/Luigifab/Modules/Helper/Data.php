@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated S/21/07/2012
- * Version 3
+ * Updated D/14/10/2012
+ * Version 4
  *
  * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -30,11 +30,33 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach (Mage::getConfig()->getNode('modules')->children() as $item) {
 
-			$data[(string) $item->codePool][] = array(
-				'version' => (string) $item->version,
-				'update' => (string) $item->update,
-				'name' => $item->getName()
-			);
+			$codepool = (string) $item->codePool;
+			$version = (string) $item->version;
+			$update = (string) $item->update;
+			$check = array();
+
+			if (strlen($update) > 0)
+				$check = $this->checkModuleVersion($item->getName(), $update);
+
+			// module à jour ou pas
+			if (is_array($check) && !empty($check)) {
+				$data[$codepool][] = array(
+					'name' => str_replace('_', '/', $item->getName()),
+					'currentVersion' => $version,
+					'lastVersion' => $check['lastVersion'],
+					'url' => $check['url']
+				);
+			}
+			// module sans information
+			else {
+				$data[$codepool][] = array(
+					'name' => str_replace('_', '/', $item->getName()),
+					'currentVersion' => $version,
+					'lastVersion' => false,
+					'url' => false
+				);
+
+			}
 		}
 
 		if (!$core)
@@ -43,10 +65,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $data;
 	}
 
-	public function checkModuleVersion($name, $url) {
-
-		if (strlen($url) < 5)
-			return false;
+	private function checkModuleVersion($name, $url) {
 
 		try {
 			$curl = curl_init();
@@ -61,11 +80,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 				$xml->loadXML($response);
 
 				foreach ($xml->getElementsByTagName(strtolower($name)) as $module) {
-
-					return array(
-						'version' => $module->getElementsByTagName('version')->item(0)->firstChild->nodeValue,
-						'url' => $module->getElementsByTagName('url')->item(0)->firstChild->nodeValue
-					);
+					return array('lastVersion' => $module->getElementsByTagName('version')->item(0)->firstChild->nodeValue, 'url' => $module->getElementsByTagName('url')->item(0)->firstChild->nodeValue);
 				}
 
 				return array();

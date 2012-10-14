@@ -23,7 +23,7 @@
 		<Luigifab_Modules>
 			<active>true</active>
 			<codePool>community</codePool>
-			<!-- see https://redmine.luigifab.info/projects/magento/wiki/modules for more information-->
+			<!-- see https://redmine.luigifab.info/projects/magento/wiki/modules for more information -->
 			<update>http://www.luigifab.info/magento/rss.xml</update>
 		</Luigifab_Modules>
 	</modules>
