@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated D/14/10/2012
- * Version 4
+ * Updated V/19/10/2012
+ * Version 5
  *
  * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -28,20 +28,20 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		$data = array();
 
-		foreach (Mage::getConfig()->getNode('modules')->children() as $item) {
+		foreach (Mage::getConfig()->getNode('modules')->children() as $module) {
 
-			$codepool = (string) $item->codePool;
-			$version = (string) $item->version;
-			$update = (string) $item->update;
+			$codepool = (string) $module->codePool;
+			$version = (string) $module->version;
+			$update = (string) $module->update;
 			$check = array();
 
 			if (strlen($update) > 0)
-				$check = $this->checkModuleVersion($item->getName(), $update);
+				$check = $this->checkModuleVersion($module->getName(), $update);
 
 			// module à jour ou pas
 			if (is_array($check) && !empty($check)) {
 				$data[$codepool][] = array(
-					'name' => str_replace('_', '/', $item->getName()),
+					'name' => str_replace('_', '/', $module->getName()),
 					'currentVersion' => $version,
 					'lastVersion' => $check['lastVersion'],
 					'url' => $check['url']
@@ -50,7 +50,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 			// module sans information
 			else {
 				$data[$codepool][] = array(
-					'name' => str_replace('_', '/', $item->getName()),
+					'name' => str_replace('_', '/', $module->getName()),
 					'currentVersion' => $version,
 					'lastVersion' => false,
 					'url' => false
@@ -62,6 +62,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (!$core)
 			unset($data['core']);
 
+		ksort($data);
 		return $data;
 	}
 
