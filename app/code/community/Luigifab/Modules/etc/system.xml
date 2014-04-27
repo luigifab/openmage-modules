@@ -1,10 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated V/19/10/2012
- * Version 2
+ * Updated S/26/04/2014
+ * Version 3
  *
- * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -40,9 +40,10 @@
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
+					<expanded>1</expanded>
 					<fields>
 						<header>
-							<frontend_model>modules/list</frontend_model>
+							<frontend_model>modules/adminhtml_list</frontend_model>
 							<sort_order>1</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>

@@ -1,10 +1,10 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated D/14/10/2012
- * Version 5
+ * Updated S/22/03/2014
+ * Version 6
  *
- * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -55,7 +55,7 @@ $data = $this->helper('modules')->getModulesList();
 							<td></td>
 						</tr>
 					<?php endif ?>
-				<?php else: ?>
+				<?php else: // module sans information ?>
 					<tr>
 						<td><img src="<?php echo $this->getSkinUrl('images/luigifab/modules/silk-blank.png') ?>" width="16" height="16" alt="<?php echo $this->__('N/A') ?>" /></td>
 						<td style="padding:0 5px;"><?php echo $module['name'] ?></td>

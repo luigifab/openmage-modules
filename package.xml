@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
 <package>
     <name>Luigifab_Modules</name>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <stability>stable</stability>
     <license uri="http://www.opensource.org/licenses/GPL-2.0">GPL</license>
     <channel>luigifab</channel>
     <extends/>
-    <summary>Show modules list and status in Magento backend.</summary>
-    <description>Show modules list and status in Magento backend.</description>
-    <notes>- Fix random codepool sort order&#xD;
-- Available in global configuration only</notes>
+    <summary>Show modules list in Magento backend.</summary>
+    <description>Show modules list in Magento backend.</description>
+    <notes>- Ignore empty codepool&#xD;
+- Sort modules by name&#xD;
+- Add fr_CA translations</notes>
     <authors><author><name>Fabrice Creuzot</name><user>luigifab</user><email>code@luigifab.info</email></author></authors>
-    <date>2012-10-19</date>
-    <time>20:46:22</time>
-    <contents><target name="magecommunity"><dir name="Luigifab"><dir name="Modules"><dir name="Block"><file name="List.php" hash="283aefbbe78efb0df96e370fb4bf7e2d"/></dir><dir name="Helper"><file name="Data.php" hash="a5ad8bc018bf7e3015c6704aa52de496"/></dir><file name="changelog" hash="d30a130e49a5b8b8f2c75f479474e8a3"/><dir name="etc"><file name="adminhtml.xml" hash="503f65f4a91c87e9227d7e1725e6782c"/><file name="config.xml" hash="186b3c26923cd80b76bb47e8f2007c56"/><file name="system.xml" hash="f1eb7431d482b0b2b2b7dd7e2a5ff95e"/></dir><file name="license" hash="b819c62bf1b7f2d249241db9a4ab3c99"/><file name="readme" hash="1b43a42f73bcd76f9d7bbaa5d34b0cec"/></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="luigifab"><dir name="modules"><file name="list.phtml" hash="dfec60c007ed5c35b2c5b320df05353f"/></dir></dir></dir></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><dir name="luigifab"><dir name="modules"><file name="silk-accept.png" hash="9de0030539ce57617a603809879ff3b9"/><file name="silk-add.png" hash="b1c7645c74e754e633d49e93ba9b214d"/><file name="silk-blank.png" hash="778e071551214a270aaa216db3a47d96"/><file name="silk-warning.png" hash="c847e1076da70df83ef5284622b82a74"/></dir></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Luigifab_Modules.xml" hash="7ed0c300cd23c615d09f0b02a893177a"/></dir></target><target name="magelocale"><dir name="fr_FR"><file name="Luigifab_Modules.csv" hash="5b36ba98b455f2e7328b8b10fc8f272e"/></dir></target></contents>
+    <date>2014-04-27</date>
+    <time>15:52:17</time>
+    <contents><target name="magecommunity"><dir name="Luigifab"><dir name="Modules"><dir name="Block"><dir name="Adminhtml"><file name="List.php" hash="8d0996d38d23b41f5088144ff8f54d7d"/></dir></dir><dir name="Helper"><file name="Data.php" hash="45ad192cc69b6e5a283aa5ea104487c7"/></dir><file name="changelog" hash="fc984afeb1e00f4545dc11176595d3ed"/><file name="copyright" hash="578a41c477df87214dcc6c0acf42ea97"/><dir name="etc"><file name="adminhtml.xml" hash="4d7396b4abf21102b430684a229d384c"/><file name="config.xml" hash="20653353db9cf67c54775fc433d696a7"/><file name="system.xml" hash="72a75842003175c1c3cf6d7633b0311e"/></dir><file name="license" hash="bfaf4466e8e29a8171b025a76601d702"/><file name="readme" hash="9d6049cbc70cfe7764b6c6bf357065a7"/></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="luigifab"><dir name="modules"><file name="list.phtml" hash="e11158253048f2c473547e6b0d72da06"/></dir></dir></dir></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><dir name="luigifab"><dir name="modules"><file name="silk-accept.png" hash="9de0030539ce57617a603809879ff3b9"/><file name="silk-add.png" hash="b1c7645c74e754e633d49e93ba9b214d"/><file name="silk-blank.png" hash="778e071551214a270aaa216db3a47d96"/><file name="silk-warning.png" hash="c847e1076da70df83ef5284622b82a74"/></dir></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Luigifab_Modules.xml" hash="b45b0673a6914829236f054408c2f27b"/></dir></target><target name="magelocale"><dir name="fr_FR"><file name="Luigifab_Modules.csv" hash="a9180a880d51549c94676fef12e0f117"/></dir><dir name="fr_CA"><file name="Luigifab_Modules.csv" hash="a9180a880d51549c94676fef12e0f117"/></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.2.0</min><max>5.9.9</max></php></required></dependencies>
 </package>

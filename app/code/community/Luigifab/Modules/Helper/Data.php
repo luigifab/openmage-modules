@@ -1,10 +1,10 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated V/19/10/2012
- * Version 5
+ * Updated D/20/04/2014
+ * Version 7
  *
- * Copyright 2012 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -35,27 +35,19 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 			$update = (string) $module->update;
 			$check = array();
 
-			if (strlen($update) > 0)
-				$check = $this->checkModuleVersion($module->getName(), $update);
+			if (strlen($codepool) > 0) {
 
-			// module à jour ou pas
-			if (is_array($check) && !empty($check)) {
+				if (strlen($update) > 10)
+					$check = $this->checkModuleVersion($module->getName(), $update);
+
+				$checked = (is_array($check) && !empty($check));
+
 				$data[$codepool][] = array(
 					'name' => str_replace('_', '/', $module->getName()),
 					'currentVersion' => $version,
-					'lastVersion' => $check['lastVersion'],
-					'url' => $check['url']
+					'lastVersion' => ($checked) ? $check['lastVersion'] : false,
+					'url' => ($checked) ? $check['url'] : false
 				);
-			}
-			// module sans information
-			else {
-				$data[$codepool][] = array(
-					'name' => str_replace('_', '/', $module->getName()),
-					'currentVersion' => $version,
-					'lastVersion' => false,
-					'url' => false
-				);
-
 			}
 		}
 
@@ -81,14 +73,17 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 				$xml->loadXML($response);
 
 				foreach ($xml->getElementsByTagName(strtolower($name)) as $module) {
-					return array('lastVersion' => $module->getElementsByTagName('version')->item(0)->firstChild->nodeValue, 'url' => $module->getElementsByTagName('url')->item(0)->firstChild->nodeValue);
+					return array(
+						'lastVersion' => $module->getElementsByTagName('version')->item(0)->firstChild->nodeValue,
+						'url' => $module->getElementsByTagName('url')->item(0)->firstChild->nodeValue
+					);
 				}
 
 				return array();
 			}
 		}
 		catch (Exception $e) {
-			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR);
+			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
 		}
 
 		return false;
