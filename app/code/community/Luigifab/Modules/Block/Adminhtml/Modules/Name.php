@@ -1,8 +1,8 @@
 <?php
 /**
- * Created V/20/07/2012
- * Updated L/21/07/2014
- * Version 8
+ * Created L/21/07/2014
+ * Updated D/31/08/2014
+ * Version 3
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -18,9 +18,10 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
+class Luigifab_Modules_Block_Adminhtml_Modules_Name extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
-	public function getVersion() {
-		return (string) Mage::getConfig()->getModuleConfig('Luigifab_Modules')->version;
+	public function render(Varien_Object $row) {
+		$name = $row->getData('name');
+		return (is_string($row->getData('url'))) ? '<a href="'.$row->getData('url').'" onclick="window.open(this.href); return false;">'.$name.'</a>' : $name;
 	}
 }

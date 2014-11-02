@@ -1,8 +1,8 @@
-<?php
-/**
- * Created V/20/07/2012
- * Updated L/21/07/2014
- * Version 8
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Created S/31/05/2014
+ * Updated D/03/08/2014
+ * Version 2
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -16,11 +16,20 @@
  * but without any warranty, without even the implied warranty of
  * merchantability or fitness for a particular purpose. See the
  * GNU General Public License (GPL) for more details.
- */
+-->
 
-class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
-
-	public function getVersion() {
-		return (string) Mage::getConfig()->getModuleConfig('Luigifab_Modules')->version;
-	}
-}
+<layout version="0.1.0">
+	<adminhtml_system_config_edit>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/luigifab/modules/styles.css</name>
+				<params>media="screen, projection"</params>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/luigifab/modules/tablesort.min.js</name>
+			</action>
+		</reference>
+	</adminhtml_system_config_edit>
+</layout>

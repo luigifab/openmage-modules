@@ -1,8 +1,8 @@
 <?php
 /**
- * Created V/20/07/2012
- * Updated D/27/04/2014
- * Version 5
+ * Created L/21/07/2014
+ * Updated D/31/08/2014
+ * Version 3
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -18,15 +18,9 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Block_Adminhtml_List extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
+class Luigifab_Modules_Block_Adminhtml_Observers_Status extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Options {
 
-	protected $_template = 'luigifab/modules/list.phtml';
-
-	public function render(Varien_Data_Form_Element_Abstract $element) {
-		return '<tr><td>'.$this->toHtml().'</td></tr>';
-	}
-
-	public function getCacheLifetime() {
-		return null;
+	public function render(Varien_Object $row) {
+		return '<span class="grid-'.$row->getData('status').'">'.parent::render($row).'</span>';
 	}
 }

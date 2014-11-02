@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/22/03/2014
- * Version 4
+ * Updated L/21/07/2014
+ * Version 7
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -21,7 +21,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>1.1.2</version>
+			<version>2.0.0</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -35,8 +35,20 @@
 				<class>Luigifab_Modules_Helper</class>
 			</modules>
 		</helpers>
+		<models>
+			<modules>
+				<class>Luigifab_Modules_Model</class>
+			</modules>
+		</models>
 	</global>
 	<adminhtml>
+		<layout>
+			<updates>
+				<modules>
+					<file>luigifab/modules.xml</file>
+				</modules>
+			</updates>
+		</layout>
 		<translate>
 			<modules>
 				<Luigifab_Modules>

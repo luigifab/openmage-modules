@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/26/04/2014
- * Version 3
+ * Updated M/19/08/2014
+ * Version 11
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -29,28 +29,50 @@
 		<modules translate="label">
 			<label>Modules list</label>
 			<tab>luigifab</tab>
-			<sort_order>51</sort_order>
+			<sort_order>63</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
 			<groups>
+				<help>
+					<sort_order>0</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<frontend_model>modules/adminhtml_help</frontend_model>
+				</help>
 				<general translate="label">
 					<label>Modules list</label>
 					<sort_order>1</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
-					<expanded>1</expanded>
-					<fields>
-						<header>
-							<frontend_model>modules/adminhtml_list</frontend_model>
-							<sort_order>1</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</header>
-					</fields>
+					<frontend_model>modules/adminhtml_modules</frontend_model>
 				</general>
+				<jobs translate="label">
+					<label>Cron jobs list</label>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<frontend_model>modules/adminhtml_jobs</frontend_model>
+				</jobs>
+				<observers translate="label">
+					<label>Observers list</label>
+					<sort_order>3</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<frontend_model>modules/adminhtml_observers</frontend_model>
+				</observers>
+				<rewrites translate="label">
+					<label>Rewrites list</label>
+					<sort_order>4</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<frontend_model>modules/adminhtml_rewrites</frontend_model>
+				</rewrites>
 			</groups>
 		</modules>
 	</sections>

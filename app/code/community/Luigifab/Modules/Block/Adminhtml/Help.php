@@ -1,8 +1,8 @@
 <?php
 /**
- * Created V/20/07/2012
- * Updated L/21/07/2014
- * Version 8
+ * Created V/23/05/2014
+ * Updated D/01/06/2014
+ * Version 2
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -18,9 +18,10 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
+class Luigifab_Modules_Block_Adminhtml_Help extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
 
-	public function getVersion() {
-		return (string) Mage::getConfig()->getModuleConfig('Luigifab_Modules')->version;
+	public function render(Varien_Data_Form_Element_Abstract $element) {
+		$url = 'https://redmine.luigifab.info/projects/magento/wiki/modules';
+		return '<p class="box">Luigifab/Modules '.$this->helper('modules')->getVersion().' <a href="'.$url.'" onclick="window.open(this.href); return false;" style="float:right;">'.$url.'</a></p>';
 	}
 }
