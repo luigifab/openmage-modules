@@ -1,7 +1,7 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated M/19/08/2014
+ * Updated S/22/11/2014
  * Version 8+2
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -46,7 +46,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		$this->addColumn('job_code', array(
@@ -54,7 +54,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'index'     => 'job_code',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort case'
+			'header_css_class' => 'defaultTsort txt'
 		));
 
 		$this->addColumn('cron_expr', array(
@@ -70,7 +70,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '40%',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		$this->addColumn('status', array(
@@ -86,7 +86,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		return parent::_prepareColumns();

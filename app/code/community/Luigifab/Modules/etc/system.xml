@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated M/19/08/2014
- * Version 11
+ * Updated S/22/11/2014
+ * Version 14
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -47,32 +47,78 @@
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
-					<frontend_model>modules/adminhtml_modules</frontend_model>
+					<expanded>1</expanded>
+					<fields>
+						<last translate="label">
+							<label>Search last version</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</last>
+						<channel translate="label comment">
+							<label>Preferred version</label>
+							<comment>For Magento connect.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>modules/source_channel</source_model>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</channel>
+					</fields>
 				</general>
-				<jobs translate="label">
-					<label>Cron jobs list</label>
+				<email translate="label">
+					<label>Update notification by email</label>
 					<sort_order>2</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
-					<frontend_model>modules/adminhtml_jobs</frontend_model>
-				</jobs>
-				<observers translate="label">
-					<label>Observers list</label>
-					<sort_order>3</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>0</show_in_website>
-					<show_in_store>0</show_in_store>
-					<frontend_model>modules/adminhtml_observers</frontend_model>
-				</observers>
-				<rewrites translate="label">
-					<label>Rewrites list</label>
-					<sort_order>4</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>0</show_in_website>
-					<show_in_store>0</show_in_store>
-					<frontend_model>modules/adminhtml_rewrites</frontend_model>
-				</rewrites>
+					<expanded>1</expanded>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enable</label>
+							<comment>Every monday at 1h.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</enabled>
+						<recipient_email translate="label comment">
+							<label>Send Emails To</label>
+							<comment>Emails separated by space.</comment>
+							<frontend_type>text</frontend_type>
+							<!--backend_model>adminhtml/system_config_backend_email_address</backend_model-->
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</recipient_email>
+						<sender_email_identity translate="label">
+							<label>Email Sender</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_identity</source_model>
+							<backend_model>adminhtml/system_config_backend_email_sender</backend_model>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</sender_email_identity>
+						<template translate="label">
+							<label>Email Template</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_template</source_model>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</template>
+					</fields>
+				</email>
 			</groups>
 		</modules>
 	</sections>

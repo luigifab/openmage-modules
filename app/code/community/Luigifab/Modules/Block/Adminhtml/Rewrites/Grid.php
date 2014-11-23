@@ -1,8 +1,8 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/19/08/2014
- * Version 14
+ * Updated S/22/11/2014
+ * Version 15
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -46,25 +46,27 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		$this->addColumn('scope', array(
 			'header'    => $this->__('Scope'),
 			'index'     => 'scope',
 			'align'     => 'center',
+			'width'     => '80px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n1 case'
+			'header_css_class' => 'defaultTsort n1 txt'
 		));
 
 		$this->addColumn('type', array(
 			'header'    => $this->__('Type'),
 			'index'     => 'type',
 			'align'     => 'center',
+			'width'     => '80px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 case'
+			'header_css_class' => 'defaultTsort n2 txt'
 		));
 
 		$this->addColumn('core_class', array(
@@ -72,7 +74,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'core_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n3 case'
+			'header_css_class' => 'defaultTsort n3 txt'
 		));
 
 		$this->addColumn('rewrite_class', array(
@@ -80,7 +82,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		$this->addColumn('status', array(
@@ -96,7 +98,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		return parent::_prepareColumns();

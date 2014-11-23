@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/30/08/2014
- * Version 13
+ * Updated D/23/11/2014
+ * Version 14
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -37,8 +37,18 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				continue;
 
 			$moduleName = $config->getName();
-			$check  = (strlen($config->update) > 10) ? $this->checkModuleVersion($moduleName, $config->update) : array();
+			$check  = array();
 			$status = 'unknown';
+
+			if (Mage::getStoreConfig('modules/general/last') === '1') {
+
+				if (strlen($config->update) > 10)
+					$check = $this->checkUpdate($moduleName, $config->update);
+
+				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName !== 'Phoenix_Moneybookers') &&
+				         ($config->codePool->__toString() === 'community'))
+					$check = $this->checkConnect($moduleName);
+			}
 
 			if ($config->active->__toString() !== 'true') {
 				$status = 'disabled';
@@ -58,6 +68,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$item->setCodePool($config->codePool);
 			$item->setCurrentVersion($config->version);
 			$item->setLastVersion((isset($check['version'])) ? $check['version'] : false);
+			$item->setLastDate((isset($check['date'])) ? $check['date'] : false);
 			$item->setUrl((isset($check['url'])) ? $check['url'] : false);
 			$item->setStatus($status);
 
@@ -73,22 +84,24 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		return ($test === 0) ? strcmp($a->getName(), $b->getName()) : $test;
 	}
 
-	private function checkModuleVersion($name, $url) {
+	private function checkUpdate($name, $url) {
 
 		try {
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$response = curl_exec($curl);
 			curl_close($curl);
 
+			// lecture du fichier XML de la balise <update>
 			if ((strpos($response, '<modules>') !== false) && (strpos($response, '</modules>') !== false)) {
 
-				$data = array('version' => null, 'url' => null);
+				$data = array();
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
-
 				$qry = new DOMXPath($dom);
 				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
 
@@ -96,6 +109,103 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 					$data[$node->nodeName] = $node->nodeValue;
 
 				return $data;
+			}
+		}
+		catch (Exception $e) {
+			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
+		}
+
+		return false;
+	}
+
+	private function checkConnect($name) {
+
+		try {
+			$channel = Mage::getStoreConfig('modules/general/channel');
+
+			$key = $name; // Owebia_Shipping2
+			$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($curl);
+			curl_close($curl);
+
+			if (strpos($response, 'Not Found') !== false) {
+				$key = substr($name, 0, -1).'_'.substr($name, -1); // Owebia_Shipping_2
+				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $url);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$response = curl_exec($curl);
+				curl_close($curl);
+			}
+			if (strpos($response, 'Not Found') !== false) {
+				$key = str_replace('_', '', $name); // OwebiaShipping2
+				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $url);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$response = curl_exec($curl);
+				curl_close($curl);
+			}
+			if (strpos($response, 'Not Found') !== false) {
+				$key = substr($name, strpos($name, '_') + 1); // Owebia
+				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $url);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$response = curl_exec($curl);
+				curl_close($curl);
+			}
+
+			// lecture du fichier XML de la liste des versions du module sur magento connect
+			// test du xpath : http://www.freeformatter.com/xpath-tester.html#ad-output
+			// avec l'option 2 : http://connect20.magentocommerce.com/community/BankPayment/releases.xml
+			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
+
+				$data = array();
+
+				$dom = new DomDocument();
+				$dom->loadXML($response);
+				$qry = new DOMXPath($dom);
+				$nodes = $qry->query('(//s[text()="'.$channel.'"])[last()]/../*'); // au lieu de /releases/r[last()]/*
+
+				foreach ($nodes as $node) {
+
+					if ($node->nodeName == 'v')
+						$data['version'] = $node->nodeValue;
+					else if ($node->nodeName == 'd')
+						$data['date'] = $node->nodeValue;
+				}
+
+				// vérification si c'est le bon module
+				// avec le connect 2 : vérifie le contenu du fichier package.xml
+				// avec le connect 1 : ne fait rien
+				if (isset($data['version'])) {
+
+					$url = 'http://connect20.magentocommerce.com/community/'.$key.'/'.$data['version'].'/package.xml';
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_URL, $url);
+					curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+					curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+					$response = curl_exec($curl);
+					curl_close($curl);
+
+					if (strpos($response, $key) !== false) // connect 2 : le fichier existe
+						return $data;
+					else if (strpos($response, 'Not Found') !== false) // connect 1 : le fichier n'existe pas
+						return $data;
+				}
 			}
 		}
 		catch (Exception $e) {

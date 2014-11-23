@@ -1,8 +1,8 @@
 <?php
 /**
- * Created V/20/07/2012
- * Updated V/15/08/2014
- * Version 12
+ * Created S/22/11/2014
+ * Updated S/22/11/2014
+ * Version 1
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -18,11 +18,14 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Block_Adminhtml_Observers extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
+class Luigifab_Modules_Model_Source_Channel extends Luigifab_Modules_Helper_Data {
 
-	public function render(Varien_Data_Form_Element_Abstract $element) {
-		$block = Mage::getBlockSingleton('modules/adminhtml_observers_grid');
-		return '<div class="entry-edit-head"><h4>'.$element->getLegend().' ('.$block->getCount().')</h4></div>'.
-			'<div class="luigifab box grid observers">'.$block->toHtml().'</div>';
+	public function toOptionArray() {
+
+		return array(
+			array('value' => 'alpha',  'label' => $this->__('Alpha')),
+			array('value' => 'beta',   'label' => $this->__('Beta')),
+			array('value' => 'stable', 'label' => $this->__('Stable'))
+		);
 	}
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated L/21/07/2014
- * Version 7
+ * Updated D/23/11/2014
+ * Version 11
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -21,7 +21,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>2.0.0</version>
+			<version>3.0.0</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -40,8 +40,38 @@
 				<class>Luigifab_Modules_Model</class>
 			</modules>
 		</models>
+		<template>
+			<email>
+				<modules_email_template translate="label">
+					<label>Cron jobs report</label>
+					<file>modules_report.html</file>
+					<type>html</type>
+				</modules_email_template>
+			</email>
+		</template>
 	</global>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<luigifab_modules before="Mage_Adminhtml">Luigifab_Modules</luigifab_modules>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
 	<adminhtml>
+		<events>
+			<admin_system_config_changed_section_modules>
+				<observers>
+					<modules>
+						<class>modules/observer</class>
+						<method>updateConfig</method>
+					</modules>
+				</observers>
+			</admin_system_config_changed_section_modules>
+		</events>
 		<layout>
 			<updates>
 				<modules>
@@ -58,5 +88,28 @@
 				</Luigifab_Modules>
 			</modules>
 		</translate>
-	</adminhtml>
+	</adminhtml>>
+	<crontab>
+		<jobs>
+			<modules_send_report>
+				<run>
+					<model>modules/observer::sendMail</model>
+				</run>
+			</modules_send_report>
+		</jobs>
+	</crontab>
+	<default>
+		<modules>
+			<general>
+				<last>1</last>
+				<channel>stable</channel>
+			</general>
+			<email>
+				<enabled>0</enabled>
+				<recipient_email>hello@example.com</recipient_email>
+				<sender_email_identity>general</sender_email_identity>
+				<template>modules_email_template</template>
+			</email>
+		</modules>
+	</default>
 </config>

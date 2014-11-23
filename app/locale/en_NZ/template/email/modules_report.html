@@ -1,0 +1,19 @@
+<!--@subject Updates list@-->
+<!--@vars {
+"var list":"List of modules updates",
+"var config":"Configuration address"
+}@-->
+
+<body style="margin:1em;">
+	<p>Weekly report relative to updates of the modules.
+	<br />Here are the updates list.</p>
+
+	{{depend list}}
+		<ul style="margin:1.5em 0 1.7em; padding:0; list-style:none;">
+			<li style="margin:0.8em 0 0.5em;">{{var list}}</li>
+		</ul>
+	{{/depend}}
+
+	<p style="font-size:0.8em; line-height:130%; font-style:italic; color:gray;">{{config path='design/head/default_title'}} - Updates list
+	<br /><a href="{{var config}}" style="color:gray;">{{var config}}</a></p>
+</body>

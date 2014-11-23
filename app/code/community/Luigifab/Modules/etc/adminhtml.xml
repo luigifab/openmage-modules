@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated M/19/08/2014
- * Version 2
+ * Updated L/10/11/2014
+ * Version 3
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -29,6 +29,11 @@
 					<sort_order>1</sort_order>
 					<action>adminhtml/system_config</action>
 				</configuration>
+				<modules translate="title">
+					<title>Modules list</title>
+					<action>adminhtml/modules_lists/index</action>
+					<sort_order>63</sort_order>
+				</modules>
 			</children>
 		</tools>
 	</menu>
@@ -44,6 +49,10 @@
 								<title>Configuration</title>
 								<sort_order>1</sort_order>
 							</configuration>
+							<modules translate="title">
+								<title>Modules list</title>
+								<sort_order>63</sort_order>
+							</modules>
 						</children>
 					</tools>
 					<system>
@@ -56,7 +65,7 @@
 										<children-->
 											<modules translate="title">
 												<title>Modules list</title>
-												<sort_order>103053</sort_order>
+												<sort_order>103063</sort_order>
 											</modules>
 										<!--/children>
 									</luigifab-->

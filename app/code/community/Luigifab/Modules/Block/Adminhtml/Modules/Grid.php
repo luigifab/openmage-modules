@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/19/08/2014
- * Version 14
+ * Updated S/22/11/2014
+ * Version 15
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -47,34 +47,46 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'renderer'  => 'modules/adminhtml_modules_name',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 case'
+			'header_css_class' => 'defaultTsort n2 txt'
 		));
 
 		$this->addColumn('code_pool', array(
 			'header'    => $this->__('Type'),
 			'index'     => 'code_pool',
-			'width'     => '140px',
+			'align'     => 'center',
+			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n1 case'
+			'header_css_class' => 'defaultTsort n1 txt'
 		));
 
 		$this->addColumn('current_version', array(
 			'header'    => $this->__('Installed version'),
 			'index'     => 'current_version',
-			'width'     => '140px',
+			'align'     => 'center',
+			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		$this->addColumn('last_version', array(
 			'header'    => $this->__('Last version'),
 			'index'     => 'last_version',
-			'width'     => '140px',
+			'align'     => 'center',
+			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
+		));
+
+		$this->addColumn('last_date', array(
+			'header'    => $this->__('Latest version of'),
+			'index'     => 'last_date',
+			'type'      => 'date',
+			'align'     => 'center',
+			'filter'    => false,
+			'sortable'  => false
 		));
 
 		$this->addColumn('status', array(
@@ -93,7 +105,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'case'
+			'header_css_class' => 'txt'
 		));
 
 		return parent::_prepareColumns();
