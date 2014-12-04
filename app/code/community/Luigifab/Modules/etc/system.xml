@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/22/11/2014
+ * Updated D/30/11/2014
  * Version 14
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -37,8 +37,8 @@
 				<help>
 					<sort_order>0</sort_order>
 					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
 					<frontend_model>modules/adminhtml_help</frontend_model>
 				</help>
 				<general translate="label">

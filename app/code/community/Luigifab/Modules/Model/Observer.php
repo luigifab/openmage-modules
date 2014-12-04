@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated D/23/11/2014
- * Version 2
+ * Updated S/29/11/2014
+ * Version 3
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -20,34 +20,14 @@
 
 class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
-	private function send($emails, $vars) {
-
-		foreach ($emails as $email) {
-
-			// sendTransactional($templateId, $sender, $recipient, $name, $vars = array(), $storeId = null)
-			$template = Mage::getModel('core/email_template');
-			$template->sendTransactional(
-				Mage::getStoreConfig('modules/email/template'),
-				Mage::getStoreConfig('modules/email/sender_email_identity'),
-				trim($email), null, $vars
-			);
-
-			if (!$template->getSentSuccess())
-				Mage::throwException($this->__('Can not send email report to %s.', $email));
-
-			//exit($template->getProcessedTemplate($vars));
-		}
-	}
-
 	public function sendMail() {
 
 		Mage::getSingleton('core/translate')->setLocale(Mage::getStoreConfig('general/locale/code'))->init('adminhtml', true);
 
-		$updates = array();
-
 		// préparation de l'email
 		// génération du code HTML du détail des mises à jour
 		$modules = Mage::getModel('modules/source_modules')->getCollection();
+		$updates = array();
 
 		foreach ($modules as $module) {
 
@@ -58,16 +38,11 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 
 		// envoie des emails
-		// mise en place des variables du template
-		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
-		$backend = Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', array('section' => 'modules'));
-
-		$vars = array(
+		// avec les variables du template
+		$this->send(array(
 			'list'   => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : '',
-			'config' => str_replace('//admin', '/admin', $backend)
-		);
-
-		$this->send($emails, $vars);
+			'config' => str_replace('//admin', '/admin', $this->getUrl('adminhtml/system_config/edit', array('section' => 'modules')))
+		));
 	}
 
 	public function updateConfig() {
@@ -94,6 +69,27 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 		catch (Exception $e) {
 			Mage::throwException($e->getMessage());
+		}
+	}
+
+	private function send($vars) {
+
+		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
+
+		foreach ($emails as $email) {
+
+			// sendTransactional($templateId, $sender, $recipient, $name, $vars = array(), $storeId = null)
+			$template = Mage::getModel('core/email_template');
+			$template->sendTransactional(
+				Mage::getStoreConfig('modules/email/template'),
+				Mage::getStoreConfig('modules/email/sender_email_identity'),
+				trim($email), null, $vars
+			);
+
+			if (!$template->getSentSuccess())
+				Mage::throwException($this->__('Can not send email report to %s.', $email));
+
+			//exit($template->getProcessedTemplate($vars));
 		}
 	}
 }

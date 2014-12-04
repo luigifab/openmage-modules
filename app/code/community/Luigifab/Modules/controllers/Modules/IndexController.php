@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated V/21/11/2014
- * Version 1
+ * Updated S/29/11/2014
+ * Version 2
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -18,7 +18,7 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Modules_ListsController extends Mage_Adminhtml_Controller_Action {
+class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller_Action {
 
 	protected function _isAllowed() {
 		return Mage::getSingleton('admin/session')->isAllowed('tools/modules');

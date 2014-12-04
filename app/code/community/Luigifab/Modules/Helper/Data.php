@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated L/21/07/2014
- * Version 8
+ * Updated S/29/11/2014
+ * Version 9
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -22,5 +22,9 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	public function getVersion() {
 		return (string) Mage::getConfig()->getModuleConfig('Luigifab_Modules')->version;
+	}
+
+	public function getUrl($url, $params = null) {
+		return Mage::helper('adminhtml')->getUrl($url, $params);
 	}
 }

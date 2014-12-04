@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated L/10/11/2014
- * Version 3
+ * Updated S/29/11/2014
+ * Version 4
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -31,7 +31,7 @@
 				</configuration>
 				<modules translate="title">
 					<title>Modules list</title>
-					<action>adminhtml/modules_lists/index</action>
+					<action>adminhtml/modules_index/index</action>
 					<sort_order>63</sort_order>
 				</modules>
 			</children>

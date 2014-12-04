@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created S/31/05/2014
- * Updated S/22/11/2014
- * Version 3
+ * Updated S/29/11/2014
+ * Version 4
  *
  * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -19,7 +19,7 @@
 -->
 
 <layout version="0.1.0">
-	<adminhtml_modules_lists_index>
+	<adminhtml_modules_index_index>
 		<reference name="head">
 			<action method="setTitle" translate="title">
 				<title>Modules list / Tools / Magento Admin</title>
@@ -34,5 +34,5 @@
 				<name>js/luigifab/modules/tablesort.min.js</name>
 			</action>
 		</reference>
-	</adminhtml_modules_lists_index>
+	</adminhtml_modules_index_index>
 </layout>
