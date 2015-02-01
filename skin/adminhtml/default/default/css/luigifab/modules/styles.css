@@ -1,16 +1,16 @@
 @charset "utf-8";
 /**
- * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * File created S/31/05/2014, Updated S/29/11/2014, version 15
+ * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Created S/31/05/2014, updated S/24/01/2015, version 16
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL).
  */
 
-/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& global &&& */
-body.adminhtml-modules-index-index h3.icon-head { background:url("../../../images/fam_server_database.gif") no-repeat left center; }
-body.adminhtml-modules-index-index h4 { margin:1em 0; }
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& modules/index/index &&& */
+body.adminhtml-modules-index-index h3.icon-head { min-height:19px; background:url("../../../images/fam_server_database.gif") no-repeat left center; }
+body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
 
 body.adminhtml-modules-index-index div.hor-scroll { overflow:hidden; white-space:nowrap; }
 
@@ -23,11 +23,11 @@ body.adminhtml-modules-index-index table.data tr:hover { background-color:#DEDED
 body.adminhtml-modules-index-index table.data tr:not(:hover) { background-color:transparent; }
 body.adminhtml-modules-index-index table.data tr:nth-child(even):not(:hover) { background-color:#F6F6F6; }
 
-body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px 4px; }
+body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px; text-align:center; }
 body.adminhtml-modules-index-index table.data tr.headings th sup { padding-left:0.2em; vertical-align:middle; color:#999; }
 body.adminhtml-modules-index-index table.data tr.headings th a { position:relative; padding:0 1em 0 0; }
-body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; }
-body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; }
+body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#888; }
+body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; color:inherit; }
 
 body.adminhtml-modules-index-index table.data tr.disabled { color:#999; }
 body.adminhtml-modules-index-index table.data tr.disabled a { color:#999; }

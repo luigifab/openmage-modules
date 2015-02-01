@@ -1,10 +1,10 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/22/11/2014
- * Version 15
+ * Updated S/24/01/2015
+ * Version 17
  *
- * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -54,7 +54,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'header'    => $this->__('Type'),
 			'index'     => 'code_pool',
 			'align'     => 'center',
-			'width'     => '120px',
+			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'defaultTsort n1 txt'
@@ -64,7 +64,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'header'    => $this->__('Installed version'),
 			'index'     => 'current_version',
 			'align'     => 'center',
-			'width'     => '120px',
+			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'txt'
@@ -74,7 +74,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'header'    => $this->__('Last version'),
 			'index'     => 'last_version',
 			'align'     => 'center',
-			'width'     => '120px',
+			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'txt'
@@ -85,6 +85,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'index'     => 'last_date',
 			'type'      => 'date',
 			'align'     => 'center',
+			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false
 		));

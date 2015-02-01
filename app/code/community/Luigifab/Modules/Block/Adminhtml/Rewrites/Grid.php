@@ -1,10 +1,10 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated S/22/11/2014
- * Version 15
+ * Updated S/24/01/2015
+ * Version 16
  *
- * Copyright 2012-2014 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -70,7 +70,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 		));
 
 		$this->addColumn('core_class', array(
-			'header'    => 'Core class',
+			'header'    => $this->__('Source'),
 			'index'     => 'core_class',
 			'filter'    => false,
 			'sortable'  => false,
@@ -78,7 +78,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 		));
 
 		$this->addColumn('rewrite_class', array(
-			'header'    => 'New class',
+			'header'    => $this->__('Destination'),
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
