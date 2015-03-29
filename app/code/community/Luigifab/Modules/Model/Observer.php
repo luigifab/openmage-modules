@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated S/29/11/2014
- * Version 3
+ * Updated J/05/03/2015
+ * Version 4
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -41,12 +41,13 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		// avec les variables du template
 		$this->send(array(
 			'list'   => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : '',
-			'config' => str_replace('//admin', '/admin', $this->getUrl('adminhtml/system_config/edit', array('section' => 'modules')))
+			'config' => str_replace('//admin', '/admin', Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', array('section' => 'modules')))
 		));
 	}
 
 	public function updateConfig() {
 
+		// EVENT admin_system_config_changed_section_modules
 		try {
 			$config = Mage::getModel('core/config_data');
 			$config->load('crontab/jobs/modules_send_report/schedule/cron_expr', 'path');

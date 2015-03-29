@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated D/31/08/2014
+ * Updated L/23/03/2015
  * Version 7
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -23,13 +23,13 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 	public function getCollection() {
 
 		// getName() = le nom du tag xml
-		// => /config/adminhtml/events/admin_system_config_changed_section_cronlog/observers/cronlog
+		// => /config/adminhtml/events/admin_system_config_changed_section_modules/observers/modules
 		// <adminhtml>                                       <= $config/../../../../$scope
 		//  <events>
-		//   <admin_system_config_changed_section_cronlog>   <= $config/../../$event
+		//   <admin_system_config_changed_section_modules>   <= $config/../../$event
 		//    <observers>
-		//     <cronlog>                                     <= $config
-		//      <class>cronlog/observer</class>
+		//     <modules>                                     <= $config
+		//      <class>modules/observer</class>
 		//      <method>updateConfig</method>
 		//      <type>disabled</type>
 		$nodes = Mage::getConfig()->getXpath('/config/*/events/*/observers/*');

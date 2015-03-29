@@ -1,8 +1,8 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated S/24/01/2015
- * Version 16
+ * Updated L/23/03/2015
+ * Version 21
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -91,7 +91,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'type'      => 'options',
 			'renderer'  => 'modules/adminhtml_modules_status',
 			'options'   => array(
-				'enabled'  => $this->helper('adminhtml')->__('Ok'),
+				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->__('Conflict')
 			),
 			'align'     => 'status',

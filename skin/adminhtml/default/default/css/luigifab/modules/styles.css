@@ -1,7 +1,7 @@
 @charset "utf-8";
 /**
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created S/31/05/2014, updated S/24/01/2015, version 16
+ * Created S/31/05/2014, updated S/28/03/2015, version 18
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -24,9 +24,9 @@ body.adminhtml-modules-index-index table.data tr:not(:hover) { background-color:
 body.adminhtml-modules-index-index table.data tr:nth-child(even):not(:hover) { background-color:#F6F6F6; }
 
 body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px; text-align:center; }
-body.adminhtml-modules-index-index table.data tr.headings th sup { padding-left:0.2em; vertical-align:middle; color:#999; }
+body.adminhtml-modules-index-index table.data tr.headings th i { padding-left:0.2em; font-style:normal; }
 body.adminhtml-modules-index-index table.data tr.headings th a { position:relative; padding:0 1em 0 0; }
-body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#888; }
+body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#999; }
 body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; color:inherit; }
 
 body.adminhtml-modules-index-index table.data tr.disabled { color:#999; }
@@ -41,6 +41,9 @@ body.adminhtml-modules-index-index table.data tr td.a-status span.grid-disabled 
 
 body.adminhtml-modules-index-index div.modules table.data tr td.a-status span.grid-disabled { background-color:#999; }
 body.adminhtml-modules-index-index div.rewrites table.data tr td.a-status span.grid-disabled { background-color:black; }
+
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& system/config &&& */
+#config_edit_form[action*="system_config/save/section/modules"] p.note { padding-top:4px; line-height:125%; }
 
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& animation &&& */
 body.adminhtml-modules-index-index div.rewrites table.data tr td.a-status span.grid-disabled {

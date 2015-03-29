@@ -1,8 +1,8 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated S/30/08/2014
- * Version 13+2
+ * Updated S/21/02/2015
+ * Version 14+2
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules « https://redmine.luigifab.info/projects/magento/wiki/cronlog
@@ -62,7 +62,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			// - la balise disabled
 			// - ou pas de balises de programmation (= pas de balises config_path/cron_expr)
 			// - ou pas de programmation (= ni balises config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isReadOnly = (isset($config->schedule->disabled) || (!isset($config->schedule->config_path) && !isset($config->schedule->cron_expr)) || is_null($expr)) ? true : false;
+			$isReadOnly = (isset($config->schedule->disabled) || (!isset($config->schedule->config_path) && !isset($config->schedule->cron_expr)) || is_null($expr));
 
 			$item = new Varien_Object();
 			$item->setModule($moduleName);

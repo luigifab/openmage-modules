@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated D/01/06/2014
- * Version 2
+ * Updated L/23/03/2015
+ * Version 3
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -23,6 +23,10 @@
 		<Luigifab_Modules>
 			<active>true</active>
 			<codePool>community</codePool>
+			<depends>
+				<Mage_Core />
+				<Mage_Adminhtml />
+			</depends>
 			<!-- see https://redmine.luigifab.info/projects/magento/wiki/modules for more information -->
 			<update>http://www.luigifab.info/magento/rss.xml</update>
 		</Luigifab_Modules>

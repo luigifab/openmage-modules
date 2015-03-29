@@ -1,8 +1,8 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated S/22/11/2014
- * Version 8+2
+ * Updated L/23/03/2015
+ * Version 12+2
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules « https://redmine.luigifab.info/projects/magento/wiki/cronlog
@@ -52,6 +52,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		$this->addColumn('job_code', array(
 			'header'    => $this->__('Job'),
 			'index'     => 'job_code',
+			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'defaultTsort txt'
@@ -67,7 +68,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		$this->addColumn('model', array(
 			'header'    => 'Model',
 			'index'     => 'model',
-			'width'     => '40%',
+			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'txt'
@@ -79,8 +80,8 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'type'      => 'options',
 			'renderer'  => 'modules/adminhtml_jobs_status',
 			'options'   => array(
-				'enabled'  => $this->helper('adminhtml')->__(' Enabled'),
-				'disabled' => $this->helper('adminhtml')->__(' Disabled'),
+				'enabled'  => $this->helper('modules')->_('Enabled'),
+				'disabled' => $this->helper('modules')->_('Disabled')
 			),
 			'align'     => 'status',
 			'width'     => '120px',

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created S/31/05/2014
- * Updated S/29/11/2014
- * Version 4
+ * Updated J/05/02/2015
+ * Version 5
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -19,6 +19,16 @@
 -->
 
 <layout version="0.1.0">
+	<adminhtml_system_config_edit>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/luigifab/modules/styles.css</name>
+				<params>media="screen, projection"</params>
+			</action>
+		</reference>
+	</adminhtml_system_config_edit>
+
 	<adminhtml_modules_index_index>
 		<reference name="head">
 			<action method="setTitle" translate="title">

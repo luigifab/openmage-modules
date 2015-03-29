@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated D/23/11/2014
+ * Updated L/23/03/2015
  * Version 14
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -23,9 +23,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 	public function getCollection() {
 
 		// getName() = le nom du tag xml
-		// => /config/modules/Luigifab_Cronlog
+		// => /config/modules/Luigifab_Modules
 		// <modules>
-		//  <Luigifab_Cronlog>                                 <= $config
+		//  <Luigifab_Modules>                                 <= $config
 		//   <active>true</active>
 		//   <codePool>community</codePool>
 		//   <update>http://www.luigifab.info/magento/rss.xml

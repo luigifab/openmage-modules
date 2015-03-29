@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated S/30/08/2014
+ * Updated L/23/03/2015
  * Version 7
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -28,7 +28,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		//  <models>                                         <= $config/../../../$type
 		//   <cron>                                          <= $config/../../$module
 		//    <rewrite>
-		//     <observer>Luigifab_Cronlog_Model_Rewrite_Cron <= $config
+		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
 		$nodes = Mage::getConfig()->getXpath('/config/*/*/*/rewrite/*');
 		$all = $this->getAllRewrites();
 
@@ -39,12 +39,12 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$module = $config->getParent()->getParent()->getName();
 			$class  = $config->getName();
 
-			//   class=Luigifab_Cronlog_Model_Rewrite_Cron
-			//   first=Cronlog_Model_Rewrite_Cron
+			//   class=Luigifab_Modules_Model_Rewrite_Cron
+			//   first=Modules_Model_Rewrite_Cron
 			//  second=Model_Rewrite_Cron
-			// module2=Cronlog
+			// module2=Modules
 			//  class2=Rewrite_Cron
-			//    name=Luigifab/Cronlog
+			//    name=Luigifab/Modules
 			$first   = substr($config, strpos($config, '_') + 1);
 			$second  = substr($first, strpos($first, '_') + 1);
 			$module2 = substr($first, 0, strpos($first, '_'));
@@ -102,7 +102,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			//  <models>                                         <= $config/../../../$type
 			//   <cron>                                          <= $config/../../$module
 			//    <rewrite>
-			//     <observer>Luigifab_Cronlog_Model_Rewrite_Cron <= $config
+			//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
 			foreach ($nodes as $config) {
 
 				$type   = $config->parentNode->parentNode->parentNode->tagName;
