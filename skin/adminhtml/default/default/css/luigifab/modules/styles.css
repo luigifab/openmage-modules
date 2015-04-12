@@ -1,7 +1,6 @@
-@charset "utf-8";
 /**
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created S/31/05/2014, updated S/28/03/2015, version 18
+ * Created S/31/05/2014, updated D/05/04/2015, version 19
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -9,9 +8,11 @@
  */
 
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& modules/index/index &&& */
-body.adminhtml-modules-index-index h3.icon-head { min-height:19px; background:url("../../../images/fam_server_database.gif") no-repeat left center; }
-body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
+body.adminhtml-modules-index-index h3.icon-head {
+	min-height:19px; background:url("../../../images/fam_asterisk_orange.gif") no-repeat left center;
+}
 
+body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
 body.adminhtml-modules-index-index div.hor-scroll { overflow:hidden; white-space:nowrap; }
 
 body.adminhtml-modules-index-index table.data tr td.a-status span {

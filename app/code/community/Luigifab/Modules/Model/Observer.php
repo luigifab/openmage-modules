@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated J/05/03/2015
- * Version 4
+ * Updated S/04/04/2015
+ * Version 30
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -20,7 +20,7 @@
 
 class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
-	public function sendMail() {
+	public function sendEmailReport() {
 
 		Mage::getSingleton('core/translate')->setLocale(Mage::getStoreConfig('general/locale/code'))->init('adminhtml', true);
 
@@ -37,7 +37,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br/>➩ %s (%s)', count($updates) + 1, $module->getName(), $module->getCurrentVersion(), $module->getLastVersion(), $module->getLastDate()));
 		}
 
-		// envoie des emails
+		// envoi des emails
 		// avec les variables du template
 		$this->send(array(
 			'list'   => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : '',
@@ -62,7 +62,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				$config->save();
 
 				// email de test
-				$this->sendMail();
+				$this->sendEmailReport();
 			}
 			else {
 				$config->delete();

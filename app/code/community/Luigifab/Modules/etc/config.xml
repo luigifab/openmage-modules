@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/21/02/2015
- * Version 12
+ * Updated S/04/04/2015
+ * Version 13
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -21,7 +21,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>3.0.3</version>
+			<version>3.0.4</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -93,7 +93,7 @@
 		<jobs>
 			<modules_send_report>
 				<run>
-					<model>modules/observer::sendMail</model>
+					<model>modules/observer::sendEmailReport</model>
 				</run>
 			</modules_send_report>
 		</jobs>

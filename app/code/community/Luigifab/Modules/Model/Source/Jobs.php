@@ -1,11 +1,11 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated S/21/02/2015
+ * Updated W/01/04/2015
  * Version 14+2
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules « https://redmine.luigifab.info/projects/magento/wiki/cronlog
+ * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
