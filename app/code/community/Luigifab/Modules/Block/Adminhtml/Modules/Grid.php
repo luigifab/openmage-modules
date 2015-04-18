@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/24/01/2015
- * Version 17
+ * Updated S/11/04/2015
+ * Version 20
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -44,10 +44,10 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 		$this->addColumn('name', array(
 			'header'    => $this->__('Module name'),
 			'index'     => 'name',
-			'renderer'  => 'modules/adminhtml_modules_name',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 txt'
+			'header_css_class' => 'defaultTsort n2 txt',
+			'frame_callback' => array($this, 'decorateName')
 		));
 
 		$this->addColumn('code_pool', array(
@@ -94,7 +94,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'header'    => $this->helper('adminhtml')->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'renderer'  => 'modules/adminhtml_modules_status',
 			'options'   => array(
 				'uptodate' => $this->__('Up to date'),
 				'toupdate' => $this->__('To update'),
@@ -106,21 +105,34 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt',
+			'frame_callback' => array($this, 'decorateStatus')
 		));
 
 		return parent::_prepareColumns();
 	}
 
+	public function getCount() {
+		return $this->getCollection()->getSize();
+	}
+
+
 	public function getRowClass($row) {
-		return ($row->getStatus() === 'disabled') ? 'disabled' : '';
+		return ($row->getData('status') === 'disabled') ? 'disabled' : '';
 	}
 
 	public function getRowUrl($row) {
 		return false;
 	}
 
-	public function getCount() {
-		return $this->getCollection()->getSize();
+	public function decorateStatus($value, $row, $column, $isExport) {
+		return '<span class="grid-'.$row->getData('status').'">'.$value.'</span>';
+	}
+
+	public function decorateName($value, $row, $column, $isExport) {
+
+		$url = $row->getData('url');
+		$name = $row->getData('name');
+		return (is_string($url)) ? '<a href="'.$url.'" onclick="window.open(this.href); return false;">'.$name.'</a>' : $name;
 	}
 }

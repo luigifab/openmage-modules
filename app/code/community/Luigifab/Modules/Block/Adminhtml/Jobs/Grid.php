@@ -1,8 +1,8 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated W/01/04/2015
- * Version 12+2
+ * Updated S/11/04/2015
+ * Version 20+2
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -78,7 +78,6 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'header'    => $this->helper('adminhtml')->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'renderer'  => 'modules/adminhtml_jobs_status',
 			'options'   => array(
 				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->helper('modules')->_('Disabled')
@@ -87,21 +86,27 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt',
+			'frame_callback' => array($this, 'decorateStatus')
 		));
 
 		return parent::_prepareColumns();
 	}
 
+	public function getCount() {
+		return $this->getCollection()->getSize();
+	}
+
+
 	public function getRowClass($row) {
-		return ($row->getStatus() === 'disabled') ? 'disabled' : '';
+		return ($row->getData('status') === 'disabled') ? 'disabled' : '';
 	}
 
 	public function getRowUrl($row) {
 		return false;
 	}
 
-	public function getCount() {
-		return $this->getCollection()->getSize();
+	public function decorateStatus($value, $row, $column, $isExport) {
+		return '<span class="grid-'.$row->getData('status').'">'.$value.'</span>';
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated S/04/04/2015
- * Version 30
+ * Updated S/11/04/2015
+ * Version 31
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -25,7 +25,6 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		Mage::getSingleton('core/translate')->setLocale(Mage::getStoreConfig('general/locale/code'))->init('adminhtml', true);
 
 		// préparation de l'email
-		// génération du code HTML du détail des mises à jour
 		$modules = Mage::getModel('modules/source_modules')->getCollection();
 		$updates = array();
 
@@ -38,10 +37,8 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 
 		// envoi des emails
-		// avec les variables du template
 		$this->send(array(
-			'list'   => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : '',
-			'config' => str_replace('//admin', '/admin', Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', array('section' => 'modules')))
+			'list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''
 		));
 	}
 
@@ -76,6 +73,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	private function send($vars) {
 
 		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
+		$vars['config'] = Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', array('section' => 'modules'));
 
 		foreach ($emails as $email) {
 
