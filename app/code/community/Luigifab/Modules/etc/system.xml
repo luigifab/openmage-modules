@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/04/04/2015
+ * Updated D/03/05/2015
  * Version 16
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
@@ -50,7 +50,7 @@
 					<expanded>1</expanded>
 					<fields>
 						<last translate="label">
-							<label>Search last version</label>
+							<label>Search the last version</label>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<sort_order>1</sort_order>
@@ -58,9 +58,8 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</last>
-						<channel translate="label comment">
+						<channel translate="label">
 							<label>Preferred version</label>
-							<comment>For reading the latest version from Magento connect.</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>modules/source_channel</source_model>
 							<sort_order>2</sort_order>

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated S/11/04/2015
- * Version 31
+ * Updated J/14/05/2015
+ * Version 32
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -73,7 +73,8 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	private function send($vars) {
 
 		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
-		$vars['config'] = Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', array('section' => 'modules'));
+		$vars['config'] = Mage::helper('adminhtml')->getUrl('adminhtml/system/config');
+		$vars['config'] = substr($vars['config'], 0, strrpos($vars['config'], '/system/config'));
 
 		foreach ($emails as $email) {
 
