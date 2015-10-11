@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated S/29/11/2014
- * Version 4
+ * Updated J/03/09/2015
+ * Version 6
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -30,9 +30,9 @@
 					<action>adminhtml/system_config</action>
 				</configuration>
 				<modules translate="title">
-					<title>Modules list</title>
+					<title>Installed modules</title>
 					<action>adminhtml/modules_index/index</action>
-					<sort_order>63</sort_order>
+					<sort_order>65</sort_order>
 				</modules>
 			</children>
 		</tools>
@@ -50,8 +50,8 @@
 								<sort_order>1</sort_order>
 							</configuration>
 							<modules translate="title">
-								<title>Modules list</title>
-								<sort_order>63</sort_order>
+								<title>Installed modules</title>
+								<sort_order>65</sort_order>
 							</modules>
 						</children>
 					</tools>
@@ -64,8 +64,8 @@
 										<sort_order>103</sort_order>
 										<children-->
 											<modules translate="title">
-												<title>Modules list</title>
-												<sort_order>103063</sort_order>
+												<title>Installed modules</title>
+												<sort_order>103065</sort_order>
 											</modules>
 										<!--/children>
 									</luigifab-->

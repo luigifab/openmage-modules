@@ -1,8 +1,8 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated W/01/04/2015
- * Version 14+2
+ * Updated J/10/09/2015
+ * Version 15+1
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -31,8 +31,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 		//     <model>cronlog/observer::sendMail</model>
 		//    <schedule>
 		//     <disabled>1</disabled>
-		// Mage::getConfig()->getXpath('/config/crontab/jobs/*'); <= souvent vide, enculé !
-		$nodes = (array) Mage::getConfig()->getNode('crontab/jobs');
+		$nodes = Mage::getConfig()->getXpath('/config/crontab/jobs/*');
 
 		foreach ($nodes as $config) {
 

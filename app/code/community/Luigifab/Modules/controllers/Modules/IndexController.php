@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated S/29/11/2014
- * Version 2
+ * Updated J/10/09/2015
+ * Version 4
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -27,8 +27,9 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 	public function indexAction() {
 
 		$this->setUsedModuleName('Luigifab_Modules');
+		Mage::getConfig()->reinit();
 
-		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Modules list').'</h3></td></tr></tbody></table></div>';
+		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
 		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4>'.$block->toHtml().'</div>';

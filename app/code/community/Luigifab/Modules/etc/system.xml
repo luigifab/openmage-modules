@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated D/03/05/2015
- * Version 16
+ * Updated J/03/09/2015
+ * Version 18
  *
  * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -27,9 +27,9 @@
 	</tabs>
 	<sections>
 		<modules translate="label">
-			<label>Modules list</label>
+			<label>Installed modules</label>
 			<tab>luigifab</tab>
-			<sort_order>63</sort_order>
+			<sort_order>65</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
