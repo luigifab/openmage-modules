@@ -1,10 +1,10 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated J/10/09/2015
- * Version 15+1
+ * Updated S/07/02/2015
+ * Version 16+1
  *
- * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
@@ -51,17 +51,20 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
 			$moduleName = str_replace('_', '/', $moduleName);
 
-			// tâche désactivée
+			// tâche désactivée si :
 			// - la balise disabled
 			// - ou configuration disabled
-			// - ou pas de programmation (= ni balises config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isDisabled = (isset($config->schedule->disabled) || isset($configurable->schedule->disabled) || is_null($expr)) ? 'disabled' : 'enabled';
+			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
+			$isDisabled = (isset($config->schedule->disabled) || isset($configurable->schedule->disabled) || is_null($expr)) ?
+				'disabled' : 'enabled';
 
-			// tâche en lecture seule
+			// tâche en lecture seule si :
 			// - la balise disabled
-			// - ou pas de balises de programmation (= pas de balises config_path/cron_expr)
-			// - ou pas de programmation (= ni balises config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isReadOnly = (isset($config->schedule->disabled) || (!isset($config->schedule->config_path) && !isset($config->schedule->cron_expr)) || is_null($expr));
+			// - ou pas de balise de programmation (= pas de balise config_path/cron_expr)
+			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
+			$isReadOnly = (isset($config->schedule->disabled) ||
+			               (!isset($config->schedule->config_path) && !isset($config->schedule->cron_expr)) ||
+			               is_null($expr));
 
 			$item = new Varien_Object();
 			$item->setModule($moduleName);

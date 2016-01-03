@@ -4,7 +4,7 @@
  * Updated D/01/06/2014
  * Version 2
  *
- * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify

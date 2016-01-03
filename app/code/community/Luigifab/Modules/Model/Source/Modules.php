@@ -1,10 +1,10 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated L/23/03/2015
- * Version 14
+ * Updated M/15/12/2015
+ * Version 15
  *
- * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -19,6 +19,8 @@
  */
 
 class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
+
+	private $cache = array();
 
 	public function getCollection() {
 
@@ -86,14 +88,20 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	private function checkUpdate($name, $url) {
 
+		$key = md5($url);
+
 		try {
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($curl);
-			curl_close($curl);
+			if (!isset($this->cache[$key])) {
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $url);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$this->cache[$key] = curl_exec($curl);
+				curl_close($curl);
+			}
+
+			$response = $this->cache[$key];
 
 			// lecture du fichier XML de la balise <update>
 			if ((strpos($response, '<modules>') !== false) && (strpos($response, '</modules>') !== false)) {
@@ -102,8 +110,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
-				$qry = new DOMXPath($dom);
-				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
+				$query = new DOMXPath($dom);
+				$nodes = $query->query('/modules/'.strtolower($name).'/*');
 
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
@@ -168,22 +176,21 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			}
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
-			// test du xpath : http://www.freeformatter.com/xpath-tester.html#ad-output
-			// avec l'option 2 : http://connect20.magentocommerce.com/community/BankPayment/releases.xml
+			// expression du xpath : http://www.freeformatter.com/xpath-tester.html#ad-output
 			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
 
 				$data = array();
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
-				$qry = new DOMXPath($dom);
-				$nodes = $qry->query('(//s[text()="'.$channel.'"])[last()]/../*'); // au lieu de /releases/r[last()]/*
+				$query = new DOMXPath($dom);
+				$nodes = $query->query('(//s[text()="'.$channel.'"])[last()]/../*'); // au lieu de /releases/r[last()]/*
 
 				foreach ($nodes as $node) {
 
-					if ($node->nodeName == 'v')
+					if ($node->nodeName === 'v')
 						$data['version'] = $node->nodeValue;
-					else if ($node->nodeName == 'd')
+					else if ($node->nodeName === 'd')
 						$data['date'] = $node->nodeValue;
 				}
 

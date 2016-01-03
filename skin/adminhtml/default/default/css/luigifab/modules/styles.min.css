@@ -1,7 +1,7 @@
 @charset "utf-8";
 /**
- * Copyright 2012-2015 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created S/31/05/2014,updated D/05/04/2015,version 19
+ * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Created S/31/05/2014,updated J/03/12/2015,version 20
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software,you can redistribute it or modify
@@ -10,7 +10,7 @@
 body.adminhtml-modules-index-index h3.icon-head{min-height:19px;background:url("../../../images/fam_asterisk_orange.gif") no-repeat left center;}
 body.adminhtml-modules-index-index h4{margin:1em 0 .8em;}
 body.adminhtml-modules-index-index div.hor-scroll{overflow:hidden;white-space:nowrap;}
-body.adminhtml-modules-index-index table.data tr td.a-status span{display:block;height:17px;line-height:17px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;color:#FFF;border-radius:10px;}
+body.adminhtml-modules-index-index table.data td.a-status span{display:block;height:17px;line-height:17px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;color:#FFF;border-radius:10px;}
 body.adminhtml-modules-index-index table.data tr:hover{background-color:#DEDEDE;}
 body.adminhtml-modules-index-index table.data tr:not(:hover){background-color:transparent;}
 body.adminhtml-modules-index-index table.data tr:nth-child(even):not(:hover){background-color:#F6F6F6;}
@@ -21,16 +21,16 @@ body.adminhtml-modules-index-index table.data tr.headings th > span{float:right;
 body.adminhtml-modules-index-index table.data tr.headings th > span.nobr{float:inherit;margin:0;color:inherit;}
 body.adminhtml-modules-index-index table.data tr.disabled{color:#999;}
 body.adminhtml-modules-index-index table.data tr.disabled a{color:#999;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-uptodate{background-color:#3CB861;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-toupdate{background-color:#E41101;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-beta{background-color:#FF9C00;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-unknown{background-color:#8CD9A3;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-enabled{background-color:#3CB861;}
-body.adminhtml-modules-index-index table.data tr td.a-status span.grid-disabled{background-color:#E41101;}
-body.adminhtml-modules-index-index div.modules table.data tr td.a-status span.grid-disabled{background-color:#999;}
-body.adminhtml-modules-index-index div.rewrites table.data tr td.a-status span.grid-disabled{background-color:#000;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-uptodate{background-color:#3CB861;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-toupdate{background-color:#E41101;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-beta{background-color:#FF9C00;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-unknown{background-color:#8CD9A3;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-enabled{background-color:#3CB861;}
+body.adminhtml-modules-index-index table.data td.a-status span.grid-disabled{background-color:#E41101;}
+body.adminhtml-modules-index-index div.modules table.data td.a-status span.grid-disabled{background-color:#999;}
+body.adminhtml-modules-index-index div.rewrites table.data td.a-status span.grid-disabled{background-color:#000;}
 #config_edit_form[action*="system_config/save/section/modules"] p.note{padding-top:4px;line-height:125%;}
-body.adminhtml-modules-index-index div.rewrites table.data tr td.a-status span.grid-disabled{animation:modulesBlink 1s step-start 0s infinite;-moz-animation:modulesBlink 1s step-start 0s infinite;-webkit-animation:modulesBlink 1s step-start 0s infinite;}
+body.adminhtml-modules-index-index div.rewrites table.data td.a-status span.grid-disabled{animation:modulesBlink 1s step-start 0s infinite;-moz-animation:modulesBlink 1s step-start 0s infinite;-webkit-animation:modulesBlink 1s step-start 0s infinite;}
 @keyframes modulesBlink{30%{color:transparent;}}
 @-moz-keyframes modulesBlink{30%{color:transparent;}}
 @-webkit-keyframes modulesBlink{30%{color:transparent;}}
