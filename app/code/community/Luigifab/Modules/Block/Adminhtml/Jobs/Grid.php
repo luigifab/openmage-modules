@@ -1,8 +1,8 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated S/11/04/2015
- * Version 20+2
+ * Updated D/28/02/2016
+ * Version 20+3
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -29,7 +29,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(false);
 		$this->setPagerVisibility(false);
-		$this->setFilterVisibility(false);
+		$this->setFilterVisibility(true);
 
 		$this->setCollection(Mage::getModel('modules/source_jobs')->getCollection());
 	}

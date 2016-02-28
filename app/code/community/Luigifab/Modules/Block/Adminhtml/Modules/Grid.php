@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/11/04/2015
- * Version 20
+ * Updated D/28/02/2016
+ * Version 21
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -29,7 +29,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(false);
 		$this->setPagerVisibility(false);
-		$this->setFilterVisibility(false);
+		$this->setFilterVisibility(true);
 
 		$this->setCollection(Mage::getModel('modules/source_modules')->getCollection());
 	}
@@ -133,6 +133,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 
 		$url = $row->getData('url');
 		$name = $row->getData('name');
+
 		return (is_string($url)) ? '<a href="'.$url.'" onclick="window.open(this.href); return false;">'.$name.'</a>' : $name;
 	}
 }

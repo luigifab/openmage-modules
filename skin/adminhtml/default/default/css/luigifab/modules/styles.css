@@ -1,6 +1,6 @@
 /**
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created S/31/05/2014, updated J/03/12/2015, version 20
+ * Created S/31/05/2014, updated D/28/02/2016, version 22
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -13,25 +13,36 @@ body.adminhtml-modules-index-index h3.icon-head {
 }
 
 body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
-body.adminhtml-modules-index-index div.hor-scroll { overflow:hidden; white-space:nowrap; }
 
-body.adminhtml-modules-index-index table.data td.a-status span {
-	display:block; height:17px; line-height:17px; text-align:center;
-	font-size:10px; font-weight:700; text-transform:uppercase; color:white; border-radius:10px;
+body.adminhtml-modules-index-index div.hor-scroll {
+	padding-bottom:0; line-height:1.5em; overflow:hidden; white-space:nowrap;
+	background-size:100% calc(3em + 10px); background-size:100% -moz-calc(3em + 10px); background-size:100% -webkit-calc(3em + 10px);
+	background-image:-webkit-linear-gradient(#FFF 50%, #F6F6F6 50%);
+	background-image:-moz-linear-gradient(#FFF 50%, #F6F6F6 50%);
+	background-image:linear-gradient(#FFF 50%, #F6F6F6 50%);
+	background-position:bottom;
 }
 
-body.adminhtml-modules-index-index table.data tr:hover { background-color:#DEDEDE; }
-body.adminhtml-modules-index-index table.data tr:not(:hover) { background-color:transparent; }
-body.adminhtml-modules-index-index table.data tr:nth-child(even):not(:hover) { background-color:#F6F6F6; }
-
+body.adminhtml-modules-index-index table.actions { display:none; }
+body.adminhtml-modules-index-index table.data tr.headings th { height:18px; }
 body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px; text-align:center; }
 body.adminhtml-modules-index-index table.data tr.headings th i { padding-left:0.2em; font-style:normal; }
 body.adminhtml-modules-index-index table.data tr.headings th a { position:relative; padding:0 1em 0 0; }
 body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#999; }
 body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; color:inherit; }
+body.adminhtml-modules-index-index table.data tr.filter th { height:22px; overflow:hidden; }
+body.adminhtml-modules-index-index table.data tr.filter input { display:block; width:100%; }
+
+body.adminhtml-modules-index-index table.data tbody, body.adminhtml-modules-index-index table.data tr.even { background-color:transparent; }
+body.adminhtml-modules-index-index table.data tr:hover { background-color:#DEDEDE; }
 
 body.adminhtml-modules-index-index table.data tr.disabled { color:#999; }
 body.adminhtml-modules-index-index table.data tr.disabled a { color:#999; }
+
+body.adminhtml-modules-index-index table.data td.a-status span {
+	display:block; height:17px; line-height:17px; text-align:center;
+	font-size:10px; font-weight:700; text-transform:uppercase; color:white; border-radius:10px;
+}
 
 body.adminhtml-modules-index-index table.data td.a-status span.grid-uptodate { background-color:#3CB861; }
 body.adminhtml-modules-index-index table.data td.a-status span.grid-toupdate { background-color:#E41101; }

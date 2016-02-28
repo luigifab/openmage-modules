@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created S/31/05/2014
- * Updated J/03/09/2015
- * Version 7
+ * Updated D/28/02/2016
+ * Version 8
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -38,6 +38,10 @@
 				<type>skin_css</type>
 				<name>css/luigifab/modules/styles.min.css</name>
 				<params>media="screen, projection"</params>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/luigifab/modules/app.min.js</name>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
