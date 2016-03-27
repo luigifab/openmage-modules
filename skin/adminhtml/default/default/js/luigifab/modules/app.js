@@ -1,5 +1,5 @@
 /**
- * Copyright 2011-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * Created D/28/02/2016, updated D/28/02/2016, version 1
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
