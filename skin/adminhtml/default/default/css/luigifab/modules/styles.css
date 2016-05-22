@@ -1,6 +1,6 @@
 /**
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created S/31/05/2014, updated J/24/03/2016, version 24
+ * Created S/31/05/2014, updated J/28/04/2016, version 26
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -8,9 +8,8 @@
  */
 
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& modules/index/index &&& */
-body.adminhtml-modules-index-index h3.icon-head {
-	min-height:19px; background:url("../../../images/fam_asterisk_orange.gif") no-repeat left center;
-}
+body.adminhtml-modules-index-index h3.icon-head { background:url("../../../images/fam_asterisk_orange.gif") no-repeat left center; }
+body.adminhtml-modules-index-index td.form-buttons input { width:45%; }
 
 body.adminhtml-modules-index-index div.hor-scroll {
 	padding-bottom:0; line-height:1.5em; overflow:hidden; white-space:nowrap;
@@ -28,6 +27,7 @@ body.adminhtml-modules-index-index table.data tr.headings th i { padding-left:0.
 body.adminhtml-modules-index-index table.data tr.headings th a { position:relative; padding:0 1em 0 0; }
 body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#999; }
 body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; color:inherit; }
+
 body.adminhtml-modules-index-index table.data tr.filter th { padding:0; height:32px; overflow:hidden; vertical-align:middle; }
 body.adminhtml-modules-index-index table.data tr.filter input { display:block; margin:5px; padding:2px; width:calc(100% - 10px); }
 

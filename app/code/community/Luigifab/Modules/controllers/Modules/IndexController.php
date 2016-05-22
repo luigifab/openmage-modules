@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated J/10/09/2015
- * Version 4
+ * Updated V/29/04/2016
+ * Version 6
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -26,24 +26,26 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 
 	public function indexAction() {
 
-		$this->setUsedModuleName('Luigifab_Modules');
-		Mage::getConfig()->reinit();
+		Mage::getConfig()->reinit(); // très important
 
-		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td></tr></tbody></table></div>';
+		$this->setUsedModuleName('Luigifab_Modules');
+		$this->loadLayout()->_setActiveMenu('tools/modules');
+
+		$block = $this->getLayout()->createBlock('adminhtml/widget_button')->setData('label', $this->__('Reset Filter'))->setData('onclick', 'modules.reset();')->setData('type', 'button');
+		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" class="input-text" onkeyup="modules.filter(null, this.value);" placeholder="'.$this->__('Search module name in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
-		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4>'.$block->toHtml().'</div>';
+		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_jobs_grid');
-		$html .= '<div class="jobs"><h4>'.$this->__('Cron jobs list').' ('.$block->getCount().')</h4>'.$block->toHtml().'</div>';
+		$html .= '<div class="jobs"><h4>'.$this->__('Cron jobs list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_observers_grid');
-		$html .= '<div class="observers"><h4>'.$this->__('Observers list').' ('.$block->getCount().')</h4>'.$block->toHtml().'</div>';
+		$html .= '<div class="observers"><h4>'.$this->__('Observers list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_rewrites_grid');
-		$html .= '<div class="rewrites"><h4>'.$this->__('Rewrites list').' ('.$block->getCount().')</h4>'.$block->toHtml().'</div>';
+		$html .= '<div class="rewrites"><h4>'.$this->__('Rewrites list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
 
-		$this->loadLayout()->_setActiveMenu('tools/modules');
 		$this->getLayout()->getBlock('content')->append($this->getLayout()->createBlock('core/text')->setText($html));
 		$this->renderLayout();
 	}

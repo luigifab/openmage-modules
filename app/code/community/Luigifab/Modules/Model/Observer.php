@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated D/28/02/2016
- * Version 34
+ * Updated M/19/04/2016
+ * Version 35
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -60,7 +60,6 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	public function sendEmailReport() {
 
 		Mage::getSingleton('core/translate')->setLocale(Mage::getStoreConfig('general/locale/code'))->init('adminhtml', true);
-
 		$modules = Mage::getModel('modules/source_modules')->getCollection();
 		$updates = array();
 
@@ -72,15 +71,21 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br/>➩ %s (%s)', count($updates) + 1, $module->getName(), $module->getCurrentVersion(), $module->getLastVersion(), $module->getLastDate()));
 		}
 
-		$this->send(array(
-			'list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''
-		));
+		$this->send(array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+	}
+
+	private function getEmailUrl($url, $params = array()) {
+
+		if (Mage::getStoreConfig('web/seo/use_rewrites') === '1')
+			return preg_replace('#/[^/]+\.php/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
+		else
+			return preg_replace('#/[^/]+\.php/#', '/index.php/', Mage::helper('adminhtml')->getUrl($url, $params));
 	}
 
 	private function send($vars) {
 
 		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
-		$vars['config'] = Mage::helper('adminhtml')->getUrl('adminhtml/system/config');
+		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
 		$vars['config'] = substr($vars['config'], 0, strrpos($vars['config'], '/system/config'));
 
 		foreach ($emails as $email) {

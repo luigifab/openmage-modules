@@ -1,6 +1,6 @@
 /**
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created D/28/02/2016, updated D/28/02/2016, version 1
+ * Created D/28/02/2016, updated S/30/04/2016, version 3
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -11,6 +11,10 @@
 var modules = {
 
 	start: function () {
+
+		if (!document.querySelector('body[class*="adminhtml-modules-index-index"]'))
+			return;
+		console.info('modules.app hello!');
 
 		var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
 		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
@@ -31,7 +35,40 @@ var modules = {
 		}
 	},
 
-	filter: function (id) {
+	reset: function () {
+
+		var elems = document.querySelectorAll('table.data input[type="search"]'), elem;
+		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
+			elems[elem].value = '';
+
+		elems = document.querySelectorAll('table.data tbody tr[style]');
+		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
+			elems[elem].removeAttribute('style');
+
+		document.querySelector('div.content-header input[type="search"]').value = '';
+	},
+
+	filter: function (id, value) {
+
+		if (typeof value === 'string') {
+
+			var elems = document.querySelectorAll('table.data'), elem;
+			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
+				elems[elem].querySelector('input[type="search"]').value = value;
+				this.action(elems[elem].getAttribute('id'));
+			}
+
+			if (document.querySelector('div.content-header input[type="search"]').value != value)
+				document.querySelector('div.content-header input[type="search"]').value = value;
+			else
+				document.querySelector('div.content-header-floating input[type="search"]').value = value;
+		}
+		else if (document.getElementById(id)) {
+			this.action(id);
+		}
+	},
+
+	action: function (id) {
 
 		var elems   = document.getElementById(id).querySelectorAll('tbody tr'), elem,
 		    searchs = document.getElementById(id).querySelectorAll('input[type="search"]'), search, row,

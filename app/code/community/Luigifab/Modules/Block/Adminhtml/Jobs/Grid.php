@@ -1,8 +1,8 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated D/28/02/2016
- * Version 20+3
+ * Updated M/12/04/2016
+ * Version 21+3
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -75,7 +75,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		));
 
 		$this->addColumn('status', array(
-			'header'    => $this->helper('adminhtml')->__('Status'),
+			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
 			'options'   => array(

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated D/28/02/2016
- * Version 21
+ * Updated M/12/04/2016
+ * Version 22
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -91,7 +91,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 		));
 
 		$this->addColumn('status', array(
-			'header'    => $this->helper('adminhtml')->__('Status'),
+			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
 			'options'   => array(
@@ -99,7 +99,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 				'toupdate' => $this->__('To update'),
 				'beta'     => $this->__('Beta'),
 				'unknown'  => '?',
-				'disabled' => $this->helper('adminhtml')->__('Disabled')
+				'disabled' => $this->__('Disabled')
 			),
 			'align'     => 'status',
 			'width'     => '120px',

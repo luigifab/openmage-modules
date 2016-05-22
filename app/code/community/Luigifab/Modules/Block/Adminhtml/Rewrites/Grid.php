@@ -1,8 +1,8 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated D/28/02/2016
- * Version 31
+ * Updated M/12/04/2016
+ * Version 32
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -86,7 +86,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 		));
 
 		$this->addColumn('status', array(
-			'header'    => $this->helper('adminhtml')->__('Status'),
+			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
 			'options'   => array(
