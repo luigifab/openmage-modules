@@ -1,6 +1,6 @@
 /**
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created D/28/02/2016, updated S/30/04/2016, version 3
+ * Created D/28/02/2016, updated J/02/06/2016, version 4
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -46,6 +46,7 @@ var modules = {
 			elems[elem].removeAttribute('style');
 
 		document.querySelector('div.content-header input[type="search"]').value = '';
+		document.querySelector('div.content-header-floating input[type="search"]').value = '';
 	},
 
 	filter: function (id, value) {
