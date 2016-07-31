@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/15/12/2015
- * Version 15
+ * Updated V/08/07/2016
+ * Version 16
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -42,7 +42,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$check  = array();
 			$status = 'unknown';
 
-			if (Mage::getStoreConfig('modules/general/last') === '1') {
+			if (Mage::getStoreConfigFlag('modules/general/last')) {
 
 				if (strlen($config->update) > 10)
 					$check = $this->checkUpdate($moduleName, $config->update);

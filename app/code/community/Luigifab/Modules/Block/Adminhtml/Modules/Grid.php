@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/12/04/2016
- * Version 22
+ * Updated V/22/07/2016
+ * Version 23
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -46,7 +46,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'index'     => 'name',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 txt',
+			'header_css_class' => 'default n2 txt sort',
 			'frame_callback' => array($this, 'decorateName')
 		));
 
@@ -57,7 +57,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n1 txt'
+			'header_css_class' => 'default n1 txt sort'
 		));
 
 		$this->addColumn('current_version', array(
@@ -67,7 +67,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('last_version', array(
@@ -77,7 +77,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('last_date', array(
@@ -105,7 +105,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt',
+			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

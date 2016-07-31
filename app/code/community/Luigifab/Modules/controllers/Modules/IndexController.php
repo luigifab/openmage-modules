@@ -1,8 +1,8 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated V/29/04/2016
- * Version 6
+ * Updated S/16/07/2016
+ * Version 7
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -32,7 +32,7 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 		$this->loadLayout()->_setActiveMenu('tools/modules');
 
 		$block = $this->getLayout()->createBlock('adminhtml/widget_button')->setData('label', $this->__('Reset Filter'))->setData('onclick', 'modules.reset();')->setData('type', 'button');
-		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" class="input-text" onkeyup="modules.filter(null, this.value);" placeholder="'.$this->__('Search module name in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
+		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" class="input-text" onkeyup="modules.filter(this);" placeholder="'.$this->__('Search module name in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
 		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated M/12/04/2016
- * Version 21+3
+ * Updated V/22/07/2016
+ * Version 21+4
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
@@ -46,7 +46,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('job_code', array(
@@ -55,7 +55,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort txt'
+			'header_css_class' => 'default txt sort'
 		));
 
 		$this->addColumn('cron_expr', array(
@@ -71,7 +71,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('status', array(
@@ -86,7 +86,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt',
+			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/12/04/2016
- * Version 32
+ * Updated V/22/07/2016
+ * Version 33
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -46,7 +46,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('scope', array(
@@ -56,7 +56,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '80px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n1 txt'
+			'header_css_class' => 'default n1 txt sort'
 		));
 
 		$this->addColumn('type', array(
@@ -66,7 +66,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '80px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 txt'
+			'header_css_class' => 'default n2 txt sort'
 		));
 
 		$this->addColumn('core_class', array(
@@ -74,7 +74,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'core_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n3 txt'
+			'header_css_class' => 'default n3 txt sort'
 		));
 
 		$this->addColumn('rewrite_class', array(
@@ -82,7 +82,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('status', array(
@@ -97,7 +97,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt',
+			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

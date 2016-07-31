@@ -1,6 +1,6 @@
 /**
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created D/28/02/2016, updated J/02/06/2016, version 4
+ * Created D/28/02/2016, updated L/18/07/2016, version 8
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -14,6 +14,7 @@ var modules = {
 
 		if (!document.querySelector('body[class*="adminhtml-modules-index-index"]'))
 			return;
+
 		console.info('modules.app hello!');
 
 		var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
@@ -33,6 +34,12 @@ var modules = {
 			search.setAttribute('onkeyup', "modules.filter('" + id + "');");
 			elems[elem].appendChild(search);
 		}
+
+		if (sessionStorage && sessionStorage.getItem('modules_search')) {
+			search = document.querySelector('div.content-header input[type="search"]');
+			search.value = sessionStorage.getItem('modules_search');
+			modules.filter(search);
+		}
 	},
 
 	reset: function () {
@@ -47,25 +54,33 @@ var modules = {
 
 		document.querySelector('div.content-header input[type="search"]').value = '';
 		document.querySelector('div.content-header-floating input[type="search"]').value = '';
+
+		if (sessionStorage)
+			sessionStorage.removeItem('modules_search');
 	},
 
-	filter: function (id, value) {
+	filter: function (data) {
 
-		if (typeof value === 'string') {
+		if (typeof data !== 'string') {
 
-			var elems = document.querySelectorAll('table.data'), elem;
+			var elems = document.querySelectorAll('table.data'), elem, search = data.value;
 			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
-				elems[elem].querySelector('input[type="search"]').value = value;
+				elems[elem].querySelector('input[type="search"]').value = search;
 				this.action(elems[elem].getAttribute('id'));
 			}
 
-			if (document.querySelector('div.content-header input[type="search"]').value != value)
-				document.querySelector('div.content-header input[type="search"]').value = value;
-			else
-				document.querySelector('div.content-header-floating input[type="search"]').value = value;
+			elem = document.querySelector('div.content-header input[type="search"]');
+			if (elem != data)
+				elem.value = search;
+			elem = document.querySelector('div.content-header-floating input[type="search"]');
+			if (elem != data)
+				elem.value = search;
+
+			if (sessionStorage)
+				sessionStorage.setItem('modules_search', search);
 		}
-		else if (document.getElementById(id)) {
-			this.action(id);
+		else if (document.getElementById(data)) {
+			this.action(data);
 		}
 	},
 

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/12/04/2016
- * Version 22
+ * Updated V/22/07/2016
+ * Version 23
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -46,7 +46,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt'
+			'header_css_class' => 'txt sort'
 		));
 
 		$this->addColumn('scope', array(
@@ -56,7 +56,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'width'     => '80px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n1 txt'
+			'header_css_class' => 'default n1 txt sort'
 		));
 
 		$this->addColumn('event', array(
@@ -64,7 +64,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'index'     => 'event',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n2 txt'
+			'header_css_class' => 'default n2 txt sort'
 		));
 
 		$this->addColumn('model', array(
@@ -72,7 +72,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'index'     => 'model',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'defaultTsort n3 txt'
+			'header_css_class' => 'default n3 txt sort'
 		));
 
 		$this->addColumn('status', array(
@@ -87,7 +87,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt',
+			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 
