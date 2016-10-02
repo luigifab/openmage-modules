@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated D/10/07/2016
- * Version 38
+ * Updated S/20/08/2016
+ * Version 39
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -41,7 +41,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				// ou si le cookie maillog_print_email est présent, et ce, quoi qu'il arrive
 				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') === 'yes') ? true : false;
 				$session = Mage::getSingleton('admin/session')->getLastModulesReport();
-				$timestamp = Mage::getModel('core/date')->timestamp(time());
+				$timestamp = Mage::getSingleton('core/date')->timestamp();
 
 				if (is_null($session) || ($timestamp > ($session + 3600)) || $cookie) {
 					$this->sendEmailReport();

@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/08/07/2016
- * Version 16
+ * Updated W/21/09/2016
+ * Version 21
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -35,34 +35,32 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 		foreach ($nodes as $config) {
 
-			if (in_array($config->codePool, array('', 'core')))
+			if (!in_array($config->codePool, array('local', 'community')))
 				continue;
 
 			$moduleName = $config->getName();
-			$check  = array();
-			$status = 'unknown';
+			$check = array('status' => 'unknown');
 
 			if (Mage::getStoreConfigFlag('modules/general/last')) {
 
 				if (strlen($config->update) > 10)
-					$check = $this->checkUpdate($moduleName, $config->update);
+					$check += $this->checkUpdate($moduleName, $config->update);
 
-				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName !== 'Phoenix_Moneybookers') &&
-				         ($config->codePool->__toString() === 'community'))
-					$check = $this->checkConnect($moduleName);
+				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName != 'Phoenix_Moneybookers') &&
+				         ($config->codePool == 'community')) // pas de !== et === ici
+					$check += $this->checkConnect($moduleName);
 			}
 
-			if ($config->active->__toString() !== 'true') {
-				$status = 'disabled';
+			if ($config->active != 'true') { // pas de !== ici
+				$check['status'] = 'disabled';
 			}
 			else if (is_array($check)) {
-
 				if (isset($check['version']) && version_compare($check['version'], $config->version, '>'))
-					$status = 'toupdate';
+					$check['status'] = 'toupdate';
 				else if (isset($check['version']) && version_compare($check['version'], $config->version, '<'))
-					$status = 'beta';
+					$check['status'] = 'beta';
 				else if (isset($check['version']))
-					$status = 'uptodate';
+					$check['status'] = 'uptodate';
 			}
 
 			$item = new Varien_Object();
@@ -72,16 +70,16 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$item->setLastVersion((isset($check['version'])) ? $check['version'] : false);
 			$item->setLastDate((isset($check['date'])) ? $check['date'] : false);
 			$item->setUrl((isset($check['url'])) ? $check['url'] : false);
-			$item->setStatus($status);
+			$item->setStatus($check['status']);
 
 			$this->addItem($item);
 		}
 
-		usort($this->_items, array($this, 'sort'));
+		usort($this->_items, array($this, 'sortModules'));
 		return $this;
 	}
 
-	private function sort($a, $b) {
+	private function sortModules($a, $b) {
 		$test = strcmp($a->getCodePool(), $b->getCodePool());
 		return ($test === 0) ? strcmp($a->getName(), $b->getName()) : $test;
 	}
@@ -92,13 +90,15 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 		try {
 			if (!isset($this->cache[$key])) {
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-				$this->cache[$key] = curl_exec($curl);
-				curl_close($curl);
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+				$this->cache[$key] = curl_exec($ch);
+				curl_close($ch);
 			}
 
 			$response = $this->cache[$key];
@@ -123,60 +123,25 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
 		}
 
-		return false;
+		return array();
 	}
 
 	private function checkConnect($name) {
 
 		try {
-			$channel = Mage::getStoreConfig('modules/general/channel');
-
-			$key = $name; // Owebia_Shipping2
-			$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($curl);
-			curl_close($curl);
-
-			if (strpos($response, 'Not Found') !== false) {
-				$key = substr($name, 0, -1).'_'.substr($name, -1); // Owebia_Shipping_2
-				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-				$response = curl_exec($curl);
-				curl_close($curl);
-			}
-			if (strpos($response, 'Not Found') !== false) {
-				$key = str_replace('_', '', $name); // OwebiaShipping2
-				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-				$response = curl_exec($curl);
-				curl_close($curl);
-			}
-			if (strpos($response, 'Not Found') !== false) {
-				$key = substr($name, strpos($name, '_') + 1); // Owebia
-				$url = 'http://connect20.magentocommerce.com/community/'.$key.'/releases.xml';
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-				$response = curl_exec($curl);
-				curl_close($curl);
-			}
+			$url = 'https://connect20.magentocommerce.com/community/'.$name.'/releases.xml'; // Owebia_Shipping2
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			$response = curl_exec($ch);
+			curl_close($ch);
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
-			// expression du xpath : http://www.freeformatter.com/xpath-tester.html#ad-output
+			// pour l'expression du xpath voir http://www.freeformatter.com/xpath-tester.html#ad-output
 			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
 
 				$data = array();
@@ -184,33 +149,40 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$dom = new DomDocument();
 				$dom->loadXML($response);
 				$query = new DOMXPath($dom);
-				$nodes = $query->query('(//s[text()="'.$channel.'"])[last()]/../*'); // au lieu de /releases/r[last()]/*
+				$nodes = $query->query('(//s[text()="stable"])/../v');
 
-				foreach ($nodes as $node) {
-
-					if ($node->nodeName === 'v')
-						$data['version'] = $node->nodeValue;
-					else if ($node->nodeName === 'd')
-						$data['date'] = $node->nodeValue;
+				foreach ($nodes as $nodeV) {
+					$nodeD = $nodeV->parentNode->getElementsByTagName('d')[0];
+					$data[$nodeV->nodeValue] = array(
+						'version' => $nodeV->nodeValue,
+						'date'    => $nodeD->nodeValue
+					);
 				}
 
+				// trie du plus grand au plus petit
+				// (donc de la plus récente à la plus ancienne version)
+				usort($data, array($this, 'sortVersions'));
+				$data = array_shift($data);
+
 				// vérification si c'est le bon module
-				// avec le connect 2 : vérifie le contenu du fichier package.xml
-				// avec le connect 1 : ne fait rien
+				// avec le connect 2 vérifie le contenu du fichier package.xml
+				// avec le connect 1 ne fait rien
 				if (isset($data['version'])) {
 
-					$url = 'http://connect20.magentocommerce.com/community/'.$key.'/'.$data['version'].'/package.xml';
-					$curl = curl_init();
-					curl_setopt($curl, CURLOPT_URL, $url);
-					curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-					curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-					$response = curl_exec($curl);
-					curl_close($curl);
+					$url = 'https://connect20.magentocommerce.com/community/'.$name.'/'.$data['version'].'/package.xml';
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+					$response = curl_exec($ch);
+					curl_close($ch);
 
-					if (strpos($response, $key) !== false) // connect 2 : le fichier existe
+					if (strpos($response, $name) !== false)
 						return $data;
-					else if (strpos($response, 'Not Found') !== false) // connect 1 : le fichier n'existe pas
+					else if (strpos($response, 'Not Found') !== false)
 						return $data;
 				}
 			}
@@ -219,6 +191,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
 		}
 
-		return false;
+		return array();
+	}
+
+	private function sortVersions($a, $b) {
+		return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
 	}
 }

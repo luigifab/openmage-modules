@@ -1,8 +1,8 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/22/07/2016
- * Version 23
+ * Updated S/17/09/2016
+ * Version 24
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -84,8 +84,9 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'header'    => $this->__('Latest version of'),
 			'index'     => 'last_date',
 			'type'      => 'date',
+			'format'    => Mage::getSingleton('core/locale')->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_LONG),
 			'align'     => 'center',
-			'width'     => '130px',
+			'width'     => '160px',
 			'filter'    => false,
 			'sortable'  => false
 		));

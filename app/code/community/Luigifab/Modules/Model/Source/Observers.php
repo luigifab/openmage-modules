@@ -1,8 +1,8 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated L/23/03/2015
- * Version 7
+ * Updated J/15/09/2016
+ * Version 8
  *
  * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
@@ -36,7 +36,7 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 
 		foreach ($nodes as $config) {
 
-			$moduleName = Mage::getConfig()->getModelClassName($config->class);
+			$moduleName = Mage::getConfig()->getModelClassName(($config->class) ? $config->class : $config->model);
 			$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
 			$moduleName = str_replace('_', '/', $moduleName);
 
