@@ -1,6 +1,6 @@
 /**
- * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created D/28/02/2016, updated L/18/07/2016, version 8
+ * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Created D/28/02/2016, updated S/19/11/2016
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -88,7 +88,7 @@ var modules = {
 
 		var elems   = document.getElementById(id).querySelectorAll('tbody tr'), elem,
 		    searchs = document.getElementById(id).querySelectorAll('input[type="search"]'), search, row,
-		    words, word,
+		    words, word, i,
 		    cell, show;
 
 		// pour chaque ligne
@@ -113,7 +113,7 @@ var modules = {
 						i = 0;
 						for (word in words) if (words.hasOwnProperty(word) && !isNaN(word))
 							i = (cell.indexOf(words[word]) > -1) ? i + 1 : i;
-						show.push((i == words.length) ? true : false);
+						show.push((i === words.length) ? true : false);
 					}
 					// si la recherche se fait avec un seul mot
 					else {

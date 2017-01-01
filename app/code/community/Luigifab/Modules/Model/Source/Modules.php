@@ -1,10 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated W/21/09/2016
- * Version 21
+ * Updated M/08/11/2016
  *
- * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -19,8 +18,6 @@
  */
 
 class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
-
-	private $cache = array();
 
 	public function getCollection() {
 
@@ -75,13 +72,12 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$this->addItem($item);
 		}
 
-		usort($this->_items, array($this, 'sortModules'));
-		return $this;
-	}
+		usort($this->_items, function ($a, $b) {
+			$test = strcmp($a->getCodePool(), $b->getCodePool());
+			return ($test === 0) ? strcmp($a->getName(), $b->getName()) : $test;
+		});
 
-	private function sortModules($a, $b) {
-		$test = strcmp($a->getCodePool(), $b->getCodePool());
-		return ($test === 0) ? strcmp($a->getName(), $b->getName()) : $test;
+		return $this;
 	}
 
 	private function checkUpdate($name, $url) {
@@ -89,6 +85,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$key = md5($url);
 
 		try {
+			if (!isset($this->cache) || !is_array($this->cache))
+				$this->cache = array();
+
 			if (!isset($this->cache[$key])) {
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
@@ -141,7 +140,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			curl_close($ch);
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
-			// pour l'expression du xpath voir http://www.freeformatter.com/xpath-tester.html#ad-output
+			// pour l'expression du xpath voir http://www.freeformatter.com/xpath-tester.html
 			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
 
 				$data = array();
@@ -160,8 +159,11 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				}
 
 				// trie du plus grand au plus petit
-				// (donc de la plus récente à la plus ancienne version)
-				usort($data, array($this, 'sortVersions'));
+				// donc de la plus récente à la plus ancienne version
+				usort($data, function ($a, $b) {
+					return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
+				});
+				// récupère la plus récente
 				$data = array_shift($data);
 
 				// vérification si c'est le bon module
@@ -192,9 +194,5 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		}
 
 		return array();
-	}
-
-	private function sortVersions($a, $b) {
-		return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
 	}
 }

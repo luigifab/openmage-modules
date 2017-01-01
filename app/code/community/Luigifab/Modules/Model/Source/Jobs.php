@@ -1,10 +1,9 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated S/07/02/2015
- * Version 16+1
+ * Updated M/08/11/2016+1
  *
- * Copyright 2012-2016 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
@@ -38,9 +37,9 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$jobcode = $config->getName();
 			$configurable = Mage::getConfig()->getNode('default/crontab/jobs/'.$jobcode);
 
-			$expr  = (isset($config->schedule->config_path)) ? $config->schedule->config_path : null;
+			$expr  = (isset($config->schedule->config_path)) ? Mage::getStoreConfig((string) $config->schedule->config_path) : null;
 			$expr  = (isset($config->schedule->cron_expr))   ? $config->schedule->cron_expr   : $expr;
-			$expr  = (isset($configurable->schedule->config_path)) ? $configurable->schedule->config_path : $expr;
+			$expr  = (isset($configurable->schedule->config_path)) ? Mage::getStoreConfig((string) $configurable->schedule->config_path) : $expr;
 			$expr  = (isset($configurable->schedule->cron_expr))   ? $configurable->schedule->cron_expr   : $expr;
 			$expr  = (strlen(trim($expr)) > 0) ? trim($expr) : null;
 
