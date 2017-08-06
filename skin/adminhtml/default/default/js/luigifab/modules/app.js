@@ -1,44 +1,44 @@
 /**
+ * Created D/28/02/2016, Updated L/17/07/2017
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * Created D/28/02/2016, updated S/19/11/2016
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL).
  */
 
-// dépend de Prototype
+// dépend de Prototype et de Table Sorter
 var modules = {
 
 	start: function () {
 
-		if (!document.querySelector('body[class*="adminhtml-modules-index-index"]'))
-			return;
+		if (document.querySelector('body[class*="adminhtml-modules-index-index"]')) {
 
-		console.info('modules.app hello!');
+			console.info('modules.app - hello');
 
-		var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
-		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
+			var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
+			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
 
-			id = elems[elem].parentNode.parentNode.parentNode.getAttribute('id');
+				id = elems[elem].parentNode.parentNode.parentNode.getAttribute('id');
 
-			if (elems[elem].childNodes.length > 0)
-				elems[elem].removeChild(elems[elem].firstChild);
+				if (elems[elem].childNodes.length > 0)
+					elems[elem].removeChild(elems[elem].firstChild);
 
-			if (elems[elem].getAttribute('class').indexOf('last') > 0)
-				continue;
+				if (elems[elem].getAttribute('class').indexOf('last') > 0)
+					continue;
 
-			search = document.createElement('input');
-			search.setAttribute('type', 'search');
-			search.setAttribute('class', 'input-text');
-			search.setAttribute('onkeyup', "modules.filter('" + id + "');");
-			elems[elem].appendChild(search);
-		}
+				search = document.createElement('input');
+				search.setAttribute('type', 'search');
+				search.setAttribute('class', 'input-text');
+				search.setAttribute('onkeyup', "modules.filter('" + id + "');");
+				elems[elem].appendChild(search);
+			}
 
-		if (sessionStorage && sessionStorage.getItem('modules_search')) {
-			search = document.querySelector('div.content-header input[type="search"]');
-			search.value = sessionStorage.getItem('modules_search');
-			modules.filter(search);
+			if (sessionStorage && sessionStorage.getItem('modules_search')) {
+				search = document.querySelector('div.content-header input[type="search"]');
+				search.value = sessionStorage.getItem('modules_search');
+				modules.filter(search);
+			}
 		}
 	},
 
@@ -53,7 +53,6 @@ var modules = {
 			elems[elem].removeAttribute('style');
 
 		document.querySelector('div.content-header input[type="search"]').value = '';
-		document.querySelector('div.content-header-floating input[type="search"]').value = '';
 
 		if (sessionStorage)
 			sessionStorage.removeItem('modules_search');
@@ -70,9 +69,6 @@ var modules = {
 			}
 
 			elem = document.querySelector('div.content-header input[type="search"]');
-			if (elem != data)
-				elem.value = search;
-			elem = document.querySelector('div.content-header-floating input[type="search"]');
 			if (elem != data)
 				elem.value = search;
 

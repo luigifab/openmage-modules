@@ -1,0 +1,19 @@
+<!--@subject Lista das atualizações@-->
+<!--@vars {
+"var list":"Lista dos módulos para atualizar",
+"var config":"Endereço de configuração"
+}@-->
+
+<div style="margin:1em; font-size:12px; line-height:16px;" lang="pt">
+	<p>Este é o relatório semanal em relação aos módulos para atualizar.
+	<br />Segue abaixo a lista das atualizações disponíveis.</p>
+
+	{{depend list}}
+		<ul style="margin:1.5em 0 1.7em; padding:0; list-style:none;">
+			<li style="margin:0.8em 0 0.5em;">{{var list}}</li>
+		</ul>
+	{{/depend}}
+
+	<p style="font-size:0.8em; line-height:1.35em; font-style:italic; color:#6F6F6F;">{{config path='design/head/default_title'}} - Lista das atualizações
+	<br /><a href="{{var config}}" style="color:#6F6F6F;">{{var config}}</a><!-- maillog - <a href="#online#" style="color:#6F6F6F;">ver a versão em linha</a> #readimg# #mailid#cron# maillog --></p>
+</div>

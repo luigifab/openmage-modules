@@ -4,9 +4,9 @@
 "var config":"Adresse de configuration"
 }@-->
 
-<div style="margin:1em; font-size:12px;">
-	<p>Rapport hebdomadaire par rapport aux mises à jour des modules.
-	<br />Voici ci-dessous la liste des mises à jour disponibles.</p>
+<div style="margin:1em; font-size:12px; line-height:16px;" lang="fr">
+	<p>Voici le rapport hebdomadaire par rapport aux modules à mettre à jour.
+	<br />Ci-dessous la liste des mises à jour disponibles.</p>
 
 	{{depend list}}
 		<ul style="margin:1.5em 0 1.7em; padding:0; list-style:none;">
@@ -14,6 +14,6 @@
 		</ul>
 	{{/depend}}
 
-	<p style="font-size:0.8em; line-height:130%; font-style:italic; color:#6F6F6F;">{{config path='design/head/default_title'}} - Liste des mises à jour
-	<br /><a href="{{var config}}" style="color:#6F6F6F;">{{var config}}</a></p>
+	<p style="font-size:0.8em; line-height:1.35em; font-style:italic; color:#6F6F6F;">{{config path='design/head/default_title'}} - Liste des mises à jour
+	<br /><a href="{{var config}}" style="color:#6F6F6F;">{{var config}}</a><!-- maillog - <a href="#online#" style="color:#6F6F6F;">voir la version en ligne</a> #readimg# #mailid#cron# maillog --></p>
 </div>

@@ -1,10 +1,10 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/08/11/2016
+ * Updated L/24/07/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -27,7 +27,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		//  <Luigifab_Modules>                                 <= $config
 		//   <active>true</active>
 		//   <codePool>community</codePool>
-		//   <update>http://www.luigifab.info/magento/rss.xml
+		//   <update>https://www.luigifab.info/magento/rss.xml
 		$nodes = Mage::getConfig()->getXpath('/config/modules/*');
 
 		foreach ($nodes as $config) {
@@ -40,7 +40,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 			if (Mage::getStoreConfigFlag('modules/general/last')) {
 
-				if (strlen($config->update) > 10)
+				if (!empty($config->update))
 					$check += $this->checkUpdate($moduleName, $config->update);
 
 				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName != 'Phoenix_Moneybookers') &&
@@ -52,29 +52,29 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$check['status'] = 'disabled';
 			}
 			else if (is_array($check)) {
-				if (isset($check['version']) && version_compare($check['version'], $config->version, '>'))
+				if (!empty($check['version']) && version_compare($check['version'], $config->version, '>'))
 					$check['status'] = 'toupdate';
-				else if (isset($check['version']) && version_compare($check['version'], $config->version, '<'))
+				else if (!empty($check['version']) && version_compare($check['version'], $config->version, '<'))
 					$check['status'] = 'beta';
-				else if (isset($check['version']))
+				else if (!empty($check['version']))
 					$check['status'] = 'uptodate';
 			}
 
 			$item = new Varien_Object();
-			$item->setName(str_replace('_', '/', $moduleName));
-			$item->setCodePool($config->codePool);
-			$item->setCurrentVersion($config->version);
-			$item->setLastVersion((isset($check['version'])) ? $check['version'] : false);
-			$item->setLastDate((isset($check['date'])) ? $check['date'] : false);
-			$item->setUrl((isset($check['url'])) ? $check['url'] : false);
-			$item->setStatus($check['status']);
+			$item->setData('name', str_replace('_', '/', $moduleName));
+			$item->setData('code_pool', $config->codePool);
+			$item->setData('current_version', $config->version);
+			$item->setData('last_version', (!empty($check['version'])) ? $check['version'] : false);
+			$item->setData('last_date', (!empty($check['date'])) ? $check['date'] : false);
+			$item->setData('url', (!empty($check['url'])) ? $check['url'] : false);
+			$item->setData('status', $check['status']);
 
 			$this->addItem($item);
 		}
 
 		usort($this->_items, function ($a, $b) {
-			$test = strcmp($a->getCodePool(), $b->getCodePool());
-			return ($test === 0) ? strcmp($a->getName(), $b->getName()) : $test;
+			$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
+			return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
 		});
 
 		return $this;
@@ -85,10 +85,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$key = md5($url);
 
 		try {
-			if (!isset($this->cache) || !is_array($this->cache))
+			if (empty($this->cache) || !is_array($this->cache))
 				$this->cache = array();
 
-			if (!isset($this->cache[$key])) {
+			if (empty($this->cache[$key])) {
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -119,7 +119,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			}
 		}
 		catch (Exception $e) {
-			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
+			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 
 		return array();
@@ -158,18 +158,17 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 					);
 				}
 
-				// trie du plus grand au plus petit
-				// donc de la plus récente à la plus ancienne version
+				// trie du plus grand au plus petit (donc de la plus récente à la plus ancienne version)
+				// puis récupère la plus récente
 				usort($data, function ($a, $b) {
 					return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
 				});
-				// récupère la plus récente
 				$data = array_shift($data);
 
 				// vérification si c'est le bon module
 				// avec le connect 2 vérifie le contenu du fichier package.xml
 				// avec le connect 1 ne fait rien
-				if (isset($data['version'])) {
+				if (!empty($data['version'])) {
 
 					$url = 'https://connect20.magentocommerce.com/community/'.$name.'/'.$data['version'].'/package.xml';
 					$ch = curl_init();
@@ -190,7 +189,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			}
 		}
 		catch (Exception $e) {
-			Mage::log($e->getMessage().' for '.$url.' ('.$name.')', Zend_Log::ERR, 'modules.log');
+			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 
 		return array();

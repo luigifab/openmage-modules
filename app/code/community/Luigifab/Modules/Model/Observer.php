@@ -1,10 +1,10 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated M/08/11/2016
+ * Updated L/24/07/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -19,7 +19,7 @@
 
 class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
-	// EVENT admin_system_config_changed_section_modules
+	// EVENT admin_system_config_changed_section_modules (adminhtml)
 	public function updateConfig() {
 
 		try {
@@ -31,20 +31,23 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				// hebdomadaire, tous les lundi à 1h00 (hebdomadaire/weekly)
 				// minute hour day-of-month month-of-year day-of-week (Dimanche = 0, Lundi = 1...)
 				// 0	     1    *            *             0|1         => weekly
-				$config->setValue('0 1 * * '.Mage::getStoreConfig('general/locale/firstday'));
-				$config->setPath('crontab/jobs/modules_send_report/schedule/cron_expr');
+				$config->setData('value', '0 1 * * '.Mage::getStoreConfig('general/locale/firstday'));
+				$config->setData('path', 'crontab/jobs/modules_send_report/schedule/cron_expr');
 				$config->save();
 
 				// email de test
 				// s'il n'a pas déjà été envoyé dans la dernière heure (3600 secondes)
 				// ou si le cookie maillog_print_email est présent, et ce, quoi qu'il arrive
 				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') === 'yes') ? true : false;
-				$session = Mage::getSingleton('admin/session')->getLastModulesReport();
+				$lastSent  = Mage::getSingleton('admin/session')->getData('last_modules_report');
 				$timestamp = Mage::getSingleton('core/date')->timestamp();
 
-				if (is_null($session) || ($timestamp > ($session + 3600)) || $cookie) {
-					$this->sendEmailReport();
-					Mage::getSingleton('admin/session')->setLastModulesReport($timestamp);
+				if (empty($lastSent) || ($timestamp > ($lastSent + 3600)) || $cookie) {
+					$this->sendEmailReport(true);
+					Mage::getSingleton('admin/session')->setData('last_modules_report', $timestamp);
+				}
+				else {
+					Mage::log(sprintf('Not sending test report, timestamp:%s > lastSent:%s +1h = false', date('H\hi', $timestamp), date('H\hi', $lastSent)), Zend_Log::DEBUG, 'modules.log');
 				}
 			}
 			else {
@@ -58,34 +61,49 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 
 	// CRON modules_send_report
-	public function sendEmailReport() {
+	public function sendEmailReport($data = null) {
 
-		Mage::getSingleton('core/translate')->setLocale(Mage::getStoreConfig('general/locale/code'))->init('adminhtml', true);
+		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
+		$newLocale = (Mage::app()->getStore()->isAdmin()) ? $oldLocale : Mage::getStoreConfig('general/locale/code');
+		Mage::getSingleton('core/translate')->setLocale($newLocale)->init('adminhtml', true);
+
+		// chargement des modules
 		$modules = Mage::getModel('modules/source_modules')->getCollection();
 		$updates = array();
 
 		foreach ($modules as $module) {
 
-			if ($module->getStatus() !== 'toupdate')
+			if ($module->getData('status') !== 'toupdate')
 				continue;
 
-			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br/>➩ %s (%s)', count($updates) + 1, $module->getName(), $module->getCurrentVersion(), $module->getLastVersion(), $module->getLastDate()));
+			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br />➩ %s (%s)',
+				count($updates) + 1,
+				$module->getData('name'),
+				$module->getData('current_version'),
+				$module->getData('last_version'),
+				$module->getData('last_date')
+			));
 		}
 
-		$this->sendReportToRecipients(array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+		// envoi des emails
+		if (!empty($updates) || ($data === true))
+			$this->sendReportToRecipients($newLocale, array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+
+		if ($newLocale !== $oldLocale)
+			Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
 	}
 
 	private function getEmailUrl($url, $params = array()) {
 
 		if (Mage::getStoreConfigFlag('web/seo/use_rewrites'))
-			return preg_replace('#/[^/]+\.php/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
+			return preg_replace('#/[^/]+\.php[0-9]*/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
 		else
-			return preg_replace('#/[^/]+\.php/#', '/index.php/', Mage::helper('adminhtml')->getUrl($url, $params));
+			return preg_replace('#/[^/]+\.php([0-9]*)/#', '/index.php$1/', Mage::helper('adminhtml')->getUrl($url, $params));
 	}
 
-	private function sendReportToRecipients($vars) {
+	private function sendReportToRecipients($locale, $vars) {
 
-		$emails = explode(' ', trim(Mage::getStoreConfig('modules/email/recipient_email')));
+		$emails = preg_split('#\s#', Mage::getStoreConfig('modules/email/recipient_email'));
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
 		$vars['config'] = substr($vars['config'], 0, strrpos($vars['config'], '/system/config'));
 
@@ -95,12 +113,22 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				continue;
 
 			// sendTransactional($templateId, $sender, $recipient, $name, $vars = array(), $storeId = null)
+			// fait en manuel (identique de Magento 1.4 à 1.9) pour utiliser la locale que l'on veut
+			// car le setLocale utilisé plus haut ne permet pas d'utiliser le template email de la langue choisie
+			$sender = Mage::getStoreConfig('modules/email/sender_email_identity');
 			$template = Mage::getModel('core/email_template');
-			$template->sendTransactional(
-				Mage::getStoreConfig('modules/email/template'),
-				Mage::getStoreConfig('modules/email/sender_email_identity'),
-				trim($email), null, $vars
-			);
+
+			//$template->sendTransactional(
+			//	Mage::getStoreConfig('modules/email/template'),
+			//	Mage::getStoreConfig('modules/email/sender_email_identity'),
+			//	$email, null, $vars
+			//);
+
+			$template->setSentSuccess(false);
+			$template->loadDefault('modules_email_template', $locale);
+			$template->setSenderName(Mage::getStoreConfig('trans_email/ident_'.$sender.'/name'));
+			$template->setSenderEmail(Mage::getStoreConfig('trans_email/ident_'.$sender.'/email'));
+			$template->setSentSuccess($template->send($email, null, $vars));
 
 			if (!$template->getSentSuccess())
 				Mage::throwException($this->__('Can not send the report by email to %s.', $email));

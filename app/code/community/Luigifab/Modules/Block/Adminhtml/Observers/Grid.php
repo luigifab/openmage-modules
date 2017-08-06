@@ -1,10 +1,10 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/08/11/2016
+ * Updated M/28/02/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -52,7 +52,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'header'    => $this->__('Scope'),
 			'index'     => 'scope',
 			'align'     => 'center',
-			'width'     => '80px',
+			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false,
 			'header_css_class' => 'default n1 txt sort'
@@ -107,6 +107,6 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 	}
 
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return '<span class="grid-'.$row->getData('status').'">'.$value.'</span>';
+		return sprintf('<span class="grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 }

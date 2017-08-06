@@ -1,10 +1,10 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated M/08/11/2016
+ * Updated M/28/02/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -43,11 +43,11 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 			$event  = $config->getParent()->getParent()->getName();
 
 			$item = new Varien_Object();
-			$item->setModule($moduleName);
-			$item->setEvent($event);
-			$item->setScope($scope);
-			$item->setModel($config->class.'::'.$config->method);
-			$item->setStatus(($config->type === 'disabled') ? 'disabled' : 'enabled');
+			$item->setData('module', $moduleName);
+			$item->setData('event', $event);
+			$item->setData('scope', $scope);
+			$item->setData('model', $config->class.'::'.$config->method);
+			$item->setData('status', ($config->type === 'disabled') ? 'disabled' : 'enabled');
 
 			$this->addItem($item);
 		}
@@ -57,11 +57,11 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 	}
 
 	private function sort($a, $b) {
-		$test = strcmp($a->getScope(), $b->getScope());
+		$test = strcmp($a->getData('scope'), $b->getData('scope'));
 		if ($test === 0)
-			$test = strcmp($a->getEvent(), $b->getEvent());
+			$test = strcmp($a->getData('event'), $b->getData('event'));
 		if ($test === 0)
-			$test = strcmp($a->getModel(), $b->getModel());
+			$test = strcmp($a->getData('model'), $b->getData('model'));
 		return $test;
 	}
 }

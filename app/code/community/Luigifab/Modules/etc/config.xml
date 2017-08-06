@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated M/08/11/2016
+ * Updated M/04/04/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -20,7 +20,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>3.4.4</version>
+			<version>3.5.0</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -54,7 +54,7 @@
 			<adminhtml>
 				<args>
 					<modules>
-						<luigifab_modules before="Mage_Adminhtml">Luigifab_Modules</luigifab_modules>
+						<Luigifab_Modules before="Mage_Adminhtml">Luigifab_Modules</Luigifab_Modules>
 					</modules>
 				</args>
 			</adminhtml>
@@ -107,7 +107,7 @@
 				<enabled>0</enabled>
 				<recipient_email>hello@example.org</recipient_email>
 				<sender_email_identity>general</sender_email_identity>
-				<template>modules_email_template</template>
+				<!--template>modules_email_template</template-->
 			</email>
 		</modules>
 	</default>

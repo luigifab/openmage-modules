@@ -1,10 +1,10 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated M/08/11/2016+1
+ * Updated M/28/02/2017+1
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules (source cronlog)
+ * https://www.luigifab.info/magento/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -22,12 +22,12 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 	public function getCollection($type = 'all') {
 
 		// getName() = le nom du tag xml
-		// => /config/crontab/jobs/cronlog_send_report
+		// => /config/crontab/jobs/modules_send_report
 		// <crontab>
 		//  <jobs>
-		//   <cronlog_send_report>                         <= $config
+		//   <modules_send_report>                         <= $config
 		//    <run>
-		//     <model>cronlog/observer::sendMail</model>
+		//     <model>modules/observer::sendMail</model>
 		//    <schedule>
 		//     <disabled>1</disabled>
 		$nodes = Mage::getConfig()->getXpath('/config/crontab/jobs/*');
@@ -37,14 +37,14 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$jobcode = $config->getName();
 			$configurable = Mage::getConfig()->getNode('default/crontab/jobs/'.$jobcode);
 
-			$expr  = (isset($config->schedule->config_path)) ? Mage::getStoreConfig((string) $config->schedule->config_path) : null;
-			$expr  = (isset($config->schedule->cron_expr))   ? $config->schedule->cron_expr   : $expr;
-			$expr  = (isset($configurable->schedule->config_path)) ? Mage::getStoreConfig((string) $configurable->schedule->config_path) : $expr;
-			$expr  = (isset($configurable->schedule->cron_expr))   ? $configurable->schedule->cron_expr   : $expr;
-			$expr  = (strlen(trim($expr)) > 0) ? trim($expr) : null;
+			$expr = (!empty($config->schedule->config_path)) ? Mage::getStoreConfig((string) $config->schedule->config_path) : null;
+			$expr = (!empty($config->schedule->cron_expr))   ? $config->schedule->cron_expr : $expr;
+			$expr = (!empty($configurable->schedule->config_path)) ? Mage::getStoreConfig((string) $configurable->schedule->config_path) : $expr;
+			$expr = (!empty($configurable->schedule->cron_expr))   ? $configurable->schedule->cron_expr : $expr;
+			$expr = (!empty(trim($expr))) ? trim($expr) : null;
 
-			$model = (isset($config->run->model)) ? $config->run->model : null;
-			$model = (isset($configurable->run->model)) ? $configurable->run->model : $model;
+			$model = (!empty($config->run->model)) ? $config->run->model : null;
+			$model = (!empty($configurable->run->model)) ? $configurable->run->model : $model;
 
 			$moduleName = Mage::getConfig()->getModelClassName($model);
 			$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
@@ -54,24 +54,24 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			// - la balise disabled
 			// - ou configuration disabled
 			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isDisabled = (isset($config->schedule->disabled) || isset($configurable->schedule->disabled) || is_null($expr)) ?
+			$isDisabled = (!empty($config->schedule->disabled) || !empty($configurable->schedule->disabled) || empty($expr)) ?
 				'disabled' : 'enabled';
 
 			// tâche en lecture seule si :
 			// - la balise disabled
 			// - ou pas de balise de programmation (= pas de balise config_path/cron_expr)
 			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isReadOnly = (isset($config->schedule->disabled) ||
-			               (!isset($config->schedule->config_path) && !isset($config->schedule->cron_expr)) ||
-			               is_null($expr));
+			$isReadOnly = (!empty($config->schedule->disabled) ||
+			               (empty($config->schedule->config_path) && empty($config->schedule->cron_expr)) ||
+			               empty($expr));
 
 			$item = new Varien_Object();
-			$item->setModule($moduleName);
-			$item->setJobCode($jobcode);
-			$item->setCronExpr($expr);
-			$item->setModel($model);
-			$item->setStatus($isDisabled);
-			$item->setIsReadOnly($isReadOnly);
+			$item->setData('module', $moduleName);
+			$item->setData('job_code', $jobcode);
+			$item->setData('cron_expr', $expr);
+			$item->setData('model', $model);
+			$item->setData('status', $isDisabled);
+			$item->setData('is_read_only', $isReadOnly);
 
 			if ((($type === 'ro') && $isReadOnly) || (($type === 'rw') && !$isReadOnly) || ($type === 'all'))
 				$this->addItem($item);
@@ -82,6 +82,6 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 	}
 
 	private function sort($a, $b) {
-		return strcmp($a->getJobCode(), $b->getJobCode());
+		return strcmp($a->getData('job_code'), $b->getData('job_code'));
 	}
 }

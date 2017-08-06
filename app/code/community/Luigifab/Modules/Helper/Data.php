@@ -1,10 +1,10 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated M/08/11/2016
+ * Updated M/28/02/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published

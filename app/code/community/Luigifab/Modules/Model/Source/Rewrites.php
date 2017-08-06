@@ -1,10 +1,10 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated M/08/11/2016
+ * Updated J/27/04/2017
  *
  * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://redmine.luigifab.info/projects/magento/wiki/modules
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -29,7 +29,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		//    <rewrite>
 		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
 		$nodes = Mage::getConfig()->getXpath('/config/*/*/*/rewrite/*');
-		$all = $this->getAllRewrites();
+		$all = $this->searchAllRewrites();
 
 		foreach ($nodes as $config) {
 
@@ -37,6 +37,9 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$type   = $config->getParent()->getParent()->getParent()->getName();
 			$module = $config->getParent()->getParent()->getName();
 			$class  = $config->getName();
+
+			if ($type === 'routers')
+				continue;
 
 			//   class=Luigifab_Modules_Model_Rewrite_Cron
 			//   first=Modules_Model_Rewrite_Cron
@@ -54,15 +57,23 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			// surcharge en conflit
 			// - au moins deux fichiers config définissent plus ou moins la même chose
 			// - ce qui est affiché = ce qui est actif sur Magento
-			$isConflict = (isset($all[$type][$module.'/'.$class]) && (count($all[$type][$module.'/'.$class]) > 1));
+			$isConflict = (!empty($all[$type][$module.'/'.$class]) && (count($all[$type][$module.'/'.$class]) > 1));
 
 			$item = new Varien_Object();
-			$item->setModule($moduleName);
-			$item->setScope($scope);
-			$item->setType(substr($type, 0, -1));
-			$item->setCoreClass($module.'/'.$class);
-			$item->setRewriteClass(strtolower($module2.'/'.$class2));
-			$item->setStatus($isConflict ? 'disabled' : 'enabled'); // disabled=conflict / enabled=ok
+			$item->setData('module', $moduleName);
+			$item->setData('scope', $scope);
+			$item->setData('type', substr($type, 0, -1));
+			$item->setData('core_class', $module.'/'.$class);
+
+			if ($isConflict) {
+				$text = strtolower($module2.'/'.$class2).implode('<br />', $this->transformData($all[$type][$module.'/'.$class]));
+				$item->setData('rewrite_class', $text);
+				$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
+			}
+			else {
+				$item->setData('rewrite_class', strtolower($module2.'/'.$class2));
+				$item->setData('status', 'enabled'); // disabled=conflict / enabled=ok
+			}
 
 			$this->addItem($item);
 		}
@@ -71,16 +82,24 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		return $this;
 	}
 
+	private function transformData($data) {
+		$inline = array('');
+		foreach ($data as $key => $value) {
+			$inline[] = sprintf('- %s = %s%s', $key, $value, "\n");
+		}
+		return $inline;
+	}
+
 	private function sort($a, $b) {
-		$test = strcmp($a->getScope(), $b->getScope());
+		$test = strcmp($a->getData('scope'), $b->getData('scope'));
 		if ($test === 0)
-			$test = strcmp($a->getType(), $b->getType());
+			$test = strcmp($a->getData('type'), $b->getData('type'));
 		if ($test === 0)
-			$test = strcmp($a->getCoreClass(), $b->getCoreClass());
+			$test = strcmp($a->getData('core_class'), $b->getData('core_class'));
 		return $test;
 	}
 
-	private function getAllRewrites() {
+	private function searchAllRewrites() {
 
 		$folders = array('app/code/local/', 'app/code/community/');
 		$files = $rewrites = array();
@@ -108,7 +127,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 				$module = $config->parentNode->parentNode->tagName;
 				$class  = $config->tagName;
 
-				$rewrites[$type][$module.'/'.$class][] = $config->nodeValue;
+				$rewrites[$type][$module.'/'.$class][$file] = $config->nodeValue;
 			}
 		}
 
