@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated J/27/04/2017
+ * Updated S/11/11/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -34,7 +34,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 	}
 
 	protected function _prepareCollection() {
-		// $this->setCollection() in __construct()
+		// $this->setCollection() dans __construct() pour getCount()
 		return parent::_prepareCollection();
 	}
 
@@ -110,11 +110,19 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 
 
 	public function getRowClass($row) {
-		return ($row->getData('status') === 'disabled') ? 'conflict' : '';
+		return ($row->getData('status') == 'disabled') ? 'conflict' : '';
 	}
 
 	public function getRowUrl($row) {
 		return false;
+	}
+
+	public function canDisplayContainer() {
+		return false;
+	}
+
+	public function getMessagesBlock() {
+		return Mage::getBlockSingleton('core/template');
 	}
 
 	public function decorateStatus($value, $row, $column, $isExport) {

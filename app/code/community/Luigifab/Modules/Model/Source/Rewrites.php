@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/27/04/2017
+ * Updated J/14/12/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -28,7 +28,8 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		//   <cron>                                          <= $config/../../$module
 		//    <rewrite>
 		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
-		$nodes = Mage::getConfig()->getXpath('/config/*/*/*/rewrite/*');
+		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes  = $config->getXpath('/config/*/*/*/rewrite/*');
 		$all = $this->searchAllRewrites();
 
 		foreach ($nodes as $config) {
@@ -38,15 +39,15 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$module = $config->getParent()->getParent()->getName();
 			$class  = $config->getName();
 
-			if ($type === 'routers')
+			if ($type == 'routers')
 				continue;
 
 			//   class=Luigifab_Modules_Model_Rewrite_Cron
-			//   first=Modules_Model_Rewrite_Cron
-			//  second=Model_Rewrite_Cron
+			//   first=Modules_Model_Rewrite_Cron  (variable temporaire)
+			//  second=Model_Rewrite_Cron          (variable temporaire)
 			// module2=Modules
 			//  class2=Rewrite_Cron
-			//    name=Luigifab/Modules
+			// modName=Luigifab/Modules
 			$first   = substr($config, strpos($config, '_') + 1);
 			$second  = substr($first, strpos($first, '_') + 1);
 			$module2 = substr($first, 0, strpos($first, '_'));
@@ -109,7 +110,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 		foreach ($files as $file) {
 
-			$dom = new DOMDocument;
+			$dom = new DOMDocument();
 			$dom->loadXML(file_get_contents($file));
 
 			$qry = new DOMXPath($dom);
@@ -121,6 +122,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			//   <cron>                                          <= $config/../../$module
 			//    <rewrite>
 			//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
+			// tagName/nodeValue === string
 			foreach ($nodes as $config) {
 
 				$type   = $config->parentNode->parentNode->parentNode->tagName;

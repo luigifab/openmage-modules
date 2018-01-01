@@ -1,6 +1,6 @@
 /**
- * Created D/28/02/2016, Updated L/17/07/2017
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Created D/28/02/2016, Updated D/29/10/2017
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -8,6 +8,7 @@
  */
 
 // dépend de Prototype et de Table Sorter
+// totalement testé sur Firefox 27/45, Chrome 29/63, Opera 49, IE 11, Edge 14
 var modules = {
 
 	start: function () {
@@ -16,24 +17,29 @@ var modules = {
 
 			console.info('modules.app - hello');
 
+			// crée les inputs avec un onkeyup dans les cellules des entêtes
+			// prend soin de supprimer ce qu'il y a dans les th
+			// utilise l'id du tableau html
 			var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
 			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
 
 				id = elems[elem].parentNode.parentNode.parentNode.getAttribute('id');
 
-				if (elems[elem].childNodes.length > 0)
+				while (elems[elem].childNodes.length > 0)
 					elems[elem].removeChild(elems[elem].firstChild);
 
-				if (elems[elem].getAttribute('class').indexOf('last') > 0)
-					continue;
-
-				search = document.createElement('input');
-				search.setAttribute('type', 'search');
-				search.setAttribute('class', 'input-text');
-				search.setAttribute('onkeyup', "modules.filter('" + id + "');");
-				elems[elem].appendChild(search);
+				if (elems[elem].getAttribute('class').indexOf('last') < 0) {
+					search = document.createElement('input');
+					search.setAttribute('type', 'search');
+					search.setAttribute('spellcheck', 'false');
+					search.setAttribute('autocomplete', 'off');
+					search.setAttribute('class', 'input-text');
+					search.setAttribute('onkeyup', "modules.filter('" + id + "');");
+					elems[elem].appendChild(search);
+				}
 			}
 
+			// réutilise la recherche précédente
 			if (sessionStorage && sessionStorage.getItem('modules_search')) {
 				search = document.querySelector('div.content-header input[type="search"]');
 				search.value = sessionStorage.getItem('modules_search');
@@ -44,22 +50,26 @@ var modules = {
 
 	reset: function () {
 
+		// efface les filtres
 		var elems = document.querySelectorAll('table.data input[type="search"]'), elem;
 		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
 			elems[elem].value = '';
 
+		// efface les display
 		elems = document.querySelectorAll('table.data tbody tr[style]');
 		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
 			elems[elem].removeAttribute('style');
 
+		// efface le filtre global
 		document.querySelector('div.content-header input[type="search"]').value = '';
-
+		document.querySelector('div.content-header input[type="search"]').focus();
 		if (sessionStorage)
 			sessionStorage.removeItem('modules_search');
 	},
 
 	filter: function (data) {
 
+		// un objet = demande le filtrage de tous les tableaux
 		if (typeof data !== 'string') {
 
 			var elems = document.querySelectorAll('table.data'), elem, search = data.value;
@@ -68,13 +78,10 @@ var modules = {
 				this.action(elems[elem].getAttribute('id'));
 			}
 
-			elem = document.querySelector('div.content-header input[type="search"]');
-			if (elem != data)
-				elem.value = search;
-
 			if (sessionStorage)
 				sessionStorage.setItem('modules_search', search);
 		}
+		// un id = demande le filtrage du tableau
 		else if (document.getElementById(data)) {
 			this.action(data);
 		}
@@ -82,38 +89,41 @@ var modules = {
 
 	action: function (id) {
 
-		var elems   = document.getElementById(id).querySelectorAll('tbody tr'), elem,
-		    searchs = document.getElementById(id).querySelectorAll('input[type="search"]'), search, row,
+		var lines = document.getElementById(id).querySelectorAll('tbody tr'), line,
+		    cols  = document.getElementById(id).querySelectorAll('input[type="search"]'), col,
 		    words, word, i,
-		    cell, show;
+		    text, show;
 
-		// pour chaque ligne
-		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
+		for (line in lines) if (lines.hasOwnProperty(line) && !isNaN(line)) {
 
-			row = 0;
 			show = [];
 
-			// pour chaque colonne (car toutes les colonnes peuvent avoir un filtre actif)
+			// pour chaque colonne (car toutes les colonnes peuvent avoir un filtre)
 			// words = ce qu'on cherche dans la colonne courante
-			// cell  = ce qu'il y a dans la cellule de la colonne de la ligne courante (sans les balises HTML)
-			for (search in searchs) if (searchs.hasOwnProperty(search) && !isNaN(search)) {
+			// text  = ce qu'il y a dans la cellule de la colonne de la ligne courante
+			for (col in cols) if (cols.hasOwnProperty(col) && !isNaN(col)) {
 
-				words = searchs[search].value.toLowerCase().trim();
-				cell  = elems[elem].querySelectorAll('td')[row++].innerHTML.replace(/(<([^>]+)>)/ig, '').toLowerCase().trim();
+				words = cols[col].value.toLowerCase().trim();
 
+				// s'il y a des mots
 				if (words.length > 0) {
+
+					words = words.split(' ');
+					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/(<([^>]+)>)/ig, '').toLowerCase().trim();
+					i     = 0;
+
 					// si la recherche se fait avec plusieurs mots
-					// pour que la recherche soit valide, on doit trouver tous les mots dans la celulle
-					if (words.indexOf(' ') > -1) {
-						words = words.split(' ');
-						i = 0;
+					// pour que la recherche soit valide, on doit trouver tous les mots
+					if (words.length > 1) {
+
 						for (word in words) if (words.hasOwnProperty(word) && !isNaN(word))
-							i = (cell.indexOf(words[word]) > -1) ? i + 1 : i;
+							i = (text.indexOf(words[word]) > -1) ? i + 1 : i;
+
 						show.push((i === words.length) ? true : false);
 					}
 					// si la recherche se fait avec un seul mot
 					else {
-						show.push((cell.indexOf(words) > -1) ? true : false);
+						show.push((text.indexOf(words[0]) > -1) ? true : false);
 					}
 				}
 				else {
@@ -123,7 +133,8 @@ var modules = {
 
 			// maintenant que chaque colonne de la ligne a été vérifiée
 			// si aucune colonne indique qu'il ne faut pas afficher la ligne, on affiche la ligne
-			elems[elem].style.display = (show.indexOf(false) === -1) ? 'table-row' : 'none';
+			lines[line].setAttribute('style', (show.indexOf(false) === -1) ? '' : 'display:none;');
+			lines[line].removeAttribute('title');
 		}
 	}
 };

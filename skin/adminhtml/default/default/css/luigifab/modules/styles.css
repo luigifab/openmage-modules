@@ -1,6 +1,6 @@
 /**
- * Created S/31/05/2014, Updated L/17/07/2017
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Created S/31/05/2014, Updated D/29/10/2017
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -12,6 +12,9 @@ body.adminhtml-modules-index-index h3.icon-head { background:url("../../../image
 body.adminhtml-modules-index-index div.content-header-floating input { display:none; }
 body.adminhtml-modules-index-index td.form-buttons input { width:45%; }
 
+body.adminhtml-modules-index-index input::-ms-clear { display: none; }
+body.adminhtml-modules-index-index input::-webkit-search-cancel-button { display: none; }
+
 body.adminhtml-modules-index-index div.hor-scroll {
 	padding-bottom:0; line-height:1.5em;
 	hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; -webkit-hyphens:auto;
@@ -20,8 +23,8 @@ body.adminhtml-modules-index-index div.hor-scroll {
 
 body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
 body.adminhtml-modules-index-index table.actions { display:none; }
-body.adminhtml-modules-index-index table.data tbody, body.adminhtml-modules-index-index table.data tr.even { background-color:transparent; }
-
+body.adminhtml-modules-index-index table.data tbody { background-color:transparent; }
+body.adminhtml-modules-index-index table.data tr.headings { user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
 body.adminhtml-modules-index-index table.data tr.headings th { height:18px; }
 body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px; text-align:center; }
 body.adminhtml-modules-index-index table.data tr.headings th i { padding-left:0.2em; font-style:normal; }
@@ -47,7 +50,7 @@ body.adminhtml-modules-index-index table.data td {
 }
 
 body.adminhtml-modules-index-index table.data td.a-status span {
-	display:block; margin-top:3px; height:17px; line-height:17px; text-align:center;
+	display:block; margin-top:3px; height:17px; line-height:18px; text-align:center;
 	font-size:10px; font-weight:700; text-transform:uppercase; color:white; border-radius:10px;
 }
 

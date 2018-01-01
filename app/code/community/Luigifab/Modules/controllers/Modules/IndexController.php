@@ -1,9 +1,9 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated M/28/02/2017
+ * Updated J/14/12/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -25,13 +25,15 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 
 	public function indexAction() {
 
-		Mage::getConfig()->reinit(); // très important
-
 		$this->setUsedModuleName('Luigifab_Modules');
 		$this->loadLayout()->_setActiveMenu('tools/modules');
 
-		$block = $this->getLayout()->createBlock('adminhtml/widget_button')->setData('label', $this->__('Reset Filter'))->setData('onclick', 'modules.reset();')->setData('type', 'button');
-		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" class="input-text" onkeyup="modules.filter(this);" placeholder="'.$this->__('Search a module name in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
+		$block = $this->getLayout()->createBlock('adminhtml/widget_button')
+			->setData('type', 'button')
+			->setData('label', $this->__('Reset Filter'))
+			->setData('onclick', 'modules.reset();');
+
+		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" spellcheck="false" autocomplete="off" class="input-text" onkeyup="modules.filter(this);" placeholder="'.$this->__('Search a module name in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
 		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';

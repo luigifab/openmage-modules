@@ -1,9 +1,9 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated M/28/02/2017+1
+ * Updated J/14/12/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
@@ -30,7 +30,8 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 		//     <model>modules/observer::sendMail</model>
 		//    <schedule>
 		//     <disabled>1</disabled>
-		$nodes = Mage::getConfig()->getXpath('/config/crontab/jobs/*');
+		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes  = $config->getXpath('/config/crontab/jobs/*');
 
 		foreach ($nodes as $config) {
 
@@ -73,7 +74,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$item->setData('status', $isDisabled);
 			$item->setData('is_read_only', $isReadOnly);
 
-			if ((($type === 'ro') && $isReadOnly) || (($type === 'rw') && !$isReadOnly) || ($type === 'all'))
+			if ((($type == 'ro') && $isReadOnly) || (($type == 'rw') && !$isReadOnly) || ($type == 'all'))
 				$this->addItem($item);
 		}
 

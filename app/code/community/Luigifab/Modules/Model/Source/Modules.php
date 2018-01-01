@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated L/24/07/2017
+ * Updated J/14/12/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -28,36 +28,32 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		//   <active>true</active>
 		//   <codePool>community</codePool>
 		//   <update>https://www.luigifab.info/magento/rss.xml
-		$nodes = Mage::getConfig()->getXpath('/config/modules/*');
+		$config  = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes   = $config->getXpath('/config/modules/*');
+		$connect = $this->readDownloaderCache();
 
 		foreach ($nodes as $config) {
 
 			if (!in_array($config->codePool, array('local', 'community')))
 				continue;
 
-			$moduleName = $config->getName();
-			$check = array('status' => 'unknown');
+			$moduleName = (string) $config->getName();
+			$check = array('status' => ($config->active != 'true') ? 'disabled' : 'unknown');
 
 			if (Mage::getStoreConfigFlag('modules/general/last')) {
 
-				if (!empty($config->update))
+				if (!empty($config->update)) {
 					$check += $this->checkUpdate($moduleName, $config->update);
-
-				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName != 'Phoenix_Moneybookers') &&
-				         ($config->codePool == 'community')) // pas de !== et === ici
-					$check += $this->checkConnect($moduleName);
-			}
-
-			if ($config->active != 'true') { // pas de !== ici
-				$check['status'] = 'disabled';
-			}
-			else if (is_array($check)) {
-				if (!empty($check['version']) && version_compare($check['version'], $config->version, '>'))
-					$check['status'] = 'toupdate';
-				else if (!empty($check['version']) && version_compare($check['version'], $config->version, '<'))
-					$check['status'] = 'beta';
-				else if (!empty($check['version']))
-					$check['status'] = 'uptodate';
+				}
+				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName != 'Phoenix_Moneybookers')) {
+					foreach ($connect as $key => $data) {
+						if (strpos($data['xml'], $moduleName) !== false) {
+							$check += $this->checkConnect($data['name'], $data['url']);
+							unset($connect[$key]); // car il y en a plus besoin
+							break;
+						}
+					}
+				}
 			}
 
 			$item = new Varien_Object();
@@ -72,17 +68,88 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$this->addItem($item);
 		}
 
+		$this->addMagento();
+
 		usort($this->_items, function ($a, $b) {
 			$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
 			return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
 		});
 
+		// calcul le statut
+		foreach ($this as $item) {
+
+			if (($item->getData('status') != 'unknown') || empty($item->getData('current_version')) || empty($item->getData('last_version')))
+				continue;
+
+			if (version_compare($item->getData('last_version'), $item->getData('current_version'), '>'))
+				$item->setData('status', 'toupdate');
+			else if (version_compare($item->getData('last_version'), $item->getData('current_version'), '<'))
+				$item->setData('status', 'beta');
+			else
+				$item->setData('status', $check['status'] = 'uptodate');
+		}
+
 		return $this;
+	}
+
+	private function addMagento() {
+
+		$check = array('status' => 'unknown');
+
+		if (Mage::getStoreConfigFlag('modules/general/last'))
+			$check += $this->checkConnect('Mage_Downloader');
+
+		$item = new Varien_Object();
+		$item->setData('name', 'MAGENTO');
+		$item->setData('code_pool', 'core');
+		$item->setData('current_version', Mage::getVersion());
+		$item->setData('last_version', (!empty($check['version'])) ? $check['version'] : false);
+		$item->setData('last_date', (!empty($check['date'])) ? $check['date'] : false);
+		$item->setData('url', 'https://magento.com/download');
+		$item->setData('status', $check['status']);
+
+		$this->addItem($item);
+	}
+
+	private function readDownloaderCache() {
+
+		$data  = array();
+		$model = Mage::getBaseDir().'/downloader/lib/Mage/Connect/Singleconfig.php';
+		$cache = Mage::getBaseDir().'/downloader/cache.cfg'; //Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME;
+
+		if (is_file($model) && is_readable($model) && is_file($cache) && is_readable($cache)) {
+
+			if (!class_exists('Mage_Connect_Singleconfig', false))
+				require_once($model);
+
+			$config = new Mage_Connect_Singleconfig($cache);
+			$config->load(false);
+
+			$channels = $config->getData();
+			$channels = (!empty($channels['channels_by_name'])) ? $channels['channels_by_name'] : array();
+
+			foreach ($channels as $channel) {
+
+				$url = (!empty($channel['uri'])) ? 'https://'.$channel['uri'].'/' : null;
+				$packages = (!empty($channel['packages'])) ? $channel['packages'] : array();
+
+				foreach ($packages as $key => $item) {
+					if (!empty($item['xml']))
+						$data[$key] = array('url' => $url, 'name' => $key, 'xml' => $item['xml']);
+				}
+			}
+		}
+		else {
+			Mage::log('Can not read the downloader/cache.cfg file to check modules update.', Zend_Log::ERR, 'modules.log');
+		}
+
+		return $data;
 	}
 
 	private function checkUpdate($name, $url) {
 
-		$key = md5($url);
+		$data = array();
+		$key  = md5($url);
 
 		try {
 			if (empty($this->cache) || !is_array($this->cache))
@@ -94,8 +161,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 				$this->cache[$key] = curl_exec($ch);
 				curl_close($ch);
 			}
@@ -105,45 +172,41 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			// lecture du fichier XML de la balise <update>
 			if ((strpos($response, '<modules>') !== false) && (strpos($response, '</modules>') !== false)) {
 
-				$data = array();
-
 				$dom = new DomDocument();
 				$dom->loadXML($response);
 				$query = new DOMXPath($dom);
-				$nodes = $query->query('/modules/'.strtolower($name).'/*');
 
+				$nodes = $query->query('/modules/'.strtolower($name).'/*');
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
-
-				return $data;
 			}
 		}
 		catch (Exception $e) {
 			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 
-		return array();
+		return $data;
 	}
 
-	private function checkConnect($name) {
+	private function checkConnect($name, $url = null) {
+
+		$data = array();
 
 		try {
-			$url = 'https://connect20.magentocommerce.com/community/'.$name.'/releases.xml'; // Owebia_Shipping2
+			$url = ((is_null($url)) ? 'https://connect20.magentocommerce.com/community/' : $url).$name.'/releases.xml';
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 6);
 			$response = curl_exec($ch);
 			curl_close($ch);
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
-			// pour l'expression du xpath voir http://www.freeformatter.com/xpath-tester.html
+			// pour l'expression du xpath voir https://www.freeformatter.com/xpath-tester.html
 			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
-
-				$data = array();
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
@@ -158,40 +221,21 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 					);
 				}
 
-				// trie du plus grand au plus petit (donc de la plus récente à la plus ancienne version)
-				// puis récupère la plus récente
+				// trie du plus grand au plus petit (donc de la plus récente à la plus ancienne)
+				// puis récupère la version la plus récente
 				usort($data, function ($a, $b) {
 					return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
 				});
+
 				$data = array_shift($data);
-
-				// vérification si c'est le bon module
-				// avec le connect 2 vérifie le contenu du fichier package.xml
-				// avec le connect 1 ne fait rien
-				if (!empty($data['version'])) {
-
-					$url = 'https://connect20.magentocommerce.com/community/'.$name.'/'.$data['version'].'/package.xml';
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $url);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-					curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-					$response = curl_exec($ch);
-					curl_close($ch);
-
-					if (strpos($response, $name) !== false)
-						return $data;
-					else if (strpos($response, 'Not Found') !== false)
-						return $data;
-				}
+				if (!is_array($data))
+					$data = array();
 			}
 		}
 		catch (Exception $e) {
 			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 
-		return array();
+		return $data;
 	}
 }

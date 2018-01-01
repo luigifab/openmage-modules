@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated M/28/02/2017
+ * Updated J/14/12/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -31,23 +31,27 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 		//      <class>modules/observer</class>
 		//      <method>updateConfig</method>
 		//      <type>disabled</type>
-		$nodes = Mage::getConfig()->getXpath('/config/*/events/*/observers/*');
+		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes  = $config->getXpath('/config/*/events/*/observers/*');
 
 		foreach ($nodes as $config) {
 
 			$moduleName = Mage::getConfig()->getModelClassName(($config->class) ? $config->class : $config->model);
-			$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
-			$moduleName = str_replace('_', '/', $moduleName);
 
-			$scope  = $config->getParent()->getParent()->getParent()->getParent()->getName();
-			$event  = $config->getParent()->getParent()->getName();
+			if (!empty($moduleName)) {
+				$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
+				$moduleName = str_replace('_', '/', $moduleName);
+			}
+
+			$scope = $config->getParent()->getParent()->getParent()->getParent()->getName();
+			$event = $config->getParent()->getParent()->getName();
 
 			$item = new Varien_Object();
 			$item->setData('module', $moduleName);
 			$item->setData('event', $event);
 			$item->setData('scope', $scope);
-			$item->setData('model', $config->class.'::'.$config->method);
-			$item->setData('status', ($config->type === 'disabled') ? 'disabled' : 'enabled');
+			$item->setData('model', (!empty($moduleName)) ? $config->class.'::'.$config->method : '');
+			$item->setData('status', (empty($moduleName) || ($config->type == 'disabled')) ? 'disabled' : 'enabled');
 
 			$this->addItem($item);
 		}

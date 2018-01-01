@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated L/24/07/2017
+ * Updated S/18/11/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -38,7 +38,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				// email de test
 				// s'il n'a pas déjà été envoyé dans la dernière heure (3600 secondes)
 				// ou si le cookie maillog_print_email est présent, et ce, quoi qu'il arrive
-				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') === 'yes') ? true : false;
+				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') == 'yes') ? true : false;
 				$lastSent  = Mage::getSingleton('admin/session')->getData('last_modules_report');
 				$timestamp = Mage::getSingleton('core/date')->timestamp();
 
@@ -47,7 +47,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 					Mage::getSingleton('admin/session')->setData('last_modules_report', $timestamp);
 				}
 				else {
-					Mage::log(sprintf('Not sending test report, timestamp:%s > lastSent:%s +1h = false', date('H\hi', $timestamp), date('H\hi', $lastSent)), Zend_Log::DEBUG, 'modules.log');
+					Mage::log(sprintf('Not sending test report because timestamp:%s > lastSent:%s +1h = false', date('H\hi', $timestamp), date('H\hi', $lastSent)), Zend_Log::DEBUG, 'modules.log');
 				}
 			}
 			else {
@@ -73,15 +73,15 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 		foreach ($modules as $module) {
 
-			if ($module->getData('status') !== 'toupdate')
+			if ($module->getData('status') != 'toupdate')
 				continue;
 
-			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br />➩ %s (%s)',
+			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br />➤ %s - %s',
 				count($updates) + 1,
 				$module->getData('name'),
 				$module->getData('current_version'),
 				$module->getData('last_version'),
-				$module->getData('last_date')
+				Mage::getSingleton('core/locale')->date($module->getData('last_date'))->toString(Zend_Date::DATE_LONG)
 			));
 		}
 
@@ -89,7 +89,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		if (!empty($updates) || ($data === true))
 			$this->sendReportToRecipients($newLocale, array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
 
-		if ($newLocale !== $oldLocale)
+		if ($newLocale != $oldLocale)
 			Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
 	}
 

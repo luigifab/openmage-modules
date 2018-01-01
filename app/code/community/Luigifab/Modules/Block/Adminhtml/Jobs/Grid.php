@@ -1,9 +1,9 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated M/28/02/2017+4
+ * Updated S/11/11/2017
  *
- * Copyright 2012-2017 | Fabrice Creuzot (luigifab) <code~luigifab~info>
+ * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules (source cronlog)
  *
  * This program is free software, you can redistribute it or modify
@@ -34,7 +34,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 	}
 
 	protected function _prepareCollection() {
-		// $this->setCollection() in __construct()
+		// $this->setCollection() dans __construct() pour getCount()
 		return parent::_prepareCollection();
 	}
 
@@ -98,11 +98,19 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 
 
 	public function getRowClass($row) {
-		return ($row->getData('status') === 'disabled') ? 'disabled' : '';
+		return ($row->getData('status') == 'disabled') ? 'disabled' : '';
 	}
 
 	public function getRowUrl($row) {
 		return false;
+	}
+
+	public function canDisplayContainer() {
+		return false;
+	}
+
+	public function getMessagesBlock() {
+		return Mage::getBlockSingleton('core/template');
 	}
 
 	public function decorateStatus($value, $row, $column, $isExport) {
