@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated S/18/11/2017
+ * Updated J/04/01/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -36,19 +36,11 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				$config->save();
 
 				// email de test
-				// s'il n'a pas déjà été envoyé dans la dernière heure (3600 secondes)
-				// ou si le cookie maillog_print_email est présent, et ce, quoi qu'il arrive
+				// si demandé ou si le cookie maillog_print_email est présent
 				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') == 'yes') ? true : false;
-				$lastSent  = Mage::getSingleton('admin/session')->getData('last_modules_report');
-				$timestamp = Mage::getSingleton('core/date')->timestamp();
 
-				if (empty($lastSent) || ($timestamp > ($lastSent + 3600)) || $cookie) {
+				if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')) || $cookie)
 					$this->sendEmailReport(true);
-					Mage::getSingleton('admin/session')->setData('last_modules_report', $timestamp);
-				}
-				else {
-					Mage::log(sprintf('Not sending test report because timestamp:%s > lastSent:%s +1h = false', date('H\hi', $timestamp), date('H\hi', $lastSent)), Zend_Log::DEBUG, 'modules.log');
-				}
 			}
 			else {
 				$config->delete();
@@ -61,7 +53,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 
 	// CRON modules_send_report
-	public function sendEmailReport($data = null) {
+	public function sendEmailReport($force = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
 		$newLocale = (Mage::app()->getStore()->isAdmin()) ? $oldLocale : Mage::getStoreConfig('general/locale/code');
@@ -86,7 +78,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 
 		// envoi des emails
-		if (!empty($updates) || ($data === true))
+		if (!empty($updates) || ($force === true))
 			$this->sendReportToRecipients($newLocale, array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
 
 		if ($newLocale != $oldLocale)

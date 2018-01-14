@@ -17,7 +17,7 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Block_Adminhtml_Help extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
+class Luigifab_Modules_Block_Adminhtml_Config_Help extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
 
 	public function render(Varien_Data_Form_Element_Abstract $element) {
 
