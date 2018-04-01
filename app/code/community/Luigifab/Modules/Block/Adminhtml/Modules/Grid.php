@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/19/01/2018
+ * Updated M/27/02/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -34,7 +34,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 	}
 
 	protected function _prepareCollection() {
-		// $this->setCollection() dans __construct() pour getCount()
+		//$this->setCollection() dans __construct() pour getCount()
 		return parent::_prepareCollection();
 	}
 
@@ -101,7 +101,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 				'unknown'  => '?',
 				'disabled' => $this->__('Disabled')
 			),
-			'align'     => 'status',
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
@@ -133,15 +132,12 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 		return Mage::getBlockSingleton('core/template');
 	}
 
+
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return sprintf('<span class="grid-%s">%s</span>', $row->getData('status'), $value);
+		return sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 
 	public function decorateName($value, $row, $column, $isExport) {
-
-		$url  = $row->getData('url');
-		$name = $row->getData('name');
-
-		return (is_string($url)) ? sprintf('<a href="%s">%s</a>', $url, $name) : $name;
+		return (!empty($url = $row->getData('url'))) ? sprintf('<a href="%s">%s</a>', $url, $value) : $value;
 	}
 }

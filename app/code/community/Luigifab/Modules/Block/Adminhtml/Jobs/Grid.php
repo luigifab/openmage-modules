@@ -1,10 +1,10 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated S/11/11/2017
+ * Updated M/27/02/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://www.luigifab.info/magento/modules (source cronlog)
+ * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -34,7 +34,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 	}
 
 	protected function _prepareCollection() {
-		// $this->setCollection() dans __construct() pour getCount()
+		//$this->setCollection() dans __construct() pour getCount()
 		return parent::_prepareCollection();
 	}
 
@@ -81,7 +81,6 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->helper('modules')->_('Disabled')
 			),
-			'align'     => 'status',
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
@@ -113,7 +112,8 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		return Mage::getBlockSingleton('core/template');
 	}
 
+
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return sprintf('<span class="grid-%s">%s</span>', $row->getData('status'), $value);
+		return sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 }

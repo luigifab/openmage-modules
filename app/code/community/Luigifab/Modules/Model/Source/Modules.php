@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/14/12/2017
+ * Updated S/03/03/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -86,7 +86,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			else if (version_compare($item->getData('last_version'), $item->getData('current_version'), '<'))
 				$item->setData('status', 'beta');
 			else
-				$item->setData('status', $check['status'] = 'uptodate');
+				$item->setData('status', 'uptodate');
 		}
 
 		return $this;
@@ -174,9 +174,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
-				$query = new DOMXPath($dom);
+				$qry = new DOMXPath($dom);
+				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
 
-				$nodes = $query->query('/modules/'.strtolower($name).'/*');
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
 			}
@@ -199,7 +199,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 6);
 			$response = curl_exec($ch);
 			curl_close($ch);
@@ -210,8 +210,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
-				$query = new DOMXPath($dom);
-				$nodes = $query->query('(//s[text()="stable"])/../v');
+				$qry = new DOMXPath($dom);
+				$nodes = $qry->query('(//s[text()="stable"])/../v');
 
 				foreach ($nodes as $nodeV) {
 					$nodeD = $nodeV->parentNode->getElementsByTagName('d')[0];

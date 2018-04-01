@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated J/04/01/2018
+ * Updated M/27/02/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -36,10 +36,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				$config->save();
 
 				// email de test
-				// si demandé ou si le cookie maillog_print_email est présent
-				$cookie = (Mage::getSingleton('core/cookie')->get('maillog_print_email') == 'yes') ? true : false;
-
-				if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')) || $cookie)
+				if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')))
 					$this->sendEmailReport(true);
 			}
 			else {

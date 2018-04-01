@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated V/19/01/2018
+ * Updated L/26/02/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -20,7 +20,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>3.6.2</version>
+			<version>3.6.3</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -101,13 +101,11 @@
 		<modules>
 			<general>
 				<last>1</last>
-				<channel>stable</channel>
 			</general>
 			<email>
 				<enabled>0</enabled>
 				<recipient_email>hello@example.org</recipient_email>
 				<sender_email_identity>general</sender_email_identity>
-				<!--template>modules_email_template</template-->
 			</email>
 		</modules>
 	</default>

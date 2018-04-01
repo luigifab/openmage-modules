@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/14/12/2017
+ * Updated S/03/03/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -30,7 +30,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
 		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
 		$nodes  = $config->getXpath('/config/*/*/*/rewrite/*');
-		$all = $this->searchAllRewrites();
+		$all    = $this->searchAllRewrites();
 
 		foreach ($nodes as $config) {
 
@@ -67,7 +67,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$item->setData('core_class', $module.'/'.$class);
 
 			if ($isConflict) {
-				$text = strtolower($module2.'/'.$class2).implode('<br />', $this->transformData($all[$type][$module.'/'.$class]));
+				$text = strtolower($module2.'/'.$class2).$this->transformData($all[$type][$module.'/'.$class]);
 				$item->setData('rewrite_class', $text);
 				$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
 			}
@@ -84,11 +84,10 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 	}
 
 	private function transformData($data) {
-		$inline = array('');
-		foreach ($data as $key => $value) {
-			$inline[] = sprintf('- %s = %s%s', $key, $value, "\n");
-		}
-		return $inline;
+		$inline = array();
+		foreach ($data as $key => $value)
+			array_push($inline, sprintf('<br />- %s = %s', $key, $value));
+		return implode($inline);
 	}
 
 	private function sort($a, $b) {
@@ -112,7 +111,6 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 			$dom = new DOMDocument();
 			$dom->loadXML(file_get_contents($file));
-
 			$qry = new DOMXPath($dom);
 			$nodes = $qry->query('/config/*/*/*/rewrite/*');
 

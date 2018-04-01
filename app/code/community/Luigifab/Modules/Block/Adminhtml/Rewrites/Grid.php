@@ -1,7 +1,7 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated S/11/11/2017
+ * Updated M/27/02/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -34,7 +34,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 	}
 
 	protected function _prepareCollection() {
-		// $this->setCollection() dans __construct() pour getCount()
+		//$this->setCollection() dans __construct() pour getCount()
 		return parent::_prepareCollection();
 	}
 
@@ -93,7 +93,6 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->__('Conflict')
 			),
-			'align'     => 'status',
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
@@ -125,8 +124,9 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 		return Mage::getBlockSingleton('core/template');
 	}
 
+
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return sprintf('<span class="grid-%s">%s</span>', $row->getData('status'), $value);
+		return sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 
 	public function decorateRewriteClass($value, $row, $column, $isExport) {

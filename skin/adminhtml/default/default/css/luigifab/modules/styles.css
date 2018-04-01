@@ -1,5 +1,5 @@
 /**
- * Created S/31/05/2014, Updated D/29/10/2017
+ * Created S/31/05/2014, Updated S/24/02/2018
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
@@ -12,8 +12,8 @@ body.adminhtml-modules-index-index h3.icon-head { background:url("../../../image
 body.adminhtml-modules-index-index div.content-header-floating input { display:none; }
 body.adminhtml-modules-index-index td.form-buttons input { width:45%; }
 
-body.adminhtml-modules-index-index input::-ms-clear { display: none; }
-body.adminhtml-modules-index-index input::-webkit-search-cancel-button { display: none; }
+body.adminhtml-modules-index-index input::-ms-clear { display:none; }
+body.adminhtml-modules-index-index input::-webkit-search-cancel-button { display:none; }
 
 body.adminhtml-modules-index-index div.hor-scroll {
 	padding-bottom:0; line-height:1.5em;
@@ -46,24 +46,23 @@ body.adminhtml-modules-index-index table.data td {
 	padding:0 4px; line-height:24px;
 	border-top-width:0; border-bottom-width:0;
 	background-size:100% 100%; background-image:linear-gradient(transparent calc(100% - 1px), #DADFE0 1px); background-position:bottom;
-	background-image:-ms-linear-gradient(transparent 97%, #DADFE0 1px);
 }
 
-body.adminhtml-modules-index-index table.data td.a-status span {
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& statut &&& */
+body span.modules-status {
 	display:block; margin-top:3px; height:17px; line-height:18px; text-align:center;
 	font-size:10px; font-weight:700; text-transform:uppercase; color:white; border-radius:10px;
 }
 
-body.adminhtml-modules-index-index table.data td.a-status span.grid-uptodate { background-color:#3CB861; }
-body.adminhtml-modules-index-index table.data td.a-status span.grid-toupdate { background-color:#E41101; }
-body.adminhtml-modules-index-index table.data td.a-status span.grid-beta     { background-color:#FF9C00; }
-body.adminhtml-modules-index-index table.data td.a-status span.grid-unknown  { background-color:#8CD9A3; }
-body.adminhtml-modules-index-index table.data td.a-status span.grid-enabled  { background-color:#3CB861; }
-body.adminhtml-modules-index-index table.data td.a-status span.grid-disabled { background-color:#E41101; }
-body.adminhtml-modules-index-index div.modules table.data td.a-status span.grid-disabled { background-color:#999; }
+body span.modules-status.grid-uptodate { background-color:#3CB861; }
+body span.modules-status.grid-toupdate { background-color:#E41101; }
+body span.modules-status.grid-beta     { background-color:#FF9C00; }
+body span.modules-status.grid-unknown  { background-color:#8CD9A3; }
+body span.modules-status.grid-enabled  { background-color:#3CB861; }
+body span.modules-status.grid-disabled { background-color:#E41101; }
 
-/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& animations &&& */
-body.adminhtml-modules-index-index div.rewrites table.data td.a-status span.grid-disabled {
+body div.modules span.modules-status.grid-disabled { background-color:#999; }
+body div.rewrites span.modules-status.grid-disabled {
 	animation:modulesBlink 1s step-start 0s infinite; -webkit-animation:modulesBlink 1s step-start 0s infinite;
 }
 

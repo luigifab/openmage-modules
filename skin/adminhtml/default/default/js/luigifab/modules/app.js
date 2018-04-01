@@ -1,5 +1,5 @@
 /**
- * Created D/28/02/2016, Updated D/29/10/2017
+ * Created D/28/02/2016, Updated M/20/02/2018
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
@@ -8,7 +8,7 @@
  */
 
 // dépend de Prototype et de Table Sorter
-// totalement testé sur Firefox 27/45, Chrome 29/63, Opera 49, IE 11, Edge 14
+// totalement testé sur Firefox 27/45, Chrome 29/65, Opera 51, IE 11, Edge 14
 var modules = {
 
 	start: function () {
@@ -34,7 +34,7 @@ var modules = {
 					search.setAttribute('spellcheck', 'false');
 					search.setAttribute('autocomplete', 'off');
 					search.setAttribute('class', 'input-text');
-					search.setAttribute('onkeyup', "modules.filter('" + id + "');");
+					search.setAttribute('oninput', "modules.filter('" + id + "');");
 					elems[elem].appendChild(search);
 				}
 			}
@@ -71,6 +71,9 @@ var modules = {
 
 		// un objet = demande le filtrage de tous les tableaux
 		if (typeof data !== 'string') {
+
+			if (data.altKey || data.ctrlKey || data.metaKey || data.shiftKey)
+				return;
 
 			var elems = document.querySelectorAll('table.data'), elem, search = data.value;
 			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
