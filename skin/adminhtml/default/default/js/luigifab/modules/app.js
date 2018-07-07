@@ -1,14 +1,21 @@
 /**
- * Created D/28/02/2016, Updated M/20/02/2018
+ * Created D/28/02/2016
+ * Updated S/19/05/2018
+ *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
  *
  * This program is free software, you can redistribute it or modify
- * it under the terms of the GNU General Public License (GPL).
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
  */
 
-// dépend de Prototype et de Table Sorter
-// totalement testé sur Firefox 27/45, Chrome 29/65, Opera 51, IE 11, Edge 14
 var modules = {
 
 	start: function () {
@@ -142,5 +149,5 @@ var modules = {
 	}
 };
 
-if (typeof window.addEventListener === 'function')
-	window.addEventListener('load', modules.start, false);
+if (typeof self.addEventListener === 'function')
+	self.addEventListener('load', modules.start, false);

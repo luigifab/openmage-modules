@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/14/12/2017
+ * Updated S/19/05/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -61,11 +61,13 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 	}
 
 	private function sort($a, $b) {
+
 		$test = strcmp($a->getData('scope'), $b->getData('scope'));
 		if ($test === 0)
 			$test = strcmp($a->getData('event'), $b->getData('event'));
 		if ($test === 0)
 			$test = strcmp($a->getData('model'), $b->getData('model'));
+
 		return $test;
 	}
 }

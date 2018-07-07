@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/03/03/2018
+ * Updated J/21/06/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -70,12 +70,6 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 		$this->addMagento();
 
-		usort($this->_items, function ($a, $b) {
-			$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
-			return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
-		});
-
-		// calcul le statut
 		foreach ($this as $item) {
 
 			if (($item->getData('status') != 'unknown') || empty($item->getData('current_version')) || empty($item->getData('last_version')))
@@ -89,7 +83,13 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$item->setData('status', 'uptodate');
 		}
 
+		usort($this->_items, array($this, 'sort'));
 		return $this;
+	}
+
+	private function sort($a, $b) {
+		$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
+		return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
 	}
 
 	private function addMagento() {
@@ -114,10 +114,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 	private function readDownloaderCache() {
 
 		$data  = array();
-		$model = Mage::getBaseDir().'/downloader/lib/Mage/Connect/Singleconfig.php';
-		$cache = Mage::getBaseDir().'/downloader/cache.cfg'; //Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME;
+		$model = BP.'/downloader/lib/Mage/Connect/Singleconfig.php';
+		$cache = BP.'/downloader/cache.cfg'; //Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME;
 
-		if (is_file($model) && is_readable($model) && is_file($cache) && is_readable($cache)) {
+		if (is_file($model) && is_file($cache)) {
 
 			if (!class_exists('Mage_Connect_Singleconfig', false))
 				require_once($model);

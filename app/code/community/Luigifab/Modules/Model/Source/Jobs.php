@@ -1,7 +1,7 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated J/14/12/2017
+ * Updated S/19/05/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules

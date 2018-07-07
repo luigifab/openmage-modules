@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated M/27/02/2018
+ * Updated M/26/06/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -76,7 +76,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 		// envoi des emails
 		if (!empty($updates) || ($force === true))
-			$this->sendReportToRecipients($newLocale, array('list' => (count($updates) > 0) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+			$this->sendReportToRecipients($newLocale, array('list' => (!empty($updates)) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
 
 		if ($newLocale != $oldLocale)
 			Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
