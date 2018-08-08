@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/27/02/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -45,7 +45,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'index'     => 'name',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'default n2 txt sort',
 			'frame_callback' => array($this, 'decorateName')
 		));
 
@@ -55,8 +54,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n1 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('current_version', array(
@@ -65,8 +63,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('last_version', array(
@@ -75,8 +72,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('last_date', array(
@@ -104,7 +100,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

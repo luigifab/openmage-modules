@@ -1,7 +1,7 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated S/19/05/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -78,11 +78,10 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 				$this->addItem($item);
 		}
 
-		usort($this->_items, array($this, 'sort'));
-		return $this;
-	}
+		usort($this->_items, function ($a, $b) {
+			return strcmp($a->getData('job_code'), $b->getData('job_code'));
+		});
 
-	private function sort($a, $b) {
-		return strcmp($a->getData('job_code'), $b->getData('job_code'));
+		return $this;
 	}
 }

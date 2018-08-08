@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated S/19/05/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -56,18 +56,15 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 			$this->addItem($item);
 		}
 
-		usort($this->_items, array($this, 'sort'));
+		usort($this->_items, function ($a, $b) {
+			$test = strcmp($a->getData('scope'), $b->getData('scope'));
+			if ($test === 0)
+				$test = strcmp($a->getData('event'), $b->getData('event'));
+			if ($test === 0)
+				$test = strcmp($a->getData('model'), $b->getData('model'));
+			return $test;
+		});
+
 		return $this;
-	}
-
-	private function sort($a, $b) {
-
-		$test = strcmp($a->getData('scope'), $b->getData('scope'));
-		if ($test === 0)
-			$test = strcmp($a->getData('event'), $b->getData('event'));
-		if ($test === 0)
-			$test = strcmp($a->getData('model'), $b->getData('model'));
-
-		return $test;
 	}
 }

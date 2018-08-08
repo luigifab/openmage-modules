@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated M/26/06/2018
+ * Updated S/21/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -92,7 +92,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 	private function sendReportToRecipients($locale, $vars) {
 
-		$emails = preg_split('#\s#', Mage::getStoreConfig('modules/email/recipient_email'));
+		$emails = array_filter(preg_split('#\s+#', Mage::getStoreConfig('modules/email/recipient_email')));
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
 		$vars['config'] = substr($vars['config'], 0, strrpos($vars['config'], '/system/config'));
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/21/06/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -83,13 +83,12 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$item->setData('status', 'uptodate');
 		}
 
-		usort($this->_items, array($this, 'sort'));
-		return $this;
-	}
+		usort($this->_items, function ($a, $b) {
+			$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
+			return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
+		});
 
-	private function sort($a, $b) {
-		$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
-		return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
+		return $this;
 	}
 
 	private function addMagento() {
@@ -175,10 +174,16 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$dom = new DomDocument();
 				$dom->loadXML($response);
 				$qry = new DOMXPath($dom);
-				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
 
+				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
+
+				if (empty($data)) {
+					$nodes = $qry->query('/config/modules/'.$name.'/*');
+					foreach ($nodes as $node)
+						$data[$node->nodeName] = $node->nodeValue;
+				}
 			}
 		}
 		catch (Exception $e) {

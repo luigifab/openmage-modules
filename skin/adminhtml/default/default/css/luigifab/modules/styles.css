@@ -1,6 +1,6 @@
 /**
  * Created S/31/05/2014
- * Updated S/19/05/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -33,14 +33,7 @@ body.adminhtml-modules-index-index div.hor-scroll {
 body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
 body.adminhtml-modules-index-index table.actions { display:none; }
 body.adminhtml-modules-index-index table.data tbody { background-color:transparent; }
-body.adminhtml-modules-index-index table.data tr.headings { user-select:none; -ms-user-select:none; -moz-user-select:none; -webkit-user-select:none; }
-body.adminhtml-modules-index-index table.data tr.headings th { height:18px; }
-body.adminhtml-modules-index-index table.data tr.headings th.no-link { padding:3px 4px; text-align:center; }
-body.adminhtml-modules-index-index table.data tr.headings th i { padding-left:0.2em; font-style:normal; }
-body.adminhtml-modules-index-index table.data tr.headings th a { position:relative; padding:0 2em 0 0; cursor:pointer; }
-body.adminhtml-modules-index-index table.data tr.headings th > span { float:right; margin:-1px 0 1px; color:#999; }
-body.adminhtml-modules-index-index table.data tr.headings th > span.nobr { float:inherit; margin:0; color:inherit; }
-
+body.adminhtml-modules-index-index table.data tr.headings th { height:18px; padding:3px 4px; text-align:center; }
 body.adminhtml-modules-index-index table.data tr.filter th { padding:0; height:32px; overflow:hidden; vertical-align:middle; }
 
 body.adminhtml-modules-index-index table.data tr.filter input {
@@ -56,6 +49,9 @@ body.adminhtml-modules-index-index table.data td {
 	border-top-width:0; border-bottom-width:0;
 	background-size:100% 100%; background-image:linear-gradient(transparent calc(100% - 1px), #DADFE0 1px); background-position:bottom;
 }
+
+
+@supports (-ms-ime-align:auto) { body.adminhtml-modules-index-index table.data td { background-image:none; } }
 
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& statut &&& */
 body span.modules-status {

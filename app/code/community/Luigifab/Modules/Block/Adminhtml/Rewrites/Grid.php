@@ -1,7 +1,7 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/27/02/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -44,8 +44,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('scope', array(
@@ -54,8 +53,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n1 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('type', array(
@@ -64,16 +62,14 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n2 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('core_class', array(
 			'header'    => $this->__('Source'),
 			'index'     => 'core_class',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n3 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('rewrite_class', array(
@@ -81,7 +77,6 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateRewriteClass')
 		));
 
@@ -96,7 +91,6 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated M/27/02/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -44,8 +44,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('scope', array(
@@ -54,24 +53,21 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n1 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('event', array(
 			'header'    => $this->__('Event'),
 			'index'     => 'event',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n2 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('model', array(
 			'header'    => 'Model',
 			'index'     => 'model',
 			'filter'    => false,
-			'sortable'  => false,
-			'header_css_class' => 'default n3 txt sort'
+			'sortable'  => false
 		));
 
 		$this->addColumn('status', array(
@@ -85,7 +81,6 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'header_css_class' => 'txt sort',
 			'frame_callback' => array($this, 'decorateStatus')
 		));
 

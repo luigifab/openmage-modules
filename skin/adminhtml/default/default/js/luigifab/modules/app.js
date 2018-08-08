@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated S/19/05/2018
+ * Updated J/19/07/2018
  *
  * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
  * https://www.luigifab.info/magento/modules
@@ -35,7 +35,7 @@ var modules = {
 				while (elems[elem].childNodes.length > 0)
 					elems[elem].removeChild(elems[elem].firstChild);
 
-				if (elems[elem].getAttribute('class').indexOf('last') < 0) {
+				//if (elems[elem].getAttribute('class').indexOf('last') < 0) {
 					search = document.createElement('input');
 					search.setAttribute('type', 'search');
 					search.setAttribute('spellcheck', 'false');
@@ -43,7 +43,7 @@ var modules = {
 					search.setAttribute('class', 'input-text');
 					search.setAttribute('oninput', "modules.filter('" + id + "');");
 					elems[elem].appendChild(search);
-				}
+				//}
 			}
 
 			// réutilise la recherche précédente
