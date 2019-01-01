@@ -3,8 +3,8 @@
  * Created V/23/05/2014
  * Updated M/22/05/2018
  *
- * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://www.luigifab.info/magento/modules
+ * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -21,6 +21,6 @@ class Luigifab_Modules_Block_Adminhtml_Config_Help extends Mage_Adminhtml_Block_
 
 	public function render(Varien_Data_Form_Element_Abstract $element) {
 		return sprintf('<p class="box">Luigifab/Modules %s <a href="https://www.%s" style="float:right;">%2$s</a></p>',
-			$this->helper('modules')->getVersion(), 'luigifab.info/magento/modules');
+			$this->helper('modules')->getVersion(), 'luigifab.fr/magento/modules');
 	}
 }

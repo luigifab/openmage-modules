@@ -3,8 +3,8 @@
  * Created L/21/07/2014
  * Updated J/19/07/2018
  *
- * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://www.luigifab.info/magento/modules
+ * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -27,7 +27,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		//  <Luigifab_Modules>                                 <= $config
 		//   <active>true</active>
 		//   <codePool>community</codePool>
-		//   <update>https://www.luigifab.info/magento/rss.xml
+		//   <update>https://www.luigifab.fr/magento/rss.xml
 		$config  = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
 		$nodes   = $config->getXpath('/config/modules/*');
 		$connect = $this->readDownloaderCache();

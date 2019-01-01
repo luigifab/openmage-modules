@@ -1,9 +1,9 @@
 /**
  * Created D/28/02/2016
- * Updated J/19/07/2018
+ * Updated D/02/09/2018
  *
- * Copyright 2012-2018 | Fabrice Creuzot (luigifab) <code~luigifab~info>
- * https://www.luigifab.info/magento/modules
+ * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -119,21 +119,40 @@ var modules = {
 				if (words.length > 0) {
 
 					words = words.split(' ');
+					size  = words.length;
 					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/(<([^>]+)>)/ig, '').toLowerCase().trim();
 					i     = 0;
 
 					// si la recherche se fait avec plusieurs mots
 					// pour que la recherche soit valide, on doit trouver tous les mots
-					if (words.length > 1) {
+					// sauf si un des mots comment par un -
+					if (size > 1) {
 
-						for (word in words) if (words.hasOwnProperty(word) && !isNaN(word))
-							i = (text.indexOf(words[word]) > -1) ? i + 1 : i;
+						for (word in words) if (words.hasOwnProperty(word) && !isNaN(word)) {
+							word = words[word];
+							if (word === '-') {
+								size -= 1;
+							}
+							else if (word[0] === '-') {
+								if (text.indexOf(word.substr(1)) > -1) {
+									size = -1;
+									break;
+								}
+								size -= 1;
+							}
+							else {
+								i = (text.indexOf(word) > -1) ? i + 1 : i;
+							}
+						}
 
-						show.push((i === words.length) ? true : false);
+						show.push((i === size) ? true : false);
 					}
 					// si la recherche se fait avec un seul mot
 					else {
-						show.push((text.indexOf(words[0]) > -1) ? true : false);
+						if (words[0][0] === '-')
+							show.push((text.indexOf(words[0].substr(1)) > -1) ? false : true);
+						else
+							show.push((text.indexOf(words[0]) > -1) ? true : false);
 					}
 				}
 				else {
