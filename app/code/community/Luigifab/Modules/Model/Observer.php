@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated S/21/07/2018
+ * Updated M/15/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -22,38 +22,33 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	// EVENT admin_system_config_changed_section_modules (adminhtml)
 	public function updateConfig() {
 
-		try {
-			$config = Mage::getModel('core/config_data');
-			$config->load('crontab/jobs/modules_send_report/schedule/cron_expr', 'path');
+		$config = Mage::getModel('core/config_data');
+		$config->load('crontab/jobs/modules_send_report/schedule/cron_expr', 'path');
 
-			if (Mage::getStoreConfigFlag('modules/email/enabled')) {
+		if (Mage::getStoreConfigFlag('modules/email/enabled')) {
 
-				// hebdomadaire, tous les lundi à 1h00 (hebdomadaire/weekly)
-				// minute hour day-of-month month-of-year day-of-week (Dimanche = 0, Lundi = 1...)
-				// 0	     1    *            *             0|1         => weekly
-				$config->setData('value', '0 1 * * '.Mage::getStoreConfig('general/locale/firstday'));
-				$config->setData('path', 'crontab/jobs/modules_send_report/schedule/cron_expr');
-				$config->save();
+			// hebdomadaire, tous les lundi à 1h00 (hebdomadaire/weekly)
+			// minute hour day-of-month month-of-year day-of-week (Dimanche = 0, Lundi = 1...)
+			// 0	     1    *            *             0|1         => weekly
+			$config->setData('value', '0 1 * * '.Mage::getStoreConfig('general/locale/firstday'));
+			$config->setData('path', 'crontab/jobs/modules_send_report/schedule/cron_expr');
+			$config->save();
 
-				// email de test
-				if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')))
-					$this->sendEmailReport(true);
-			}
-			else {
-				$config->delete();
-			}
+			// email de test
+			if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')))
+				$this->sendEmailReport(true);
 		}
-		catch (Exception $e) {
-			Mage::throwException($e->getMessage());
+		else {
+			$config->delete();
 		}
 	}
 
 
 	// CRON modules_send_report
-	public function sendEmailReport($force = false) {
+	public function sendEmailReport($test = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
-		$newLocale = (Mage::app()->getStore()->isAdmin()) ? $oldLocale : Mage::getStoreConfig('general/locale/code');
+		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig('general/locale/code');
 		Mage::getSingleton('core/translate')->setLocale($newLocale)->init('adminhtml', true);
 
 		// chargement des modules
@@ -65,18 +60,18 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 			if ($module->getData('status') != 'toupdate')
 				continue;
 
-			array_push($updates, sprintf('(%d) <strong>%s %s</strong><br />➤ %s - %s',
+			$updates[] = sprintf('(%d) <strong>%s %s</strong><br />➤ %s - %s',
 				count($updates) + 1,
 				$module->getData('name'),
 				$module->getData('current_version'),
 				$module->getData('last_version'),
 				Mage::getSingleton('core/locale')->date($module->getData('last_date'))->toString(Zend_Date::DATE_LONG)
-			));
+			);
 		}
 
 		// envoi des emails
-		if (!empty($updates) || ($force === true))
-			$this->sendReportToRecipients($newLocale, array('list' => (!empty($updates)) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+		if (!empty($updates) || ($test === true))
+			$this->sendReportToRecipients($newLocale, array('list' => !empty($updates) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
 
 		if ($newLocale != $oldLocale)
 			Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
@@ -85,28 +80,28 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	private function getEmailUrl($url, $params = array()) {
 
 		if (Mage::getStoreConfigFlag('web/seo/use_rewrites'))
-			return preg_replace('#/[^/]+\.php[0-9]*/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
+			return preg_replace('#/[^/]+\.php\d*/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
 		else
-			return preg_replace('#/[^/]+\.php([0-9]*)/#', '/index.php$1/', Mage::helper('adminhtml')->getUrl($url, $params));
+			return preg_replace('#/[^/]+\.php(\d*)/#', '/index.php$1/', Mage::helper('adminhtml')->getUrl($url, $params));
 	}
 
 	private function sendReportToRecipients($locale, $vars) {
 
 		$emails = array_filter(preg_split('#\s+#', Mage::getStoreConfig('modules/email/recipient_email')));
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
-		$vars['config'] = substr($vars['config'], 0, strrpos($vars['config'], '/system/config'));
+		$vars['config'] = mb_substr($vars['config'], 0, mb_strrpos($vars['config'], '/system/config'));
 
 		foreach ($emails as $email) {
 
 			if (in_array($email, array('hello@example.org', 'hello@example.com', '')))
 				continue;
 
-			// sendTransactional($templateId, $sender, $recipient, $name, $vars = array(), $storeId = null)
-			// fait en manuel (identique de Magento 1.4 à 1.9) pour utiliser la locale que l'on veut
-			// car le setLocale utilisé plus haut ne permet pas d'utiliser le template email de la langue choisie
+			// le setLocale utilisé plus haut ne permet pas d'utiliser le template email de la langue choisie
+			// donc le sendTransactional est fait en manuel (identique de Magento 1.4 à 1.9) pour utiliser la locale que l'on veut
 			$sender = Mage::getStoreConfig('modules/email/sender_email_identity');
 			$template = Mage::getModel('core/email_template');
 
+			// sendTransactional($templateId, $sender, $recipient, $name, $vars = array(), $storeId = null)
 			//$template->sendTransactional(
 			//	Mage::getStoreConfig('modules/email/template'),
 			//	Mage::getStoreConfig('modules/email/sender_email_identity'),

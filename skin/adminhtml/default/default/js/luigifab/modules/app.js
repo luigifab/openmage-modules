@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated D/02/09/2018
+ * Updated J/17/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -102,7 +102,7 @@ var modules = {
 		var lines = document.getElementById(id).querySelectorAll('tbody tr'), line,
 		    cols  = document.getElementById(id).querySelectorAll('input[type="search"]'), col,
 		    words, word, i,
-		    text, show;
+		    text, show, size;
 
 		for (line in lines) if (lines.hasOwnProperty(line) && !isNaN(line)) {
 
@@ -120,7 +120,7 @@ var modules = {
 
 					words = words.split(' ');
 					size  = words.length;
-					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/(<([^>]+)>)/ig, '').toLowerCase().trim();
+					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/(<[^>]+>)/ig, '').toLowerCase().trim();
 					i     = 0;
 
 					// si la recherche se fait avec plusieurs mots
@@ -149,7 +149,9 @@ var modules = {
 					}
 					// si la recherche se fait avec un seul mot
 					else {
-						if (words[0][0] === '-')
+						if (words[0] === '-')
+							show.push(true);
+						else if (words[0][0] === '-')
 							show.push((text.indexOf(words[0].substr(1)) > -1) ? false : true);
 						else
 							show.push((text.indexOf(words[0]) > -1) ? true : false);

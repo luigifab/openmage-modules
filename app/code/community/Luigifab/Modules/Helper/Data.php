@@ -1,7 +1,7 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated M/28/02/2017
+ * Updated S/22/12/2018
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -24,6 +24,6 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function _($data, $a = null, $b = null) {
-		return (strpos($txt = $this->__(' '.$data, $a, $b), ' ') === 0) ? $this->__($data, $a, $b) : $txt;
+		return (mb_strpos($txt = $this->__(' '.$data, $a, $b), ' ') === 0) ? $this->__($data, $a, $b) : $txt;
 	}
 }

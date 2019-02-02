@@ -1,7 +1,7 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated J/19/07/2018
+ * Updated M/15/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -38,17 +38,17 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$jobcode = $config->getName();
 			$configurable = Mage::getConfig()->getNode('default/crontab/jobs/'.$jobcode);
 
-			$expr = (!empty($config->schedule->config_path)) ? Mage::getStoreConfig((string) $config->schedule->config_path) : null;
-			$expr = (!empty($config->schedule->cron_expr))   ? $config->schedule->cron_expr : $expr;
-			$expr = (!empty($configurable->schedule->config_path)) ? Mage::getStoreConfig((string) $configurable->schedule->config_path) : $expr;
-			$expr = (!empty($configurable->schedule->cron_expr))   ? $configurable->schedule->cron_expr : $expr;
-			$expr = (!empty(trim($expr))) ? trim($expr) : null;
+			$expr = !empty($config->schedule->config_path) ? Mage::getStoreConfig((string) $config->schedule->config_path) : null;
+			$expr = !empty($config->schedule->cron_expr)   ? $config->schedule->cron_expr : $expr;
+			$expr = !empty($configurable->schedule->config_path) ? Mage::getStoreConfig((string) $configurable->schedule->config_path) : $expr;
+			$expr = !empty($configurable->schedule->cron_expr)   ? $configurable->schedule->cron_expr : $expr;
+			$expr = !empty(trim($expr)) ? trim($expr) : null;
 
-			$model = (!empty($config->run->model)) ? $config->run->model : null;
-			$model = (!empty($configurable->run->model)) ? $configurable->run->model : $model;
+			$model = !empty($config->run->model) ? $config->run->model : null;
+			$model = !empty($configurable->run->model) ? $configurable->run->model : $model;
 
 			$moduleName = Mage::getConfig()->getModelClassName($model);
-			$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
+			$moduleName = mb_substr($moduleName, 0, mb_strpos($moduleName, '_', mb_strpos($moduleName, '_') + 1));
 			$moduleName = str_replace('_', '/', $moduleName);
 
 			// tâche désactivée si :

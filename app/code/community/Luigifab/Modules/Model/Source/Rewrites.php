@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/19/07/2018
+ * Updated M/08/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -48,12 +48,12 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			// module2=Modules
 			//  class2=Rewrite_Cron
 			// modName=Luigifab/Modules
-			$first   = substr($config, strpos($config, '_') + 1);
-			$second  = substr($first, strpos($first, '_') + 1);
-			$module2 = substr($first, 0, strpos($first, '_'));
-			$class2  = substr($second, strpos($second, '_') + 1);
+			$first   = mb_substr($config, mb_strpos($config, '_') + 1);
+			$second  = mb_substr($first, mb_strpos($first, '_') + 1);
+			$module2 = mb_substr($first, 0, mb_strpos($first, '_'));
+			$class2  = mb_substr($second, mb_strpos($second, '_') + 1);
 
-			$moduleName = substr($config, 0, strpos($config, '_')).'/'.$module2;
+			$moduleName = mb_substr($config, 0, mb_strpos($config, '_')).'/'.$module2;
 
 			// surcharge en conflit
 			// - au moins deux fichiers config définissent plus ou moins la même chose
@@ -63,16 +63,16 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$item = new Varien_Object();
 			$item->setData('module', $moduleName);
 			$item->setData('scope', $scope);
-			$item->setData('type', substr($type, 0, -1));
+			$item->setData('type', mb_substr($type, 0, -1));
 			$item->setData('core_class', $module.'/'.$class);
 
 			if ($isConflict) {
-				$text = strtolower($module2.'/'.$class2).$this->transformData($all[$type][$module.'/'.$class]);
+				$text = mb_strtolower($module2.'/'.$class2).$this->transformData($all[$type][$module.'/'.$class]);
 				$item->setData('rewrite_class', $text);
 				$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
 			}
 			else {
-				$item->setData('rewrite_class', strtolower($module2.'/'.$class2));
+				$item->setData('rewrite_class', mb_strtolower($module2.'/'.$class2));
 				$item->setData('status', 'enabled'); // disabled=conflict / enabled=ok
 			}
 
@@ -95,7 +95,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 		$inline = array();
 		foreach ($data as $key => $value)
-			array_push($inline, sprintf('<br />- %s = %s', $key, $value));
+			$inline[] = sprintf('<br />- %s = %s', $key, $value);
 
 		return implode($inline);
 	}

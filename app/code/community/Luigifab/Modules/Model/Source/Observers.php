@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/19/07/2018
+ * Updated M/15/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -36,10 +36,10 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 
 		foreach ($nodes as $config) {
 
-			$moduleName = Mage::getConfig()->getModelClassName(($config->class) ? $config->class : $config->model);
+			$moduleName = Mage::getConfig()->getModelClassName($config->class ?: $config->model);
 
 			if (!empty($moduleName)) {
-				$moduleName = substr($moduleName, 0, strpos($moduleName, '_', strpos($moduleName, '_') + 1));
+				$moduleName = mb_substr($moduleName, 0, mb_strpos($moduleName, '_', mb_strpos($moduleName, '_') + 1));
 				$moduleName = str_replace('_', '/', $moduleName);
 			}
 
@@ -50,7 +50,7 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 			$item->setData('module', $moduleName);
 			$item->setData('event', $event);
 			$item->setData('scope', $scope);
-			$item->setData('model', (!empty($moduleName)) ? $config->class.'::'.$config->method : '');
+			$item->setData('model',  !empty($moduleName) ? $config->class.'::'.$config->method : '');
 			$item->setData('status', (empty($moduleName) || ($config->type == 'disabled')) ? 'disabled' : 'enabled');
 
 			$this->addItem($item);

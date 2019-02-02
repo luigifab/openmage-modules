@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/19/07/2018
+ * Updated M/15/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -45,9 +45,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				if (!empty($config->update)) {
 					$check += $this->checkUpdate($moduleName, $config->update);
 				}
-				else if ((strpos($moduleName, 'Mage_') === false) && ($moduleName != 'Phoenix_Moneybookers')) {
+				else if (($moduleName != 'Phoenix_Moneybookers') && (mb_strpos($moduleName, 'Mage_') === false)) {
 					foreach ($connect as $key => $data) {
-						if (strpos($data['xml'], $moduleName) !== false) {
+						if (mb_strpos($data['xml'], $moduleName) !== false) {
 							$check += $this->checkConnect($data['name'], $data['url']);
 							unset($connect[$key]); // car il y en a plus besoin
 							break;
@@ -60,9 +60,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$item->setData('name', str_replace('_', '/', $moduleName));
 			$item->setData('code_pool', $config->codePool);
 			$item->setData('current_version', $config->version);
-			$item->setData('last_version', (!empty($check['version'])) ? $check['version'] : false);
-			$item->setData('last_date', (!empty($check['date'])) ? $check['date'] : false);
-			$item->setData('url', (!empty($check['url'])) ? $check['url'] : false);
+			$item->setData('last_version', !empty($check['version']) ? $check['version'] : false);
+			$item->setData('last_date', !empty($check['date']) ? $check['date'] : false);
+			$item->setData('url', !empty($check['url']) ? $check['url'] : false);
 			$item->setData('status', $check['status']);
 
 			$this->addItem($item);
@@ -102,8 +102,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$item->setData('name', 'MAGENTO');
 		$item->setData('code_pool', 'core');
 		$item->setData('current_version', Mage::getVersion());
-		$item->setData('last_version', (!empty($check['version'])) ? $check['version'] : false);
-		$item->setData('last_date', (!empty($check['date'])) ? $check['date'] : false);
+		$item->setData('last_version', !empty($check['version']) ? $check['version'] : false);
+		$item->setData('last_date', !empty($check['date']) ? $check['date'] : false);
 		$item->setData('url', 'https://magento.com/download');
 		$item->setData('status', $check['status']);
 
@@ -125,12 +125,12 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$config->load(false);
 
 			$channels = $config->getData();
-			$channels = (!empty($channels['channels_by_name'])) ? $channels['channels_by_name'] : array();
+			$channels = !empty($channels['channels_by_name']) ? $channels['channels_by_name'] : array();
 
 			foreach ($channels as $channel) {
 
-				$url = (!empty($channel['uri'])) ? 'https://'.$channel['uri'].'/' : null;
-				$packages = (!empty($channel['packages'])) ? $channel['packages'] : array();
+				$url = !empty($channel['uri']) ? 'https://'.$channel['uri'].'/' : null;
+				$packages = !empty($channel['packages']) ? $channel['packages'] : array();
 
 				foreach ($packages as $key => $item) {
 					if (!empty($item['xml']))
@@ -169,13 +169,13 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$response = $this->cache[$key];
 
 			// lecture du fichier XML de la balise <update>
-			if ((strpos($response, '<modules>') !== false) && (strpos($response, '</modules>') !== false)) {
+			if ((mb_strpos($response, '<modules>') !== false) && (mb_strpos($response, '</modules>') !== false)) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
 				$qry = new DOMXPath($dom);
 
-				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
+				$nodes = $qry->query('/modules/'.mb_strtolower($name).'/*');
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
 
@@ -198,7 +198,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$data = array();
 
 		try {
-			$url = ((is_null($url)) ? 'https://connect20.magentocommerce.com/community/' : $url).$name.'/releases.xml';
+			$url = (empty($url) ? 'https://connect20.magentocommerce.com/community/' : $url).$name.'/releases.xml';
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -211,7 +211,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
 			// pour l'expression du xpath voir https://www.freeformatter.com/xpath-tester.html
-			if ((strpos($response, '<releases>') !== false) && (strpos($response, '</releases>') !== false)) {
+			if ((mb_strpos($response, '<releases>') !== false) && (mb_strpos($response, '</releases>') !== false)) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);

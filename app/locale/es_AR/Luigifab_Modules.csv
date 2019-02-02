@@ -20,7 +20,7 @@
 "Destination","Destino"
 "Conflict","Conflicto"
 "Can not send the report by email to %s.","Imposible enviar el informe por correo electrónico a %s."
-"Search a module name in all lists","Buscar el nombre del módulo en todas las listas"
+"Search in all lists","Buscar en todas las listas"
 "Cron jobs list","Lista de tareas cron"
 "Observers list","Lista de observadores"
 "Rewrites list","Lista de sobrecargas"

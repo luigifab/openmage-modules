@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/19/07/2018
+ * Updated M/15/01/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -133,6 +133,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 	}
 
 	public function decorateName($value, $row, $column, $isExport) {
-		return (!empty($url = $row->getData('url'))) ? sprintf('<a href="%s">%s</a>', $url, $value) : $value;
+		return !empty($url = $row->getData('url')) ? sprintf('<a href="%s">%s</a>', $url, $value) : $value;
 	}
 }
