@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated J/17/01/2019
+ * Updated V/01/03/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -20,14 +20,14 @@ var modules = {
 
 	start: function () {
 
-		if (document.querySelector('body[class*="adminhtml-modules-index-index"]')) {
+		if (document.querySelector('body.adminhtml-modules-index-index')) {
 
 			console.info('modules.app - hello');
 
 			// crée les inputs avec un onkeyup dans les cellules des entêtes
 			// prend soin de supprimer ce qu'il y a dans les th
 			// utilise l'id du tableau html
-			var elems = document.querySelectorAll('table.data tr.filter th'), elem, search, id;
+			var elem, elems = document.querySelectorAll('table.data tr.filter th'), search, id, data;
 			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
 
 				id = elems[elem].parentNode.parentNode.parentNode.getAttribute('id');
@@ -35,21 +35,20 @@ var modules = {
 				while (elems[elem].childNodes.length > 0)
 					elems[elem].removeChild(elems[elem].firstChild);
 
-				//if (elems[elem].getAttribute('class').indexOf('last') < 0) {
-					search = document.createElement('input');
-					search.setAttribute('type', 'search');
-					search.setAttribute('spellcheck', 'false');
-					search.setAttribute('autocomplete', 'off');
-					search.setAttribute('class', 'input-text');
-					search.setAttribute('oninput', "modules.filter('" + id + "');");
-					elems[elem].appendChild(search);
-				//}
+				search = document.createElement('input');
+				search.setAttribute('type', 'search');
+				search.setAttribute('spellcheck', 'false');
+				search.setAttribute('autocomplete', 'off');
+				search.setAttribute('class', 'input-text');
+				search.setAttribute('oninput', "modules.filter('" + id + "');");
+				elems[elem].appendChild(search);
 			}
 
 			// réutilise la recherche précédente
-			if (sessionStorage && sessionStorage.getItem('modules_search')) {
+			data = sessionStorage.getItem('modules_search');
+			if (data) {
 				search = document.querySelector('div.content-header input[type="search"]');
-				search.value = sessionStorage.getItem('modules_search');
+				search.value = data;
 				modules.filter(search);
 			}
 		}
@@ -58,7 +57,7 @@ var modules = {
 	reset: function () {
 
 		// efface les filtres
-		var elems = document.querySelectorAll('table.data input[type="search"]'), elem;
+		var elem, elems = document.querySelectorAll('table.data input[type="search"]');
 		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
 			elems[elem].value = '';
 
@@ -70,8 +69,8 @@ var modules = {
 		// efface le filtre global
 		document.querySelector('div.content-header input[type="search"]').value = '';
 		document.querySelector('div.content-header input[type="search"]').focus();
-		if (sessionStorage)
-			sessionStorage.removeItem('modules_search');
+
+		sessionStorage.removeItem('modules_search');
 	},
 
 	filter: function (data) {
@@ -82,14 +81,13 @@ var modules = {
 			if (data.altKey || data.ctrlKey || data.metaKey || data.shiftKey)
 				return;
 
-			var elems = document.querySelectorAll('table.data'), elem, search = data.value;
+			var elem, elems = document.querySelectorAll('table.data'), search = data.value;
 			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
 				elems[elem].querySelector('input[type="search"]').value = search;
 				this.action(elems[elem].getAttribute('id'));
 			}
 
-			if (sessionStorage)
-				sessionStorage.setItem('modules_search', search);
+			sessionStorage.setItem('modules_search', search);
 		}
 		// un id = demande le filtrage du tableau
 		else if (document.getElementById(data)) {
@@ -99,10 +97,9 @@ var modules = {
 
 	action: function (id) {
 
-		var lines = document.getElementById(id).querySelectorAll('tbody tr'), line,
-		    cols  = document.getElementById(id).querySelectorAll('input[type="search"]'), col,
-		    words, word, i,
-		    text, show, size;
+		var line, lines = document.getElementById(id).querySelectorAll('tbody tr'),
+		    col, cols = document.getElementById(id).querySelectorAll('input[type="search"]'),
+		    word, words, i, text, show, size;
 
 		for (line in lines) if (lines.hasOwnProperty(line) && !isNaN(line)) {
 
@@ -120,7 +117,7 @@ var modules = {
 
 					words = words.split(' ');
 					size  = words.length;
-					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/(<[^>]+>)/ig, '').toLowerCase().trim();
+					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/<[^>]+>/ig, '').toLowerCase().trim();
 					i     = 0;
 
 					// si la recherche se fait avec plusieurs mots
