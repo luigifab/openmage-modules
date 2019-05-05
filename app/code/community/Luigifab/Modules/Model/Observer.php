@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated M/15/01/2019
+ * Updated V/12/04/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -29,14 +29,14 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 			// hebdomadaire, tous les lundi à 1h00 (hebdomadaire/weekly)
 			// minute hour day-of-month month-of-year day-of-week (Dimanche = 0, Lundi = 1...)
-			// 0	     1    *            *             0|1         => weekly
+			// 0      1    *            *             0|1         => weekly
 			$config->setData('value', '0 1 * * '.Mage::getStoreConfig('general/locale/firstday'));
 			$config->setData('path', 'crontab/jobs/modules_send_report/schedule/cron_expr');
 			$config->save();
 
 			// email de test
 			if (!empty(Mage::app()->getRequest()->getPost('modules_test_email')))
-				$this->sendEmailReport(true);
+				$this->sendEmailReport(null, true);
 		}
 		else {
 			$config->delete();
@@ -45,7 +45,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 
 	// CRON modules_send_report
-	public function sendEmailReport($test = false) {
+	public function sendEmailReport($cron = null, $test = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
 		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig('general/locale/code');
@@ -70,8 +70,10 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 
 		// envoi des emails
-		if (!empty($updates) || ($test === true))
-			$this->sendReportToRecipients($newLocale, array('list' => !empty($updates) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : ''));
+		if (!empty($updates) || $test) {
+			$updates = !empty($updates) ? implode('</li><li style="margin:0.8em 0 0.5em;">', $updates) : '';
+			$this->sendReportToRecipients($newLocale, array('list' => $updates));
+		}
 
 		if ($newLocale != $oldLocale)
 			Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);

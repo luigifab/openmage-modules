@@ -64,7 +64,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
 			$isReadOnly = (!empty($config->schedule->disabled) ||
 			               (empty($config->schedule->config_path) && empty($config->schedule->cron_expr)) ||
-			               empty($expr));
+			                empty($expr));
 
 			$item = new Varien_Object();
 			$item->setData('module', $moduleName);

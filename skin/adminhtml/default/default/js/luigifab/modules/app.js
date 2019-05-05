@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated V/01/03/2019
+ * Updated V/26/04/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -67,8 +67,9 @@ var modules = {
 			elems[elem].removeAttribute('style');
 
 		// efface le filtre global
-		document.querySelector('div.content-header input[type="search"]').value = '';
-		document.querySelector('div.content-header input[type="search"]').focus();
+		elem = document.querySelector('div.content-header input[type="search"]');
+		elem.value = '';
+		elem.focus();
 
 		sessionStorage.removeItem('modules_search');
 	},

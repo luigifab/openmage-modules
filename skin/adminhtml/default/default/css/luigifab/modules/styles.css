@@ -1,6 +1,6 @@
 /**
  * Created S/31/05/2014
- * Updated J/19/07/2018
+ * Updated D/17/03/2019
  *
  * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -41,7 +41,7 @@ body.adminhtml-modules-index-index table.data tr.filter input {
 	box-sizing:border-box; -moz-box-sizing:border-box;
 }
 
-body.adminhtml-modules-index-index table.data tr.disabled { color:#999; }
+body.adminhtml-modules-index-index table.data tr.disabled,
 body.adminhtml-modules-index-index table.data tr.disabled a { color:#999; }
 
 body.adminhtml-modules-index-index table.data td {
@@ -49,7 +49,6 @@ body.adminhtml-modules-index-index table.data td {
 	border-top-width:0; border-bottom-width:0;
 	background-size:100% 100%; background-image:linear-gradient(transparent calc(100% - 1px), #DADFE0 1px); background-position:bottom;
 }
-
 
 @supports (-ms-ime-align:auto) { body.adminhtml-modules-index-index table.data td { background-image:none; } }
 
