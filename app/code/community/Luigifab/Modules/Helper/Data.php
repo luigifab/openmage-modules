@@ -1,9 +1,9 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated S/22/12/2018
+ * Updated J/17/10/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -23,7 +23,11 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 		return (string) Mage::getConfig()->getModuleConfig('Luigifab_Modules')->version;
 	}
 
-	public function _($data, $a = null, $b = null) {
-		return (mb_strpos($txt = $this->__(' '.$data, $a, $b), ' ') === 0) ? $this->__($data, $a, $b) : $txt;
+	public function _(string $data, $a = null, $b = null) {
+		return (mb_stripos($txt = $this->__(' '.$data, $a, $b), ' ') === 0) ? $this->__($data, $a, $b) : $txt;
+	}
+
+	public function escapeEntities($data, bool $quotes = false) {
+		return htmlspecialchars($data, $quotes ? ENT_SUBSTITUTE | ENT_COMPAT : ENT_SUBSTITUTE | ENT_NOQUOTES);
 	}
 }

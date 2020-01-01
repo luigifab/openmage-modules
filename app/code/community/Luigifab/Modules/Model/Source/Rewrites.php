@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated M/08/01/2019
+ * Updated V/30/08/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -28,9 +28,9 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		//   <cron>                                          <= $config/../../$module
 		//    <rewrite>
 		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
-		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
-		$nodes  = $config->getXpath('/config/*/*/*/rewrite/*');
-		$all    = $this->searchAllRewrites();
+		$config   = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes    = $config->getXpath('/config/*/*/*/rewrite/*');
+		$rewrites = $this->searchAllRewrites();
 
 		foreach ($nodes as $config) {
 
@@ -48,17 +48,17 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			// module2=Modules
 			//  class2=Rewrite_Cron
 			// modName=Luigifab/Modules
-			$first   = mb_substr($config, mb_strpos($config, '_') + 1);
-			$second  = mb_substr($first, mb_strpos($first, '_') + 1);
-			$module2 = mb_substr($first, 0, mb_strpos($first, '_'));
-			$class2  = mb_substr($second, mb_strpos($second, '_') + 1);
+			$first   = mb_substr($config, mb_stripos($config, '_') + 1);
+			$second  = mb_substr($first, mb_stripos($first, '_') + 1);
+			$module2 = mb_substr($first, 0, mb_stripos($first, '_'));
+			$class2  = mb_substr($second, mb_stripos($second, '_') + 1);
 
-			$moduleName = mb_substr($config, 0, mb_strpos($config, '_')).'/'.$module2;
+			$moduleName = mb_substr($config, 0, mb_stripos($config, '_')).'/'.$module2;
 
 			// surcharge en conflit
 			// - au moins deux fichiers config définissent plus ou moins la même chose
 			// - ce qui est affiché = ce qui est actif sur Magento
-			$isConflict = (!empty($all[$type][$module.'/'.$class]) && (count($all[$type][$module.'/'.$class]) > 1));
+			$isConflict = (!empty($rewrites[$type][$module.'/'.$class]) && (count($rewrites[$type][$module.'/'.$class]) > 1));
 
 			$item = new Varien_Object();
 			$item->setData('module', $moduleName);
@@ -67,7 +67,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$item->setData('core_class', $module.'/'.$class);
 
 			if ($isConflict) {
-				$text = mb_strtolower($module2.'/'.$class2).$this->transformData($all[$type][$module.'/'.$class]);
+				$text = mb_strtolower($module2.'/'.$class2).$this->transformData($rewrites[$type][$module.'/'.$class]);
 				$item->setData('rewrite_class', $text);
 				$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
 			}
@@ -79,7 +79,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			$this->addItem($item);
 		}
 
-		usort($this->_items, function ($a, $b) {
+		usort($this->_items, static function ($a, $b) {
 			$test = strcmp($a->getData('scope'), $b->getData('scope'));
 			if ($test === 0)
 				$test = strcmp($a->getData('type'), $b->getData('type'));
@@ -93,7 +93,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 	private function transformData($data) {
 
-		$inline = array();
+		$inline = [];
 		foreach ($data as $key => $value)
 			$inline[] = sprintf('<br />- %s = %s', $key, $value);
 
@@ -102,8 +102,8 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 	private function searchAllRewrites() {
 
-		$folders = array('app/code/local/', 'app/code/community/');
-		$files = $rewrites = array();
+		$folders  = ['app/code/local/', 'app/code/community/'];
+		$rewrites = $files = [];
 
 		foreach ($folders as $folder)
 			$files = array_merge($files, glob($folder.'*/*/etc/config.xml'));

@@ -1,8 +1,8 @@
 /**
  * Created S/31/05/2014
- * Updated D/17/03/2019
+ * Updated S/23/11/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -25,9 +25,8 @@ body.adminhtml-modules-index-index input::-ms-clear { display:none; }
 body.adminhtml-modules-index-index input::-webkit-search-cancel-button { display:none; }
 
 body.adminhtml-modules-index-index div.hor-scroll {
-	padding-bottom:0; line-height:1.5em;
-	hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; -webkit-hyphens:auto;
-	background-size:100% 48px; background-image:linear-gradient(#FFF 50%, #F6F6F6 50%); background-position:bottom;
+	padding-bottom:0; hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; -webkit-hyphens:auto;
+	background-size:100% 46px; background-position:bottom; background-image:linear-gradient(#FFF 50%, #F6F6F6 50%);
 }
 
 body.adminhtml-modules-index-index h4 { margin:1em 0 0.8em; }
@@ -45,28 +44,26 @@ body.adminhtml-modules-index-index table.data tr.disabled,
 body.adminhtml-modules-index-index table.data tr.disabled a { color:#999; }
 
 body.adminhtml-modules-index-index table.data td {
-	padding:0 4px; line-height:24px;
+	padding:0 4px; line-height:23px;
 	border-top-width:0; border-bottom-width:0;
-	background-size:100% 100%; background-image:linear-gradient(transparent calc(100% - 1px), #DADFE0 1px); background-position:bottom;
+	background-size:100% 100%; background-position:bottom; background-image:linear-gradient(transparent calc(100% - 1px), #DADFE0 1px);
 }
 
-@supports (-ms-ime-align:auto) { body.adminhtml-modules-index-index table.data td { background-image:none; } }
-
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& statut &&& */
-body span.modules-status {
-	display:block; margin-top:3px; height:17px; line-height:18px; text-align:center;
+.modules-status {
+	display:block; margin-top:3px; height:auto; line-height:16px; text-align:center;
 	font-size:10px; font-weight:700; text-transform:uppercase; color:white; border-radius:10px;
 }
 
-body span.modules-status.grid-uptodate { background-color:#3CB861; }
-body span.modules-status.grid-toupdate { background-color:#E41101; }
-body span.modules-status.grid-beta     { background-color:#FF9C00; }
-body span.modules-status.grid-unknown  { background-color:#8CD9A3; }
-body span.modules-status.grid-enabled  { background-color:#3CB861; }
-body span.modules-status.grid-disabled { background-color:#E41101; }
+.modules-status.grid-uptodate { background-color:#3CB861; }
+.modules-status.grid-toupdate { background-color:#E41101; }
+.modules-status.grid-beta     { background-color:#FF9C00; }
+.modules-status.grid-unknown  { background-color:#8CD9A3; }
+.modules-status.grid-enabled  { background-color:#3CB861; }
+.modules-status.grid-disabled { background-color:#E41101; }
 
-body div.modules span.modules-status.grid-disabled { background-color:#999; }
-body div.rewrites span.modules-status.grid-disabled {
+div.modules .modules-status.grid-disabled { background-color:#999; }
+div.rewrites .modules-status.grid-disabled {
 	animation:modulesBlink 1s step-start 0s infinite; -webkit-animation:modulesBlink 1s step-start 0s infinite;
 }
 

@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/15/01/2019
+ * Updated J/05/12/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -40,42 +40,42 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 
 	protected function _prepareColumns() {
 
-		$this->addColumn('name', array(
+		$this->addColumn('name', [
 			'header'    => $this->__('Module name'),
 			'index'     => 'name',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateName')
-		));
+			'frame_callback' => [$this, 'decorateName']
+		]);
 
-		$this->addColumn('code_pool', array(
+		$this->addColumn('code_pool', [
 			'header'    => $this->__('Type'),
 			'index'     => 'code_pool',
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('current_version', array(
+		$this->addColumn('current_version', [
 			'header'    => $this->__('Installed version'),
 			'index'     => 'current_version',
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('last_version', array(
-			'header'    => $this->__('Last version'),
+		$this->addColumn('last_version', [
+			'header'    => $this->__('Latest version'),
 			'index'     => 'last_version',
 			'align'     => 'center',
 			'width'     => '130px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('last_date', array(
+		$this->addColumn('last_date', [
 			'header'    => $this->__('Latest version of'),
 			'index'     => 'last_date',
 			'type'      => 'date',
@@ -84,24 +84,24 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 			'width'     => '180px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('status', array(
+		$this->addColumn('status', [
 			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'options'   => array(
+			'options'   => [
 				'uptodate' => $this->__('Up to date'),
 				'toupdate' => $this->__('To update'),
 				'beta'     => $this->__('Beta'),
 				'unknown'  => '?',
 				'disabled' => $this->__('Disabled')
-			),
+			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateStatus')
-		));
+			'frame_callback' => [$this, 'decorateStatus']
+		]);
 
 		return parent::_prepareColumns();
 	}
@@ -124,7 +124,7 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 	}
 
 	public function getMessagesBlock() {
-		return Mage::getBlockSingleton('core/template');
+		return Mage::getBlockSingleton('adminhtml/template');
 	}
 
 
@@ -133,6 +133,6 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 	}
 
 	public function decorateName($value, $row, $column, $isExport) {
-		return !empty($url = $row->getData('url')) ? sprintf('<a href="%s">%s</a>', $url, $value) : $value;
+		return empty($url = $row->getData('url')) ? $value : sprintf('<a href="%s">%s</a>', $url, $value);
 	}
 }

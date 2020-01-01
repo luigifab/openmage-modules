@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated J/19/07/2018
+ * Updated D/15/09/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -40,49 +40,49 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 
 	protected function _prepareColumns() {
 
-		$this->addColumn('module', array(
+		$this->addColumn('module', [
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('scope', array(
+		$this->addColumn('scope', [
 			'header'    => $this->__('Scope'),
 			'index'     => 'scope',
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('event', array(
+		$this->addColumn('event', [
 			'header'    => $this->__('Event'),
 			'index'     => 'event',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('model', array(
+		$this->addColumn('model', [
 			'header'    => 'Model',
 			'index'     => 'model',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('status', array(
+		$this->addColumn('status', [
 			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'options'   => array(
+			'options'   => [
 				'enabled'  => $this->__('Enabled'),
 				'disabled' => $this->__('Disabled')
-			),
+			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateStatus')
-		));
+			'frame_callback' => [$this, 'decorateStatus']
+		]);
 
 		return parent::_prepareColumns();
 	}
@@ -105,7 +105,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 	}
 
 	public function getMessagesBlock() {
-		return Mage::getBlockSingleton('core/template');
+		return Mage::getBlockSingleton('adminhtml/template');
 	}
 
 

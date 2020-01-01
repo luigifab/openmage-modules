@@ -1,9 +1,9 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated J/27/12/2018
+ * Updated J/29/08/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -33,7 +33,7 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 			->setData('label', $this->__('Reset Filter'))
 			->setData('onclick', 'modules.reset();');
 
-		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" spellcheck="false" autocomplete="off" class="input-text" oninput="modules.filter(this);" placeholder="'.$this->__('Search in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
+		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" spellcheck="false" autocomplete="off" class="input-text" oninput="modules.action(this);" placeholder="'.$this->__('Search in all lists').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
 		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';

@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated M/15/01/2019
+ * Updated D/13/10/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -24,7 +24,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		// getName() = le nom du tag xml
 		// => /config/modules/Luigifab_Modules
 		// <modules>
-		//  <Luigifab_Modules>                                 <= $config
+		//  <Luigifab_Modules>                               <= $config
 		//   <active>true</active>
 		//   <codePool>community</codePool>
 		//   <update>https://www.luigifab.fr/magento/rss.xml
@@ -34,21 +34,21 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 		foreach ($nodes as $config) {
 
-			if (!in_array($config->codePool, array('local', 'community')))
+			if (!in_array($config->codePool, ['local', 'community']))
 				continue;
 
 			$moduleName = (string) $config->getName();
-			$check = array('status' => ($config->active != 'true') ? 'disabled' : 'unknown');
+			$check = ['status' => ($config->active != 'true') ? 'disabled' : 'unknown'];
 
 			if (Mage::getStoreConfigFlag('modules/general/last')) {
 
 				if (!empty($config->update)) {
-					$check += $this->checkUpdate($moduleName, $config->update);
+					$check = array_merge($check, $this->checkUpdate($moduleName, $config->update));
 				}
-				else if (($moduleName != 'Phoenix_Moneybookers') && (mb_strpos($moduleName, 'Mage_') === false)) {
+				else if (($moduleName != 'Phoenix_Moneybookers') && (mb_stripos($moduleName, 'Mage_') === false)) {
 					foreach ($connect as $key => $data) {
-						if (mb_strpos($data['xml'], $moduleName) !== false) {
-							$check += $this->checkConnect($data['name'], $data['url']);
+						if (mb_stripos($data['xml'], $moduleName) !== false) {
+							$check = array_merge($check, $this->checkConnect($data['name'], $data['url']));
 							unset($connect[$key]); // car il y en a plus besoin
 							break;
 						}
@@ -83,7 +83,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$item->setData('status', 'uptodate');
 		}
 
-		usort($this->_items, function ($a, $b) {
+		usort($this->_items, static function ($a, $b) {
 			$test = strcmp($a->getData('code_pool'), $b->getData('code_pool'));
 			return ($test === 0) ? strcmp($a->getData('name'), $b->getData('name')) : $test;
 		});
@@ -93,10 +93,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	private function addMagento() {
 
-		$check = array('status' => 'unknown');
+		$check = ['status' => 'unknown'];
 
 		if (Mage::getStoreConfigFlag('modules/general/last'))
-			$check += $this->checkConnect('Mage_Downloader');
+			$check = array_merge($check, $this->checkConnect('Mage_Downloader'));
 
 		$item = new Varien_Object();
 		$item->setData('name', 'MAGENTO');
@@ -112,9 +112,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	private function readDownloaderCache() {
 
-		$data  = array();
+		$data  = [];
 		$model = BP.'/downloader/lib/Mage/Connect/Singleconfig.php';
-		$cache = BP.'/downloader/cache.cfg'; //Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME;
+		$cache = BP.'/downloader/cache.cfg'; // Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME;
 
 		if (is_file($model) && is_file($cache)) {
 
@@ -125,16 +125,16 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$config->load(false);
 
 			$channels = $config->getData();
-			$channels = !empty($channels['channels_by_name']) ? $channels['channels_by_name'] : array();
+			$channels = empty($channels['channels_by_name']) ? [] : $channels['channels_by_name'];
 
 			foreach ($channels as $channel) {
 
-				$url = !empty($channel['uri']) ? 'https://'.$channel['uri'].'/' : null;
-				$packages = !empty($channel['packages']) ? $channel['packages'] : array();
+				$url   = empty($channel['uri']) ? null : 'https://'.$channel['uri'].'/';
+				$items = empty($channel['packages']) ? [] : $channel['packages'];
 
-				foreach ($packages as $key => $item) {
+				foreach ($items as $key => $item) {
 					if (!empty($item['xml']))
-						$data[$key] = array('url' => $url, 'name' => $key, 'xml' => $item['xml']);
+						$data[$key] = ['url' => $url, 'name' => $key, 'xml' => $item['xml']];
 				}
 			}
 		}
@@ -147,12 +147,12 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	private function checkUpdate($name, $url) {
 
-		$data = array();
+		$data = [];
 		$key  = md5($url);
 
 		try {
 			if (empty($this->cache) || !is_array($this->cache))
-				$this->cache = array();
+				$this->cache = [];
 
 			if (empty($this->cache[$key])) {
 				$ch = curl_init();
@@ -160,16 +160,18 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-				$this->cache[$key] = curl_exec($ch);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
+				$response = curl_exec($ch);
+				$response = ((curl_errno($ch) !== 0) || ($response === false)) ? 'CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch) : $response;
 				curl_close($ch);
+				$this->cache[$key] = $response;
 			}
 
 			$response = $this->cache[$key];
 
 			// lecture du fichier XML de la balise <update>
-			if ((mb_strpos($response, '<modules>') !== false) && (mb_strpos($response, '</modules>') !== false)) {
+			if ((mb_stripos($response, '<modules>') !== false) && (mb_stripos($response, '</modules>') !== false)) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
@@ -185,6 +187,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 						$data[$node->nodeName] = $node->nodeValue;
 				}
 			}
+			else {
+				Mage::throwException($response);
+			}
 		}
 		catch (Exception $e) {
 			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
@@ -195,23 +200,24 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	private function checkConnect($name, $url = null) {
 
-		$data = array();
+		$data = [];
 
 		try {
 			$url = (empty($url) ? 'https://connect20.magentocommerce.com/community/' : $url).$name.'/releases.xml';
-			$ch = curl_init();
+			$ch  = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 18);
 			$response = curl_exec($ch);
+			$response = ((curl_errno($ch) !== 0) || ($response === false)) ? 'CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch) : $response;
 			curl_close($ch);
 
 			// lecture du fichier XML de la liste des versions du module sur magento connect
 			// pour l'expression du xpath voir https://www.freeformatter.com/xpath-tester.html
-			if ((mb_strpos($response, '<releases>') !== false) && (mb_strpos($response, '</releases>') !== false)) {
+			if ((mb_stripos($response, '<releases>') !== false) && (mb_stripos($response, '</releases>') !== false)) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($response);
@@ -220,21 +226,24 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 				foreach ($nodes as $nodeV) {
 					$nodeD = $nodeV->parentNode->getElementsByTagName('d')[0];
-					$data[$nodeV->nodeValue] = array(
+					$data[$nodeV->nodeValue] = [
 						'version' => $nodeV->nodeValue,
 						'date'    => $nodeD->nodeValue
-					);
+					];
 				}
 
 				// trie du plus grand au plus petit (donc de la plus récente à la plus ancienne)
 				// puis récupère la version la plus récente
-				usort($data, function ($a, $b) {
+				usort($data, static function ($a, $b) {
 					return ($a['version'] == $b['version']) ? 0 : (version_compare($a['version'], $b['version'], '>') ? -1 : 1);
 				});
 
 				$data = array_shift($data);
 				if (!is_array($data))
-					$data = array();
+					$data = [];
+			}
+			else {
+				Mage::throwException($response);
 			}
 		}
 		catch (Exception $e) {

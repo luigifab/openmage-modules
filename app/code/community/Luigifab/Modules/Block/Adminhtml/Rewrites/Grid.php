@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated J/19/07/2018
+ * Updated D/15/09/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -40,59 +40,52 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 
 	protected function _prepareColumns() {
 
-		$this->addColumn('module', array(
+		$this->addColumn('module', [
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('scope', array(
+		$this->addColumn('scope', [
 			'header'    => $this->__('Scope'),
 			'index'     => 'scope',
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('type', array(
+		$this->addColumn('type', [
 			'header'    => $this->__('Type'),
 			'index'     => 'type',
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('core_class', array(
-			'header'    => $this->__('Source'),
-			'index'     => 'core_class',
-			'filter'    => false,
-			'sortable'  => false
-		));
-
-		$this->addColumn('rewrite_class', array(
-			'header'    => $this->__('Destination'),
+		$this->addColumn('rewrite_class', [
+			'header'    => $this->__('Source').' → '.$this->__('Destination'),
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateRewriteClass')
-		));
+			'frame_callback' => [$this, 'decorateRewriteClass']
+		]);
 
-		$this->addColumn('status', array(
+		$this->addColumn('status', [
 			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'options'   => array(
+			'options'   => [
 				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->__('Conflict')
-			),
+			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateStatus')
-		));
+			'frame_callback' => [$this, 'decorateStatus']
+		]);
 
 		return parent::_prepareColumns();
 	}
@@ -115,7 +108,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 	}
 
 	public function getMessagesBlock() {
-		return Mage::getBlockSingleton('core/template');
+		return Mage::getBlockSingleton('adminhtml/template');
 	}
 
 
@@ -124,6 +117,6 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 	}
 
 	public function decorateRewriteClass($value, $row, $column, $isExport) {
-		return $row->getData('rewrite_class');
+		return str_replace('app/code/', '', $row->getData('core_class').' → '.$row->getData('rewrite_class'));
 	}
 }

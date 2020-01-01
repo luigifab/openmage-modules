@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated M/15/01/2019
+ * Updated D/22/09/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -36,11 +36,12 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 
 		foreach ($nodes as $config) {
 
-			$moduleName = Mage::getConfig()->getModelClassName($config->class ?: $config->model);
+			$moduleName = $model = Mage::getConfig()->getModelClassName($config->class ?: $config->model);
 
 			if (!empty($moduleName)) {
-				$moduleName = mb_substr($moduleName, 0, mb_strpos($moduleName, '_', mb_strpos($moduleName, '_') + 1));
+				$moduleName = mb_substr($moduleName, 0, mb_stripos($moduleName, '_', mb_stripos($moduleName, '_') + 1));
 				$moduleName = str_replace('_', '/', $moduleName);
+				$model      = $config->class.'::'.$config->method;
 			}
 
 			$scope = $config->getParent()->getParent()->getParent()->getParent()->getName();
@@ -50,13 +51,13 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 			$item->setData('module', $moduleName);
 			$item->setData('event', $event);
 			$item->setData('scope', $scope);
-			$item->setData('model',  !empty($moduleName) ? $config->class.'::'.$config->method : '');
+			$item->setData('model', $model);
 			$item->setData('status', (empty($moduleName) || ($config->type == 'disabled')) ? 'disabled' : 'enabled');
 
 			$this->addItem($item);
 		}
 
-		usort($this->_items, function ($a, $b) {
+		usort($this->_items, static function ($a, $b) {
 			$test = strcmp($a->getData('scope'), $b->getData('scope'));
 			if ($test === 0)
 				$test = strcmp($a->getData('event'), $b->getData('event'));

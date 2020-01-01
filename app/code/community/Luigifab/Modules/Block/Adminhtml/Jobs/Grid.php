@@ -1,9 +1,9 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated J/19/07/2018
+ * Updated D/15/09/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -40,49 +40,49 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 
 	protected function _prepareColumns() {
 
-		$this->addColumn('module', array(
+		$this->addColumn('module', [
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('job_code', array(
+		$this->addColumn('job_code', [
 			'header'    => $this->__('Job'),
 			'index'     => 'job_code',
 			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('cron_expr', array(
+		$this->addColumn('cron_expr', [
 			'header'    => $this->__('Configuration'),
 			'index'     => 'cron_expr',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('model', array(
+		$this->addColumn('model', [
 			'header'    => 'Model',
 			'index'     => 'model',
 			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false
-		));
+		]);
 
-		$this->addColumn('status', array(
+		$this->addColumn('status', [
 			'header'    => $this->__('Status'),
 			'index'     => 'status',
 			'type'      => 'options',
-			'options'   => array(
+			'options'   => [
 				'enabled'  => $this->helper('modules')->_('Enabled'),
 				'disabled' => $this->helper('modules')->_('Disabled')
-			),
+			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => array($this, 'decorateStatus')
-		));
+			'frame_callback' => [$this, 'decorateStatus']
+		]);
 
 		return parent::_prepareColumns();
 	}
@@ -105,7 +105,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 	}
 
 	public function getMessagesBlock() {
-		return Mage::getBlockSingleton('core/template');
+		return Mage::getBlockSingleton('adminhtml/template');
 	}
 
 

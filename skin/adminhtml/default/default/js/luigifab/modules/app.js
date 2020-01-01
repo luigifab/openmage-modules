@@ -1,8 +1,8 @@
 /**
  * Created D/28/02/2016
- * Updated V/26/04/2019
+ * Updated D/03/11/2019
  *
- * Copyright 2012-2019 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -16,6 +16,14 @@
  * GNU General Public License (GPL) for more details.
  */
 
+if (window.NodeList && !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = function (callback, that, i) {
+		that = that || window;
+		for (i = 0; i < this.length; i++)
+			callback.call(that, this[i], i, this);
+	};
+}
+
 var modules = {
 
 	start: function () {
@@ -23,150 +31,154 @@ var modules = {
 		if (document.querySelector('body.adminhtml-modules-index-index')) {
 
 			console.info('modules.app - hello');
+			var search, data;
 
 			// crée les inputs avec un onkeyup dans les cellules des entêtes
 			// prend soin de supprimer ce qu'il y a dans les th
 			// utilise l'id du tableau html
-			var elem, elems = document.querySelectorAll('table.data tr.filter th'), search, id, data;
-			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
+			document.querySelectorAll('table.data tr.filter th').forEach(function (elem) {
 
-				id = elems[elem].parentNode.parentNode.parentNode.getAttribute('id');
-
-				while (elems[elem].childNodes.length > 0)
-					elems[elem].removeChild(elems[elem].firstChild);
+				while (elem.childNodes.length > 0)
+					elem.removeChild(elem.firstChild);
 
 				search = document.createElement('input');
 				search.setAttribute('type', 'search');
 				search.setAttribute('spellcheck', 'false');
 				search.setAttribute('autocomplete', 'off');
 				search.setAttribute('class', 'input-text');
-				search.setAttribute('oninput', "modules.filter('" + id + "');");
-				elems[elem].appendChild(search);
-			}
+				search.setAttribute('oninput', "modules.action('" + elem.parentNode.parentNode.parentNode.getAttribute('id') + "');");
+				elem.appendChild(search);
+			});
 
 			// réutilise la recherche précédente
-			data = sessionStorage.getItem('modules_search');
+			data = this.storage('modules_search');
 			if (data) {
 				search = document.querySelector('div.content-header input[type="search"]');
 				search.value = data;
-				modules.filter(search);
+				this.action(search);
 			}
 		}
 	},
 
-	reset: function () {
+	filter: function (id) {
 
-		// efface les filtres
-		var elem, elems = document.querySelectorAll('table.data input[type="search"]');
-		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
-			elems[elem].value = '';
-
-		// efface les display
-		elems = document.querySelectorAll('table.data tbody tr[style]');
-		for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem))
-			elems[elem].removeAttribute('style');
-
-		// efface le filtre global
-		elem = document.querySelector('div.content-header input[type="search"]');
-		elem.value = '';
-		elem.focus();
-
-		sessionStorage.removeItem('modules_search');
-	},
-
-	filter: function (data) {
-
-		// un objet = demande le filtrage de tous les tableaux
-		if (typeof data !== 'string') {
-
-			if (data.altKey || data.ctrlKey || data.metaKey || data.shiftKey)
-				return;
-
-			var elem, elems = document.querySelectorAll('table.data'), search = data.value;
-			for (elem in elems) if (elems.hasOwnProperty(elem) && !isNaN(elem)) {
-				elems[elem].querySelector('input[type="search"]').value = search;
-				this.action(elems[elem].getAttribute('id'));
-			}
-
-			sessionStorage.setItem('modules_search', search);
-		}
-		// un id = demande le filtrage du tableau
-		else if (document.getElementById(data)) {
-			this.action(data);
-		}
-	},
-
-	action: function (id) {
-
-		var line, lines = document.getElementById(id).querySelectorAll('tbody tr'),
-		    col, cols = document.getElementById(id).querySelectorAll('input[type="search"]'),
-		    word, words, i, text, show, size;
-
-		for (line in lines) if (lines.hasOwnProperty(line) && !isNaN(line)) {
+		var words, tmp, text, show, size, i;
+		document.getElementById(id).querySelectorAll('tbody tr').forEach(function (line) {
 
 			show = [];
 
 			// pour chaque colonne (car toutes les colonnes peuvent avoir un filtre)
 			// words = ce qu'on cherche dans la colonne courante
 			// text  = ce qu'il y a dans la cellule de la colonne de la ligne courante
-			for (col in cols) if (cols.hasOwnProperty(col) && !isNaN(col)) {
+			document.getElementById(id).querySelectorAll('input[type="search"]').forEach(function (col, idx) {
 
-				words = cols[col].value.toLowerCase().trim();
+				words = col.value.toLowerCase().trim(); // ce qu'on cherche
 
 				// s'il y a des mots
 				if (words.length > 0) {
 
 					words = words.split(' ');
 					size  = words.length;
-					text  = lines[line].querySelectorAll('td')[col].innerHTML.replace(/<[^>]+>/ig, '').toLowerCase().trim();
+					text  = line.querySelectorAll('td')[idx].innerHTML.replace(/<[^>]+>/ig, '').toLowerCase().trim(); // dans quoi on cherche
 					i     = 0;
 
-					// si la recherche se fait avec plusieurs mots
-					// pour que la recherche soit valide, on doit trouver tous les mots
-					// sauf si un des mots comment par un -
-					if (size > 1) {
-
-						for (word in words) if (words.hasOwnProperty(word) && !isNaN(word)) {
-							word = words[word];
-							if (word === '-') {
-								size -= 1;
-							}
-							else if (word[0] === '-') {
-								if (text.indexOf(word.substr(1)) > -1) {
-									size = -1;
+					words.forEach(function (word) {
+						if ((word === '-') || (word === '|')) {
+							size--;
+						}
+						else if (word.charAt(0) === '-') {
+							size--;
+							if (text.indexOf(word.substr(1)) > -1)
+								size = -1;
+						}
+						else if (word.indexOf('|') > -1) {
+							tmp = word.split('|');
+							while (tmp.length > 0) {
+								word = tmp.pop();
+								if ((word.length > 0) && (text.indexOf(word) > -1)) {
+									i++;
 									break;
 								}
-								size -= 1;
-							}
-							else {
-								i = (text.indexOf(word) > -1) ? i + 1 : i;
 							}
 						}
+						else if (text.indexOf(word) > -1) {
+							i++;
+						}
+					});
 
-						show.push((i === size) ? true : false);
-					}
-					// si la recherche se fait avec un seul mot
-					else {
-						if (words[0] === '-')
-							show.push(true);
-						else if (words[0][0] === '-')
-							show.push((text.indexOf(words[0].substr(1)) > -1) ? false : true);
-						else
-							show.push((text.indexOf(words[0]) > -1) ? true : false);
-					}
+					show.push(i === size);
 				}
 				else {
 					show.push(true);
 				}
-			}
+			});
 
 			// maintenant que chaque colonne de la ligne a été vérifiée
 			// si aucune colonne indique qu'il ne faut pas afficher la ligne, on affiche la ligne
-			lines[line].setAttribute('style', (show.indexOf(false) === -1) ? '' : 'display:none;');
-			lines[line].removeAttribute('title');
+			line.setAttribute('style', (show.indexOf(false) > -1) ? 'display:none;' : '');
+			line.removeAttribute('title');
+		});
+	},
+
+	action: function (data) {
+
+		// un objet = demande le filtrage de tous les tableaux
+		if (typeof data != 'string') {
+
+			if (data.altKey || data.ctrlKey || data.metaKey || data.shiftKey)
+				return;
+
+			document.querySelectorAll('table.data').forEach(function (elem) {
+				elem.querySelector('input[type="search"]').value = data.value;
+				this.filter(elem.getAttribute('id'));
+			}, this); // pour que ci-dessus this = this
+
+			this.storage('modules_search', data.value);
+		}
+		// un id = demande le filtrage du tableau
+		else if (document.getElementById(data)) {
+			this.filter(data);
+		}
+	},
+
+	reset: function (elem) {
+
+		this.storage('modules_search', null);
+
+		// efface les filtres et les display
+		document.querySelectorAll('table.data thead input[type="search"]').forEach(function (elem) { elem.value = ''; });
+		document.querySelectorAll('table.data tbody tr[style]').forEach(function (elem) { elem.removeAttribute('style'); });
+
+		// efface le filtre global
+		elem = document.querySelector('div.content-header input[type="search"]');
+		elem.value = '';
+		elem.focus();
+	},
+
+	unload: function () {
+		this.storage('modules_search', this.storage('modules_search'));
+	},
+
+	storage: function (key, value) {
+
+		// remove
+		if (value === null) {
+			localStorage.removeItem(key);
+			sessionStorage.removeItem(key);
+		}
+		// set
+		else if (typeof value != 'undefined') {
+			localStorage.setItem(key, value);
+			sessionStorage.setItem(key, value);
+		}
+		// get
+		else {
+			return localStorage.getItem(key) || sessionStorage.getItem(key);
 		}
 	}
 };
 
-if (typeof self.addEventListener === 'function')
-	self.addEventListener('load', modules.start, false);
+if (typeof self.addEventListener == 'function') {
+	self.addEventListener('load', modules.start.bind(modules));
+	self.addEventListener('beforeunload', modules.unload.bind(modules));
+}
