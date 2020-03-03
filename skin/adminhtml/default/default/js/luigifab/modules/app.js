@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated D/03/11/2019
+ * Updated J/23/01/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -24,16 +24,18 @@ if (window.NodeList && !NodeList.prototype.forEach) {
 	};
 }
 
-var modules = {
+var modules = new (function () {
 
-	start: function () {
+	"use strict";
+
+	this.start = function () {
 
 		if (document.querySelector('body.adminhtml-modules-index-index')) {
 
 			console.info('modules.app - hello');
 			var search, data;
 
-			// crée les inputs avec un onkeyup dans les cellules des entêtes
+			// crée les inputs dans les cellules des entêtes
 			// prend soin de supprimer ce qu'il y a dans les th
 			// utilise l'id du tableau html
 			document.querySelectorAll('table.data tr.filter th').forEach(function (elem) {
@@ -58,9 +60,9 @@ var modules = {
 				this.action(search);
 			}
 		}
-	},
+	};
 
-	filter: function (id) {
+	this.filter = function (id) {
 
 		var words, tmp, text, show, size, i;
 		document.getElementById(id).querySelectorAll('tbody tr').forEach(function (line) {
@@ -118,9 +120,9 @@ var modules = {
 			line.setAttribute('style', (show.indexOf(false) > -1) ? 'display:none;' : '');
 			line.removeAttribute('title');
 		});
-	},
+	};
 
-	action: function (data) {
+	this.action = function (data) {
 
 		// un objet = demande le filtrage de tous les tableaux
 		if (typeof data != 'string') {
@@ -139,9 +141,9 @@ var modules = {
 		else if (document.getElementById(data)) {
 			this.filter(data);
 		}
-	},
+	};
 
-	reset: function (elem) {
+	this.reset = function (elem) {
 
 		this.storage('modules_search', null);
 
@@ -153,13 +155,13 @@ var modules = {
 		elem = document.querySelector('div.content-header input[type="search"]');
 		elem.value = '';
 		elem.focus();
-	},
+	};
 
-	unload: function () {
+	this.unload = function () {
 		this.storage('modules_search', this.storage('modules_search'));
-	},
+	};
 
-	storage: function (key, value) {
+	this.storage = function (key, value) {
 
 		// remove
 		if (value === null) {
@@ -175,8 +177,9 @@ var modules = {
 		else {
 			return localStorage.getItem(key) || sessionStorage.getItem(key);
 		}
-	}
-};
+	};
+
+})();
 
 if (typeof self.addEventListener == 'function') {
 	self.addEventListener('load', modules.start.bind(modules));

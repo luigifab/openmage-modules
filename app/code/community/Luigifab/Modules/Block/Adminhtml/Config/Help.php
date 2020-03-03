@@ -1,7 +1,7 @@
 <?php
 /**
  * Created V/23/05/2014
- * Updated J/26/09/2019
+ * Updated S/01/02/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -20,7 +20,7 @@
 class Luigifab_Modules_Block_Adminhtml_Config_Help extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
 
 	public function render(Varien_Data_Form_Element_Abstract $element) {
-		return sprintf('<p class="box">%s %s <span style="float:right;"><a href="https://www.%s">%3$s</a> | ⚠ IPv6</span></p>',
+		return sprintf('<p class="box">%s %s <span class="right"><a href="https://www.%s">%3$s</a> | ⚠ IPv6</span></p>',
 			'Luigifab/Modules', $this->helper('modules')->getVersion(), 'luigifab.fr/magento/modules');
 	}
 }

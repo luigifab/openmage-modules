@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated V/11/10/2019
+ * Updated J/23/01/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -47,7 +47,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 
 
 	// CRON modules_send_report
-	public function sendEmailReport($cron = null, $test = false) {
+	public function sendEmailReport($cron = null, bool $test = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
 		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig('general/locale/code');
@@ -89,7 +89,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 			return preg_replace('#/[^/]+\.php(\d*)/#', '/index.php$1/', Mage::helper('adminhtml')->getUrl($url, $params));
 	}
 
-	private function sendReportToRecipients(string $locale, array $vars) {
+	private function sendReportToRecipients(string $locale, array $vars = []) {
 
 		$emails = array_filter(preg_split('#\s+#', Mage::getStoreConfig('modules/email/recipient_email')));
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
