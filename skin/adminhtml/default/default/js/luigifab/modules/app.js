@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated J/23/01/2020
+ * Updated V/21/02/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -64,7 +64,7 @@ var modules = new (function () {
 
 	this.filter = function (id) {
 
-		var words, tmp, text, show, size, i;
+		var words, tmp, text, show, size, cnt;
 		document.getElementById(id).querySelectorAll('tbody tr').forEach(function (line) {
 
 			show = [];
@@ -82,7 +82,7 @@ var modules = new (function () {
 					words = words.split(' ');
 					size  = words.length;
 					text  = line.querySelectorAll('td')[idx].innerHTML.replace(/<[^>]+>/ig, '').toLowerCase().trim(); // dans quoi on cherche
-					i     = 0;
+					cnt   = 0;
 
 					words.forEach(function (word) {
 						if ((word === '-') || (word === '|')) {
@@ -98,17 +98,17 @@ var modules = new (function () {
 							while (tmp.length > 0) {
 								word = tmp.pop();
 								if ((word.length > 0) && (text.indexOf(word) > -1)) {
-									i++;
-									break;
+									tmp = '';
+									cnt++;
 								}
 							}
 						}
 						else if (text.indexOf(word) > -1) {
-							i++;
+							cnt++;
 						}
 					});
 
-					show.push(i === size);
+					show.push(cnt === size);
 				}
 				else {
 					show.push(true);

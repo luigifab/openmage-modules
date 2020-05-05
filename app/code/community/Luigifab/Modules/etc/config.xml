@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated M/07/01/2020
+ * Updated L/20/04/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/magento/modules
@@ -20,7 +20,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>3.8.1</version>
+			<version>3.8.2</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
