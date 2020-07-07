@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Created V/20/07/2012
+ * Updated V/12/06/2020
+ *
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://www.luigifab.fr/openmage/modules
+ *
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
+-->
+
+<config>
+	<modules>
+		<Luigifab_Modules>
+			<version>4.0.0</version>
+		</Luigifab_Modules>
+	</modules>
+	<global>
+		<blocks>
+			<modules>
+				<class>Luigifab_Modules_Block</class>
+			</modules>
+		</blocks>
+		<helpers>
+			<modules>
+				<class>Luigifab_Modules_Helper</class>
+			</modules>
+		</helpers>
+		<models>
+			<modules>
+				<class>Luigifab_Modules_Model</class>
+			</modules>
+		</models>
+		<template>
+			<email>
+				<modules_email_template translate="label">
+					<label>Modules report</label>
+					<file>modules_report.html</file>
+					<type>html</type>
+				</modules_email_template>
+			</email>
+		</template>
+	</global>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<Luigifab_Modules before="Mage_Adminhtml">Luigifab_Modules</Luigifab_Modules>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<adminhtml>
+		<events>
+			<admin_system_config_changed_section_modules>
+				<observers>
+					<modules>
+						<class>modules/observer</class>
+						<method>updateConfig</method>
+					</modules>
+				</observers>
+			</admin_system_config_changed_section_modules>
+		</events>
+		<layout>
+			<updates>
+				<modules>
+					<file>luigifab/modules.xml</file>
+				</modules>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<Luigifab_Modules>
+					<files>
+						<default>Luigifab_Modules.csv</default>
+					</files>
+				</Luigifab_Modules>
+			</modules>
+		</translate>
+	</adminhtml>>
+	<crontab>
+		<jobs>
+			<modules_send_report>
+				<run>
+					<model>modules/observer::sendEmailReport</model>
+				</run>
+			</modules_send_report>
+		</jobs>
+	</crontab>
+	<default>
+		<modules>
+			<general>
+				<last>1</last>
+			</general>
+			<email>
+				<enabled>0</enabled>
+				<recipient_email>hello@example.org</recipient_email>
+				<sender_email_identity>general</sender_email_identity>
+			</email>
+		</modules>
+	</default>
+</config>

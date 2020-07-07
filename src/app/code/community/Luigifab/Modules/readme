@@ -1,0 +1,110 @@
+Docs      : https://www.luigifab.fr/openmage/modules
+Mirror    : https://github.com/luigifab/openmage-modules
+Composer  : https://packagist.org/packages/luigifab/openmage-modules
+Module    : Luigifab/Modules
+License   : GNU GPL 2 (https://opensource.org/licenses/gpl-2.0)
+Copyright : 2012-2020 Fabrice Creuzot (luigifab) <code~luigifab~fr>
+
+
+
+
+
+THE COMPOSER KEY FOR COMMAND LINE IS: luigifab/openmage-modules
+THE EXTENSION KEY FOR MAGENTO CONNECT MANAGER IS: https://www.luigifab.fr/magento/connect/luigifab/Luigifab_Modules
+
+THE MODULE AND ALL THE TRANSLATIONS AND ALL THE DOCUMENTATION ARE EXCEPTIONALLY MAGNIFICENT.
+IF YOU FOUND A MISTAKE OR A BUG, PLEASE, CONTACT ME (IN FRENCH OR IN ENGLISH) AT code~luigifab~fr
+
+CSS AND JS FILES ARE MINIFIED WITH clean-css (github.com/jakubpawlowicz/clean-css) AND uglify-js (github.com/mishoo/UglifyJS2).
+ALL FILES (INCLUDING DOCUMENTATION AND TRANSLATIONS) ARE LICENSED UNDER THE TERMS OF GNU GPL 2.0+ LICENSE.
+
+
+
+Rewrite
+- none
+Event
+- adminhtml | admin_system_config_changed_section_modules | modules/observer::updateConfig
+Cron
+- modules_send_report | modules/observer::sendEmailReport
+Database
+- none
+Files and directories
+- app/locale/de_AT/template/email/modules_report.html
+- app/locale/de_CH/template/email/modules_report.html
+- app/locale/de_DE/template/email/modules_report.html
+- app/locale/en_AU/template/email/modules_report.html
+- app/locale/en_CA/template/email/modules_report.html
+- app/locale/en_GB/template/email/modules_report.html
+- app/locale/en_IE/template/email/modules_report.html
+- app/locale/en_NZ/template/email/modules_report.html
+- app/locale/en_US/template/email/modules_report.html
+- app/locale/es_AR/template/email/modules_report.html
+- app/locale/es_CL/template/email/modules_report.html
+- app/locale/es_CO/template/email/modules_report.html
+- app/locale/es_CR/template/email/modules_report.html
+- app/locale/es_ES/template/email/modules_report.html
+- app/locale/es_MX/template/email/modules_report.html
+- app/locale/es_PA/template/email/modules_report.html
+- app/locale/es_PE/template/email/modules_report.html
+- app/locale/es_VE/template/email/modules_report.html
+- app/locale/fr_CA/template/email/modules_report.html
+- app/locale/fr_FR/template/email/modules_report.html
+- app/locale/it_CH/template/email/modules_report.html
+- app/locale/it_IT/template/email/modules_report.html
+- app/locale/pt_BR/template/email/modules_report.html
+- app/locale/pt_PT/template/email/modules_report.html
+- app/locale/cs_CZ/Luigifab_Modules.csv
+- app/locale/de_AT/Luigifab_Modules.csv
+- app/locale/de_CH/Luigifab_Modules.csv
+- app/locale/de_DE/Luigifab_Modules.csv
+- app/locale/es_AR/Luigifab_Modules.csv
+- app/locale/es_CL/Luigifab_Modules.csv
+- app/locale/es_CO/Luigifab_Modules.csv
+- app/locale/es_CR/Luigifab_Modules.csv
+- app/locale/es_ES/Luigifab_Modules.csv
+- app/locale/es_MX/Luigifab_Modules.csv
+- app/locale/es_PA/Luigifab_Modules.csv
+- app/locale/es_PE/Luigifab_Modules.csv
+- app/locale/es_VE/Luigifab_Modules.csv
+- app/locale/fr_CA/Luigifab_Modules.csv
+- app/locale/fr_FR/Luigifab_Modules.csv
+- app/locale/it_CH/Luigifab_Modules.csv
+- app/locale/it_IT/Luigifab_Modules.csv
+- app/locale/ja_JP/Luigifab_Modules.csv
+- app/locale/nl_NL/Luigifab_Modules.csv
+- app/locale/pl_PL/Luigifab_Modules.csv
+- app/locale/pt_BR/Luigifab_Modules.csv
+- app/locale/pt_PT/Luigifab_Modules.csv
+- app/locale/ru_RU/Luigifab_Modules.csv
+- app/locale/tr_TR/Luigifab_Modules.csv
+- app/locale/zh_CN/Luigifab_Modules.csv
+- app/etc/modules/Luigifab_Modules.xml
+- app/code/community/Luigifab/Modules/
+- app/design/adminhtml/default/default/layout/luigifab/modules.xml
+- skin/adminhtml/default/default/css/luigifab/modules/
+- skin/adminhtml/default/default/js/luigifab/modules/
+
+
+Translations in de-DE (deutsch/Deutschland) by:
+- Pamela Steinborn <st.pamela~laposte~net> 2017
+- Nelly Renaud <nbrandone~gmail~com> 2017
+Translations in en-US (english/United-States) by:
+- Fabrice Creuzot (luigifab) <code~luigifab~fr> 2012-2020
+- Alexandre Laffitte <alexandre.laffitte~label-park~com> 2016
+- Pascale Scellier <scellier.pascale~orange~fr> 2016
+Translations in es-ES (español/España) by:
+- Liliana Moreu <lilichuster~gmail~com> 2017
+- Guillaume Genetet <genetet.incorporated~gmail~com> 2018 https://fr.tipeee.com/william-broome
+Translations in fr-FR (français/France) by:
+- Fabrice Creuzot (luigifab) <code~luigifab~fr> 2012-2020
+- Alexandre Laffitte <alexandre.laffitte~label-park~com> 2016
+- Pascale Scellier <scellier.pascale~orange~fr> 2016
+Translations in it-IT (italiano/Italia) by:
+- Maria Grasso <mgrasso~outlook~fr> 2017
+Translations in pt-PT (português/Portugal) by:
+- Isabel Mendes <isabel.2012~orange~fr> 2017
+- Ugo <skender_cr7~hotmail~fr> 2017
+Translations in pt-BR (português/Brasil) by:
+- Ugo <skender_cr7~hotmail~fr> 2017
+
+If you like, take some of your time to improve the translations, go to https://bit.ly/2HyCCEc

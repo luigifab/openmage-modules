@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Created V/20/07/2012
+ * Updated J/05/12/2019
+ *
+ * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://www.luigifab.fr/openmage/modules
+ *
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
+-->
+
+<config>
+	<tabs>
+		<luigifab translate="label">
+			<label>Tools</label>
+			<sort_order>103</sort_order>
+		</luigifab>
+	</tabs>
+	<sections>
+		<modules translate="label">
+			<label>Installed modules</label>
+			<tab>luigifab</tab>
+			<sort_order>80</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>0</show_in_website>
+			<show_in_store>0</show_in_store>
+			<groups>
+				<help>
+					<frontend_model>modules/adminhtml_config_help</frontend_model>
+					<sort_order>0</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+				</help>
+				<general translate="label">
+					<label>Modules list</label>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<expanded>1</expanded>
+					<fields>
+						<last translate="label">
+							<label>Search the latest version</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</last>
+					</fields>
+				</general>
+				<email translate="label">
+					<label>Update notification by email</label>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<expanded>1</expanded>
+					<fields>
+						<enabled translate="label">
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</enabled>
+						<recipient_email translate="label comment">
+							<label>Send Emails To</label>
+							<comment>Separate addresses by a space.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</recipient_email>
+						<sender_email_identity translate="label">
+							<label>Email Sender</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_identity</source_model>
+							<backend_model>adminhtml/system_config_backend_email_sender</backend_model>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</sender_email_identity>
+						<test translate="label">
+							<label>Send an email now</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>modules/adminhtml_config_test</frontend_model>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</test>
+					</fields>
+				</email>
+			</groups>
+		</modules>
+	</sections>
+</config>
