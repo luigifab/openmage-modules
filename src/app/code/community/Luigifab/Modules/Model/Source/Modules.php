@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/19/06/2020
+ * Updated S/01/08/2020
  *
  * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -42,7 +42,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$moduleName = (string) $config->getName();
 			$check = ['status' => ($config->active != 'true') ? 'disabled' : 'unknown'];
 
-			if (Mage::getStoreConfigFlag('modules/general/last') && !empty($config->update))
+			if (!empty($config->update) && Mage::getStoreConfigFlag('modules/general/last'))
 				$check = array_merge($check, $this->checkUpdate($moduleName, $config->update));
 
 			$item = new Varien_Object();
