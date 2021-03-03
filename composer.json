@@ -1,7 +1,7 @@
 {
     "type": "magento-module",
     "name": "luigifab/openmage-modules",
-    "description": "A module to show modules, cron jobs, observers and rewrites lists for OpenMage and Magento.",
+    "description": "A module to show modules, cron jobs, observers and rewrites lists for OpenMage.",
     "homepage": "https://github.com/luigifab/openmage-modules",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -23,6 +23,10 @@
         {
             "type": "other",
             "url": "https://gandi.link/f/4b904048"
+        },
+        {
+            "type": "other",
+            "url": "https://ekwateur.fr/?parrain=EKW001147103"
         }
     ],
     "require": {
@@ -55,6 +59,7 @@
             ["src/app/locale/es_PE/template/email/modules_report.html", "app/locale/es_PE/template/email/modules_report.html"],
             ["src/app/locale/es_VE/template/email/modules_report.html", "app/locale/es_VE/template/email/modules_report.html"],
             ["src/app/locale/fr_CA/template/email/modules_report.html", "app/locale/fr_CA/template/email/modules_report.html"],
+            ["src/app/locale/fr_CH/template/email/modules_report.html", "app/locale/fr_CH/template/email/modules_report.html"],
             ["src/app/locale/fr_FR/template/email/modules_report.html", "app/locale/fr_FR/template/email/modules_report.html"],
             ["src/app/locale/it_CH/template/email/modules_report.html", "app/locale/it_CH/template/email/modules_report.html"],
             ["src/app/locale/it_IT/template/email/modules_report.html", "app/locale/it_IT/template/email/modules_report.html"],
@@ -74,6 +79,7 @@
             ["src/app/locale/es_PE/Luigifab_Modules.csv", "app/locale/es_PE/Luigifab_Modules.csv"],
             ["src/app/locale/es_VE/Luigifab_Modules.csv", "app/locale/es_VE/Luigifab_Modules.csv"],
             ["src/app/locale/fr_CA/Luigifab_Modules.csv", "app/locale/fr_CA/Luigifab_Modules.csv"],
+            ["src/app/locale/fr_CH/Luigifab_Modules.csv", "app/locale/fr_CH/Luigifab_Modules.csv"],
             ["src/app/locale/fr_FR/Luigifab_Modules.csv", "app/locale/fr_FR/Luigifab_Modules.csv"],
             ["src/app/locale/it_CH/Luigifab_Modules.csv", "app/locale/it_CH/Luigifab_Modules.csv"],
             ["src/app/locale/it_IT/Luigifab_Modules.csv", "app/locale/it_IT/Luigifab_Modules.csv"],
@@ -83,7 +89,6 @@
             ["src/app/locale/pt_BR/Luigifab_Modules.csv", "app/locale/pt_BR/Luigifab_Modules.csv"],
             ["src/app/locale/pt_PT/Luigifab_Modules.csv", "app/locale/pt_PT/Luigifab_Modules.csv"],
             ["src/app/locale/ru_RU/Luigifab_Modules.csv", "app/locale/ru_RU/Luigifab_Modules.csv"],
-            ["src/app/locale/sk_SK/Luigifab_Modules.csv", "app/locale/sk_SK/Luigifab_Modules.csv"],
             ["src/app/locale/tr_TR/Luigifab_Modules.csv", "app/locale/tr_TR/Luigifab_Modules.csv"],
             ["src/app/locale/zh_CN/Luigifab_Modules.csv", "app/locale/zh_CN/Luigifab_Modules.csv"],
             ["src/app/etc/modules/Luigifab_Modules.xml", "app/etc/modules/Luigifab_Modules.xml"],

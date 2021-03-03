@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated D/04/10/2020
+ * Updated M/09/02/2021
  *
- * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -50,10 +50,10 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	public function sendEmailReport($cron = null, bool $test = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
-		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig('general/locale/code');
+		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE);
 		$locales   = [];
 
-		// recherche des langues et des emails
+		// recherche des langues (@todo) et des emails
 		$emails = array_filter(preg_split('#\s+#', Mage::getStoreConfig('modules/email/recipient_email')));
 		foreach ($emails as $email) {
 			if (!in_array($email, ['hello@example.org', 'hello@example.com', '']))
@@ -64,8 +64,6 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		foreach ($locales as $locale => $recipients) {
 
 			Mage::getSingleton('core/translate')->setLocale($locale)->init('adminhtml', true);
-
-			// chargement des modules
 			$modules = Mage::getModel('modules/source_modules')->getCollection();
 			$updates = [];
 
@@ -83,7 +81,6 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 				);
 			}
 
-			// envoi des emails
 			if (!empty($updates) || $test) {
 				$updates = empty($updates) ? '' : implode('</li><li style="margin:0.8em 0 0.5em;">', $updates);
 				$this->sendReportToRecipients($locale, $recipients, ['list' => $updates]);
@@ -104,7 +101,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	private function sendReportToRecipients(string $locale, array $emails, array $vars = []) {
 
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
-		$vars['config'] = mb_substr($vars['config'], 0, mb_strripos($vars['config'], '/system/config'));
+		$vars['config'] = mb_substr($vars['config'], 0, mb_strrpos($vars['config'], '/system/config'));
 
 		foreach ($emails as $email) {
 

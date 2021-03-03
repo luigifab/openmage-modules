@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated V/19/06/2020
+ * Updated V/12/02/2021
  *
- * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -21,59 +21,86 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 	public function getCollection() {
 
-		// getName() = le nom du tag xml
-		// => /config/global/models/cron/rewrite/observer
-		// <global>                                          <= $config/../../../../$scope
-		//  <models>                                         <= $config/../../../$type
-		//   <cron>                                          <= $config/../../$module
-		//    <rewrite>
-		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
-		$config   = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
-		$nodes    = $config->getXpath('/config/*/*/*/rewrite/*');
 		$rewrites = $this->searchAllRewrites();
 
-		foreach ($nodes as $config) {
+		// getName() = le nom du tag xml
+		// => /config/global/models/cron/rewrite/observer
+		// <global>                                          <= $node/../../../../$scope
+		//  <models>                                         <= $node/../../../$type
+		//   <cron>                                          <= $node/../../$srcModule
+		//    <rewrite>
+		//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $node
+		// => /config/admin/routers/adminhtml/args/modules/Luigifab_Modules
+		// <admin>
+		//  <routers>
+		//   <adminhtml>
+		//    <args>
+		//     <modules>
+		//      <Luigifab_Modules before="Mage_Adminhtml">   <= node
+		$xml   = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes = array_merge($xml->getXpath('/config/*/*/*/rewrite/*'), $xml->getXpath('/config/*/routers/*/args/modules/*'));
 
-			$scope  = $config->getParent()->getParent()->getParent()->getParent()->getName();
-			$type   = $config->getParent()->getParent()->getParent()->getName();
-			$module = $config->getParent()->getParent()->getName();
-			$class  = $config->getName();
+		foreach ($nodes as $node) {
+
+			$scope  = $node->getParent()->getParent()->getParent()->getParent()->getName();
+			$type   = $node->getParent()->getParent()->getParent()->getName();
 
 			if ($type == 'routers')
 				continue;
 
-			//   class=Luigifab_Modules_Model_Rewrite_Cron
-			//   first=Modules_Model_Rewrite_Cron  (variable temporaire)
-			//  second=Model_Rewrite_Cron          (variable temporaire)
-			// module2=Modules
-			//  class2=Rewrite_Cron
-			// modName=Luigifab/Modules
-			$first   = mb_substr($config, mb_stripos($config, '_') + 1);
-			$second  = mb_substr($first, mb_stripos($first, '_') + 1);
-			$module2 = mb_substr($first, 0, mb_stripos($first, '_'));
-			$class2  = mb_substr($second, mb_stripos($second, '_') + 1);
+			if ($scope == 'routers') {
 
-			$moduleName = mb_substr($config, 0, mb_stripos($config, '_')).'/'.$module2;
+				$moduleName = $node->getName();
+				if (empty($node->getAttribute('before')) || in_array($moduleName, ['widget', 'oauth', 'api2', 'importexport']) || (strncmp($moduleName, 'Mage_', 5) === 0))
+					continue;
 
-			// surcharge en conflit
-			// - au moins deux fichiers config définissent plus ou moins la même chose
-			// - ce qui est affiché = ce qui est actif
-			$isConflict = (!empty($rewrites[$type][$module.'/'.$class]) && (count($rewrites[$type][$module.'/'.$class]) > 1));
-
-			$item = new Varien_Object();
-			$item->setData('module', $moduleName);
-			$item->setData('scope', $scope);
-			$item->setData('type', mb_substr($type, 0, -1));
-			$item->setData('core_class', $module.'/'.$class);
-
-			if ($isConflict) {
-				$text = mb_strtolower($module2.'/'.$class2).$this->transformData($rewrites[$type][$module.'/'.$class]);
-				$item->setData('rewrite_class', $text);
-				$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
+				// item
+				$item = new Varien_Object();
+				$item->setData('module', $moduleName);
+				$item->setData('scope', $type);
+				$item->setData('type', 'router');
+				$item->setData('core_class', $node->getAttribute('before'));
+				$item->setData('rewrite_class', $moduleName);
+				$item->setData('status', 'enabled');
 			}
 			else {
-				$item->setData('rewrite_class', mb_strtolower($module2.'/'.$class2));
-				$item->setData('status', 'enabled'); // disabled=conflict / enabled=ok
+				$srcModule     = $node->getParent()->getParent()->getName();                     // short
+				$srcClass      = $node->getName();                                               // short
+				$srcClassName  = $this->getFullClassName($xml, $srcModule.'/'.$srcClass, $type); // short => full
+				//$srcModuleName = mb_substr($srcClassName, 0, mb_strpos($srcClassName, '_', mb_strpos($srcClassName, '_') + 1)); // full
+
+				$dstClass      = $this->getShortClassName($xml, (string) $node, $type); // full/short => short
+				$dstClassName  = $this->getFullClassName($xml, $dstClass, $type);       // short => full
+				//$dstModule   = mb_substr($dstClass, 0, mb_strpos($dstClass, '/'));          // short
+				$dstModuleName = mb_substr($dstClassName, 0, mb_strpos($dstClassName, '_', mb_strpos($dstClassName, '_') + 1)); // full
+
+				// surcharge en conflit
+				// - au moins deux fichiers config définissent plus ou moins la même chose
+				// - ce qui est affiché = ce qui est actif
+				$isConflict = !empty($rewrites[$type][$srcModule.'/'.$srcClass]) && (count($rewrites[$type][$srcModule.'/'.$srcClass]) > 1);
+
+				// item
+				$item = new Varien_Object();
+				$item->setData('rewrite_class_name', $dstClassName);
+				$item->setData('core_class_name', $srcClassName);
+				$item->setData('module', $dstModuleName);
+				$item->setData('scope', $scope);
+				$item->setData('type', mb_substr($type, 0, -1));
+				$item->setData('core_class', $srcModule.'/'.$srcClass);
+
+				if ($isConflict) {
+					$text = $dstClass.'<br>- '.implode('<br>- ', array_keys($rewrites[$type][$srcModule.'/'.$srcClass]));
+					$item->setData('rewrite_class', $text);
+					$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
+				}
+				else {
+					$item->setData('rewrite_class', $dstClass);
+					$item->setData('status', 'enabled');  // disabled=conflict / enabled=ok
+				}
+
+				//echo $srcModule,' /// ',$srcModuleName,' /// ',$srcClass,' /// ',$srcClassName,'<br>';
+				//echo $dstModule,' /// ',$dstModuleName,' /// ',$dstClass,' /// ',$dstClassName,'<br>';
+				//echo '<pre>';print_r($item->getData());
 			}
 
 			$this->addItem($item);
@@ -91,13 +118,51 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		return $this;
 	}
 
-	private function transformData($data) {
+	private function getShortClassName(object $xml, string $name, string $scope = 'models') {
 
-		$inline = [];
-		foreach ($data as $key => $value)
-			$inline[] = sprintf('<br />- %s = %s', $key, $value);
+		// $name = Luigifab_Modules_Model_Rewrite_Demo
+		if (mb_strpos($name, '/') !== false)
+			return $name;
 
-		return implode($inline);
+		// module actif
+		// config/global/models/modules/class => Luigifab_Modules_Model
+		$nodes = $xml->getXpath('/config/*/'.$scope.'/*');
+		foreach ($nodes as $node) {
+			// $node->getName = modules
+			// $node->class   = Luigifab_Modules_Model
+			// résultat       = modules/rewrite_demo
+			if (!empty($node->class) && (mb_stripos($name, (string) $node->class) !== false))
+				return $node->getName().'/'.implode('_', array_map('lcfirst', explode('_', str_replace($node->class.'_', '', $name))));
+		}
+
+		// module inactif
+		return '*'.$name;
+	}
+
+	private function getFullClassName(object $xml, string $name, string $scope = 'models') {
+
+		// $name = modules/rewrite_demo
+		if (mb_strpos($name, '/') === false)
+			return $name;
+
+		// module actif
+		// config/global/models/modules/class => Luigifab_Modules_Model
+		$key   = mb_substr($name, 0, mb_strpos($name, '/'));
+		$type  = ucfirst(mb_substr($scope, 0, -1)); // = Model
+		$nodes = $xml->getXpath('/config/*/'.$scope.'/*');
+		foreach ($nodes as $node) {
+			// $node->getName = modules
+			// $node->class   = Luigifab_Modules_Model
+			// résultat       = Mage_Modules_Model_Rewrite_Demo, Luigifab_Modules_Model_Rewrite_Demo
+			if ($key == $node->getName()) {
+				return empty($node->class) ?
+					'Mage_'.uc_words($key.'_'.$type.'_'.mb_substr($name, mb_strpos($name, '/') + 1)) :
+					$node->class.'_'.uc_words(mb_substr($name, mb_strpos($name, '/') + 1));
+			}
+		}
+
+		// module inactif
+		return (mb_strpos($name, '_'.$type.'_') === false) ? '*'.$name : $name;
 	}
 
 	private function searchAllRewrites() {
@@ -118,18 +183,18 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 			// => /config/global/models/cron/rewrite/observer
 			// <global>
-			//  <models>                                         <= $config/../../../$type
-			//   <cron>                                          <= $config/../../$module
+			//  <models>                                         <= $node/../../../$type
+			//   <cron>                                          <= $node/../../$module
 			//    <rewrite>
-			//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $config
+			//     <observer>Luigifab_Modules_Model_Rewrite_Cron <= $node
 			// tagName/nodeValue === string
-			foreach ($nodes as $config) {
+			foreach ($nodes as $node) {
 
-				$type   = $config->parentNode->parentNode->parentNode->tagName;
-				$module = $config->parentNode->parentNode->tagName;
-				$class  = $config->tagName;
+				$type   = $node->parentNode->parentNode->parentNode->tagName;
+				$module = $node->parentNode->parentNode->tagName;
+				$class  = $node->tagName;
 
-				$rewrites[$type][$module.'/'.$class][$file] = $config->nodeValue;
+				$rewrites[$type][$module.'/'.$class][$file] = $node->nodeValue;
 			}
 		}
 

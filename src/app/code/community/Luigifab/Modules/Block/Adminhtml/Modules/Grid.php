@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/05/12/2019
+ * Updated D/07/02/2021
  *
- * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -129,10 +129,10 @@ class Luigifab_Modules_Block_Adminhtml_Modules_Grid extends Mage_Adminhtml_Block
 
 
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
+		return $isExport ? $value : sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 
 	public function decorateName($value, $row, $column, $isExport) {
-		return empty($url = $row->getData('url')) ? $value : sprintf('<a href="%s">%s</a>', $url, $value);
+		return ($isExport || empty($url = $row->getData('url'))) ? $value : sprintf('<a href="%s">%s</a>', $url, $value);
 	}
 }

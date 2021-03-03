@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/01/08/2020
+ * Updated V/12/02/2021
  *
- * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -21,34 +21,33 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	public function getCollection() {
 
+		$this->addOpenMage();
+
 		// getName() = le nom du tag xml
 		// => /config/modules/Luigifab_Modules
 		// <modules>
-		//  <Luigifab_Modules>                               <= $config
+		//  <Luigifab_Modules>                               <= $node
 		//   <active>true</active>
 		//   <codePool>community</codePool>
 		//   <update>https://www.luigifab.fr/openmage/rss.xml
-		$config = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
-		$nodes  = $config->getXpath('/config/modules/*');
+		$nodes = Mage::getModel('core/config')->loadBase()->loadModules()->loadDb();
+		$nodes = $nodes->getXpath('/config/modules/*');
 
-		(stripos(file_get_contents(BP.'/app/Mage.php'), 'getOpenMageVersion') === false) ? // pas de mb_stripos
-			$this->addMagento() : $this->addOpenMage();
+		foreach ($nodes as $node) {
 
-		foreach ($nodes as $config) {
-
-			if (!in_array($config->codePool, ['local', 'community']))
+			if (!in_array($node->codePool, ['local', 'community']))
 				continue;
 
-			$moduleName = (string) $config->getName();
-			$check = ['status' => ($config->active != 'true') ? 'disabled' : 'unknown'];
+			$moduleName = $node->getName();
+			$check = ['status' => ($node->active != 'true') ? 'disabled' : 'unknown'];
 
-			if (!empty($config->update) && Mage::getStoreConfigFlag('modules/general/last'))
-				$check = array_merge($check, $this->checkUpdate($moduleName, $config->update));
+			if (!empty($node->update) && Mage::getStoreConfigFlag('modules/general/last'))
+				$check = array_merge($check, $this->checkUpdate($moduleName, $node->update));
 
 			$item = new Varien_Object();
-			$item->setData('name', str_replace('_', '/', $moduleName));
-			$item->setData('code_pool', $config->codePool);
-			$item->setData('current_version', $config->version);
+			$item->setData('name', $moduleName);
+			$item->setData('code_pool', $node->codePool);
+			$item->setData('current_version', $node->version);
 			$item->setData('last_version', empty($check['version']) ? false : $check['version']);
 			$item->setData('last_date', empty($check['date']) ? false : $check['date']);
 			$item->setData('url', empty($check['url']) ? false : $check['url']);
@@ -78,50 +77,6 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		return $this;
 	}
 
-	private function addMagento() {
-
-		$check = ['status' => 'unknown'];
-
-		if (Mage::getStoreConfigFlag('modules/general/last')) {
-
-			try {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'https://api.github.com/repos/OpenMage/magento-mirror/releases');
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
-				curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0');
-				$response = curl_exec($ch);
-				$response = ((curl_errno($ch) !== 0) || ($response === false)) ? 'CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch) : $response;
-				curl_close($ch);
-
-				if (mb_stripos($response, '"tag_name": "') !== false) {
-					$response = @json_decode($response, true);
-					if (!empty($response[0]['tag_name']) && !empty($response[0]['created_at'])) {
-						$check['version'] = preg_replace('#[^0-9.]+#', '', $response[0]['tag_name']);
-						$check['date'] = $response[0]['created_at'];
-					}
-				}
-			}
-			catch (Exception $e) {
-				Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), 'api.github.com', 'magento'), Zend_Log::ERR, 'modules.log');
-			}
-		}
-
-		$item = new Varien_Object();
-		$item->setData('name', 'MAGENTO');
-		$item->setData('code_pool', 'core');
-		$item->setData('current_version', Mage::getVersion());
-		$item->setData('last_version', empty($check['version']) ? false : $check['version']);
-		$item->setData('last_date', empty($check['date']) ? false : $check['date']);
-		$item->setData('url', 'https://magento.com/download');
-		$item->setData('status', $check['status']);
-
-		$this->addItem($item);
-	}
-
 	private function addOpenMage() {
 
 		$check = ['status' => 'unknown'];
@@ -137,19 +92,19 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
 				curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0');
-				$response = curl_exec($ch);
-				$response = ((curl_errno($ch) !== 0) || ($response === false)) ? 'CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch) : $response;
+				$result = curl_exec($ch);
+				$result = ((curl_errno($ch) !== 0) || ($result === false)) ? trim('CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch)) : $result;
 				curl_close($ch);
 
-				if (mb_stripos($response, '"tag_name": "') !== false) {
-					$response = @json_decode($response, true);
-					if (!empty($response[0]['tag_name']) && !empty($response[0]['created_at'])) {
-						$check['version'] = preg_replace('#[^0-9.]+#', '', $response[0]['tag_name']);
-						$check['date'] = $response[0]['created_at'];
+				if (mb_stripos($result, '"tag_name": "') !== false) {
+					$result = @json_decode($result, true);
+					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
+						$check['version'] = preg_replace('#[^0-9.]+#', '', $result[0]['tag_name']);
+						$check['date'] = $result[0]['created_at'];
 					}
 				}
 			}
-			catch (Exception $e) {
+			catch (Throwable $e) {
 				Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), 'api.github.com', 'openmage'), Zend_Log::ERR, 'modules.log');
 			}
 		}
@@ -183,19 +138,19 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
-				$response = curl_exec($ch);
-				$response = ((curl_errno($ch) !== 0) || ($response === false)) ? 'CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch) : $response;
+				$result = curl_exec($ch);
+				$result = ((curl_errno($ch) !== 0) || ($result === false)) ? trim('CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch)) : $result;
 				curl_close($ch);
-				$this->cache[$key] = $response;
+				$this->cache[$key] = $result;
 			}
 
-			$response = $this->cache[$key];
+			$result = $this->cache[$key];
 
 			// lecture du fichier XML de la balise <update>
-			if ((mb_stripos($response, '<modules>') !== false) && (mb_stripos($response, '</modules>') !== false)) {
+			if ((mb_stripos($result, '<modules>') !== false) && (mb_stripos($result, '</modules>') !== false)) {
 
 				$dom = new DomDocument();
-				$dom->loadXML($response);
+				$dom->loadXML($result);
 				$qry = new DOMXPath($dom);
 
 				$nodes = $qry->query('/modules/'.mb_strtolower($name).'/*');
@@ -209,10 +164,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				}
 			}
 			else {
-				Mage::throwException($response);
+				Mage::throwException($result);
 			}
 		}
-		catch (Exception $e) {
+		catch (Throwable $e) {
 			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 

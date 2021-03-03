@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated D/15/09/2019
+ * Updated D/07/02/2021
  *
- * Copyright 2012-2020 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -60,7 +60,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'header'    => $this->__('Type'),
 			'index'     => 'type',
 			'align'     => 'center',
-			'width'     => '90px',
+			'width'     => '150px',
 			'filter'    => false,
 			'sortable'  => false
 		]);
@@ -113,10 +113,15 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 
 
 	public function decorateStatus($value, $row, $column, $isExport) {
-		return sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
+		return $isExport ? $value : sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
 	}
 
 	public function decorateRewriteClass($value, $row, $column, $isExport) {
-		return str_replace('app/code/', '', $row->getData('core_class').' → '.$row->getData('rewrite_class'));
+		return ($isExport || empty($row->getData('core_class_name'))) ?
+			str_replace('app/code/', '', sprintf('%s → %s', $row->getData('core_class'), $row->getData('rewrite_class'))) :
+			str_replace(['app/code/', '_Model_', '_Block_', '_Helper_'], ['', '_<b>Model</b>_', '_<b>Block</b>_', '_<b>Helper</b>_'], sprintf(
+				'%s → %s <div>%s<br>%s</div>',
+				$row->getData('core_class'), $row->getData('rewrite_class'),
+				$row->getData('core_class_name'), $row->getData('rewrite_class_name')));
 	}
 }
