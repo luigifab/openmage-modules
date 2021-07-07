@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/12/02/2021
+ * Updated V/18/06/2021
  *
  * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -104,8 +104,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 					}
 				}
 			}
-			catch (Throwable $e) {
-				Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), 'api.github.com', 'openmage'), Zend_Log::ERR, 'modules.log');
+			catch (Throwable $t) {
+				Mage::log(sprintf('%s for %s (%s)', $t->getMessage(), 'api.github.com', 'openmage'), Zend_Log::ERR, 'modules.log');
 			}
 		}
 
@@ -153,7 +153,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$dom->loadXML($result);
 				$qry = new DOMXPath($dom);
 
-				$nodes = $qry->query('/modules/'.mb_strtolower($name).'/*');
+				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
 
@@ -167,8 +167,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				Mage::throwException($result);
 			}
 		}
-		catch (Throwable $e) {
-			Mage::log(sprintf('%s for %s (%s)', $e->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
+		catch (Throwable $t) {
+			Mage::log(sprintf('%s for %s (%s)', $t->getMessage(), $url, $name), Zend_Log::ERR, 'modules.log');
 		}
 
 		return $data;

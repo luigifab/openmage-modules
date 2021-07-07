@@ -2,6 +2,7 @@
     "type": "magento-module",
     "name": "luigifab/openmage-modules",
     "description": "A module to show modules, cron jobs, observers and rewrites lists for OpenMage.",
+    "keywords": ["openmage", "openmage-module"],
     "homepage": "https://github.com/luigifab/openmage-modules",
     "license": "GPL-2.0-or-later",
     "authors": [

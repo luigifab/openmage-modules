@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated V/21/02/2020
+ * Updated J/13/05/2021
  *
  * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -40,8 +40,8 @@ var modules = new (function () {
 			// utilise l'id du tableau html
 			document.querySelectorAll('table.data tr.filter th').forEach(function (elem) {
 
-				while (elem.childNodes.length > 0)
-					elem.removeChild(elem.firstChild);
+				while (elem.firstChild)
+					elem.firstChild.remove();
 
 				search = document.createElement('input');
 				search.setAttribute('type', 'search');
@@ -49,6 +49,7 @@ var modules = new (function () {
 				search.setAttribute('autocomplete', 'off');
 				search.setAttribute('class', 'input-text');
 				search.setAttribute('oninput', "modules.action('" + elem.parentNode.parentNode.parentNode.getAttribute('id') + "');");
+
 				elem.appendChild(search);
 			});
 
