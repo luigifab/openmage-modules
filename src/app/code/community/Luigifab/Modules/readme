@@ -53,6 +53,7 @@ Files and directories
 - app/locale/de_AT/Luigifab_Modules.csv
 - app/locale/de_CH/Luigifab_Modules.csv
 - app/locale/de_DE/Luigifab_Modules.csv
+- app/locale/el_GR/Luigifab_Modules.csv
 - app/locale/es_AR/Luigifab_Modules.csv
 - app/locale/es_CL/Luigifab_Modules.csv
 - app/locale/es_CO/Luigifab_Modules.csv
@@ -65,6 +66,7 @@ Files and directories
 - app/locale/fr_CA/Luigifab_Modules.csv
 - app/locale/fr_CH/Luigifab_Modules.csv
 - app/locale/fr_FR/Luigifab_Modules.csv
+- app/locale/hu_HU/Luigifab_Modules.csv
 - app/locale/it_CH/Luigifab_Modules.csv
 - app/locale/it_IT/Luigifab_Modules.csv
 - app/locale/ja_JP/Luigifab_Modules.csv
@@ -72,8 +74,11 @@ Files and directories
 - app/locale/pl_PL/Luigifab_Modules.csv
 - app/locale/pt_BR/Luigifab_Modules.csv
 - app/locale/pt_PT/Luigifab_Modules.csv
+- app/locale/ro_RO/Luigifab_Modules.csv
 - app/locale/ru_RU/Luigifab_Modules.csv
+- app/locale/sk_SK/Luigifab_Modules.csv
 - app/locale/tr_TR/Luigifab_Modules.csv
+- app/locale/uk_UA/Luigifab_Modules.csv
 - app/locale/zh_CN/Luigifab_Modules.csv
 - app/etc/modules/Luigifab_Modules.xml
 - app/code/community/Luigifab/Modules/

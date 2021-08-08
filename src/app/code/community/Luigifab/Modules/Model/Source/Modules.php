@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/18/06/2021
+ * Updated S/17/07/2021
  *
  * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -84,19 +84,9 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		if (Mage::getStoreConfigFlag('modules/general/last')) {
 
 			try {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'https://api.github.com/repos/OpenMage/magento-lts/releases');
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
-				curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0');
-				$result = curl_exec($ch);
-				$result = ((curl_errno($ch) !== 0) || ($result === false)) ? trim('CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch)) : $result;
-				curl_close($ch);
+				$result = $this->sendRequest('https://api.github.com/repos/OpenMage/magento-lts/releases');
 
-				if (mb_stripos($result, '"tag_name": "') !== false) {
+				if (stripos($result, '"tag_name": "') !== false) {
 					$result = @json_decode($result, true);
 					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
 						$check['version'] = preg_replace('#[^0-9.]+#', '', $result[0]['tag_name']);
@@ -105,7 +95,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				}
 			}
 			catch (Throwable $t) {
-				Mage::log(sprintf('%s for %s (%s)', $t->getMessage(), 'api.github.com', 'openmage'), Zend_Log::ERR, 'modules.log');
+				Mage::log(sprintf('%s for %s (%s)', $t->getMessage(), 'api.github.com', 'OpenMage'), Zend_Log::ERR, 'modules.log');
 			}
 		}
 
@@ -121,7 +111,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$this->addItem($item);
 	}
 
-	private function checkUpdate($name, $url) {
+	private function checkUpdate(string $name, string $url) {
 
 		$data = [];
 		$key  = md5($url);
@@ -130,24 +120,13 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			if (empty($this->cache) || !is_array($this->cache))
 				$this->cache = [];
 
-			if (empty($this->cache[$key])) {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 18);
-				$result = curl_exec($ch);
-				$result = ((curl_errno($ch) !== 0) || ($result === false)) ? trim('CURL_ERROR_'.curl_errno($ch).' '.curl_error($ch)) : $result;
-				curl_close($ch);
-				$this->cache[$key] = $result;
-			}
+			if (empty($this->cache[$key]))
+				$this->cache[$key] = $this->sendRequest($url);
 
 			$result = $this->cache[$key];
 
 			// lecture du fichier XML de la balise <update>
-			if ((mb_stripos($result, '<modules>') !== false) && (mb_stripos($result, '</modules>') !== false)) {
+			if ((stripos($result, '<modules>') !== false) && (stripos($result, '</modules>') !== false)) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($result);
@@ -172,5 +151,23 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		}
 
 		return $data;
+	}
+
+	private function sendRequest(string $url) {
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0');
+
+		$result = curl_exec($ch);
+		$result = (($result === false) || (curl_errno($ch) !== 0)) ? trim('CURL_ERROR '.curl_errno($ch).' '.curl_error($ch)) : $result;
+		curl_close($ch);
+
+		return $result;
 	}
 }
