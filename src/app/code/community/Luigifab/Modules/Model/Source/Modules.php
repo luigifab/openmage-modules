@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated S/17/07/2021
+ * Updated J/30/09/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -77,7 +77,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		return $this;
 	}
 
-	private function addOpenMage() {
+	protected function addOpenMage() {
 
 		$check = ['status' => 'unknown'];
 
@@ -111,7 +111,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$this->addItem($item);
 	}
 
-	private function checkUpdate(string $name, string $url) {
+	protected function checkUpdate(string $name, string $url) {
 
 		$data = [];
 		$key  = md5($url);
@@ -153,7 +153,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		return $data;
 	}
 
-	private function sendRequest(string $url) {
+	protected function sendRequest(string $url) {
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

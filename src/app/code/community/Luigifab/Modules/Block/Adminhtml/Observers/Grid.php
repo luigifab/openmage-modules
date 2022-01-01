@@ -3,7 +3,7 @@
  * Created M/22/07/2014
  * Updated D/07/02/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify

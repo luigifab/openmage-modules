@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated V/12/02/2021
+ * Updated S/02/10/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -89,18 +89,14 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 				$item->setData('core_class', $srcModule.'/'.$srcClass);
 
 				if ($isConflict) {
-					$text = $dstClass.'<br>- '.implode('<br>- ', array_keys($rewrites[$type][$srcModule.'/'.$srcClass]));
+					$text = $dstClass.'<br />- '.implode('<br />- ', array_keys($rewrites[$type][$srcModule.'/'.$srcClass]));
 					$item->setData('rewrite_class', $text);
-					$item->setData('status', 'disabled'); // disabled=conflict / enabled=ok
+					$item->setData('status', 'disabled'); // disabled=conflict enabled=ok
 				}
 				else {
 					$item->setData('rewrite_class', $dstClass);
-					$item->setData('status', 'enabled');  // disabled=conflict / enabled=ok
+					$item->setData('status', 'enabled');  // disabled=conflict enabled=ok
 				}
-
-				//echo $srcModule,' /// ',$srcModuleName,' /// ',$srcClass,' /// ',$srcClassName,'<br>';
-				//echo $dstModule,' /// ',$dstModuleName,' /// ',$dstClass,' /// ',$dstClassName,'<br>';
-				//echo '<pre>';print_r($item->getData());
 			}
 
 			$this->addItem($item);
@@ -118,7 +114,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		return $this;
 	}
 
-	private function getShortClassName(object $xml, string $name, string $scope = 'models') {
+	protected function getShortClassName(object $xml, string $name, string $scope = 'models') {
 
 		// $name = Luigifab_Modules_Model_Rewrite_Demo
 		if (mb_strpos($name, '/') !== false)
@@ -139,7 +135,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		return '*'.$name;
 	}
 
-	private function getFullClassName(object $xml, string $name, string $scope = 'models') {
+	protected function getFullClassName(object $xml, string $name, string $scope = 'models') {
 
 		// $name = modules/rewrite_demo
 		if (mb_strpos($name, '/') === false)
@@ -165,7 +161,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		return (mb_strpos($name, '_'.$type.'_') === false) ? '*'.$name : $name;
 	}
 
-	private function searchAllRewrites() {
+	protected function searchAllRewrites() {
 
 		$folders  = ['app/code/local/', 'app/code/community/'];
 		$rewrites = [];

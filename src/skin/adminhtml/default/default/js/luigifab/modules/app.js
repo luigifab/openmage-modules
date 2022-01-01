@@ -1,8 +1,8 @@
 /**
  * Created D/28/02/2016
- * Updated J/13/05/2021
+ * Updated D/05/09/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -28,7 +28,7 @@ var modules = new (function () {
 
 	"use strict";
 
-	this.start = function () {
+	this.init = function () {
 
 		if (document.querySelector('body.adminhtml-modules-index-index')) {
 
@@ -158,10 +158,6 @@ var modules = new (function () {
 		elem.focus();
 	};
 
-	this.unload = function () {
-		this.storage('modules_search', this.storage('modules_search'));
-	};
-
 	this.storage = function (key, value) {
 
 		// remove
@@ -180,9 +176,13 @@ var modules = new (function () {
 		}
 	};
 
+	this.unload = function () {
+		this.storage('modules_search', this.storage('modules_search'));
+	};
+
 })();
 
 if (typeof self.addEventListener == 'function') {
-	self.addEventListener('load', modules.start.bind(modules));
+	self.addEventListener('load', modules.init.bind(modules));
 	self.addEventListener('beforeunload', modules.unload.bind(modules));
 }

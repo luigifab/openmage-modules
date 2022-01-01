@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated D/07/02/2021
+ * Updated L/13/09/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -120,7 +120,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 		return ($isExport || empty($row->getData('core_class_name'))) ?
 			str_replace('app/code/', '', sprintf('%s → %s', $row->getData('core_class'), $row->getData('rewrite_class'))) :
 			str_replace(['app/code/', '_Model_', '_Block_', '_Helper_'], ['', '_<b>Model</b>_', '_<b>Block</b>_', '_<b>Helper</b>_'], sprintf(
-				'%s → %s <div>%s<br>%s</div>',
+				'%s → %s <div>%s<br />%s</div>',
 				$row->getData('core_class'), $row->getData('rewrite_class'),
 				$row->getData('core_class_name'), $row->getData('rewrite_class_name')));
 	}

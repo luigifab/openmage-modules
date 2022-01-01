@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated M/09/02/2021
+ * Updated J/30/09/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -50,7 +50,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 	public function sendEmailReport($cron = null, bool $test = false) {
 
 		$oldLocale = Mage::getSingleton('core/translate')->getLocale();
-		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE);
+		$newLocale = Mage::app()->getStore()->isAdmin() ? $oldLocale : Mage::getStoreConfig('general/locale/code');
 		$locales   = [];
 
 		// recherche des langues (@todo) et des emails
@@ -90,7 +90,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
 	}
 
-	private function getEmailUrl(string $url, array $params = []) {
+	protected function getEmailUrl(string $url, array $params = []) {
 
 		if (Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_USE_REWRITES))
 			return preg_replace('#/[^/]+\.php\d*/#', '/', Mage::helper('adminhtml')->getUrl($url, $params));
@@ -98,7 +98,7 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 			return preg_replace('#/[^/]+\.php(\d*)/#', '/index.php$1/', Mage::helper('adminhtml')->getUrl($url, $params));
 	}
 
-	private function sendReportToRecipients(string $locale, array $emails, array $vars = []) {
+	protected function sendReportToRecipients(string $locale, array $emails, array $vars = []) {
 
 		$vars['config'] = $this->getEmailUrl('adminhtml/system/config');
 		$vars['config'] = mb_substr($vars['config'], 0, mb_strrpos($vars['config'], '/system/config'));

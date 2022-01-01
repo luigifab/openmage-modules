@@ -1,9 +1,9 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated V/12/02/2021
+ * Updated V/15/10/2021
  *
- * Copyright 2012-2021 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
  *
  * This program is free software, you can redistribute it or modify
@@ -35,14 +35,14 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 
 		foreach ($nodes as $node) {
 
-			$jobcode = $node->getName();
-			$config  = Mage::getConfig()->getNode('default/crontab/jobs/'.$jobcode);
+			$key    = $node->getName();
+			$config = Mage::getConfig()->getNode('default/crontab/jobs/'.$key);
 
 			$expr = empty($node->schedule->config_path) ? null  : Mage::getStoreConfig((string) $node->schedule->config_path);
 			$expr = empty($node->schedule->cron_expr)   ? $expr : $node->schedule->cron_expr;
 			$expr = empty($config->schedule->config_path) ? $expr : Mage::getStoreConfig((string) $config->schedule->config_path);
 			$expr = empty($config->schedule->cron_expr)   ? $expr : $config->schedule->cron_expr;
-			$expr = empty(trim($expr)) ? null : trim($expr);
+			$expr = empty($expr) ? null : trim($expr);
 
 			$model = empty($node->run->model) ? null : $node->run->model;
 			$model = empty($config->run->model) ? $model : $config->run->model;
@@ -69,7 +69,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$item = new Varien_Object();
 			$item->setData('class_name', $className);
 			$item->setData('module', $moduleName);
-			$item->setData('job_code', $jobcode);
+			$item->setData('job_code', $key);
 			$item->setData('cron_expr', $expr);
 			$item->setData('model', $model);
 			$item->setData('status', $isDisabled);
