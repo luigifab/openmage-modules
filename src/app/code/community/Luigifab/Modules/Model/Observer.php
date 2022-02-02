@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/22/11/2014
- * Updated J/30/09/2021
+ * Updated D/26/12/2021
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -88,6 +88,9 @@ class Luigifab_Modules_Model_Observer extends Luigifab_Modules_Helper_Data {
 		}
 
 		Mage::getSingleton('core/translate')->setLocale($oldLocale)->init('adminhtml', true);
+
+		if (is_object($cron))
+			$cron->setData('messages', 'memory: '.((int) (memory_get_peak_usage(true) / 1024 / 1024)).' M'."\n".print_r($locales, true));
 	}
 
 	protected function getEmailUrl(string $url, array $params = []) {
