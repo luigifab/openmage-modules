@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/30/09/2021
+ * Updated V/13/05/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -89,7 +89,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				if (stripos($result, '"tag_name": "') !== false) {
 					$result = @json_decode($result, true);
 					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
-						$check['version'] = preg_replace('#[^0-9.]+#', '', $result[0]['tag_name']);
+						$check['version'] = preg_replace('#[^\d.]+#', '', $result[0]['tag_name']);
 						$check['date'] = $result[0]['created_at'];
 					}
 				}

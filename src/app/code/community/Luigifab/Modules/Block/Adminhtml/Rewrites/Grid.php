@@ -1,7 +1,7 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated L/13/09/2021
+ * Updated S/19/02/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -44,7 +44,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('scope', [
@@ -53,7 +53,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('type', [
@@ -62,7 +62,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'align'     => 'center',
 			'width'     => '150px',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('rewrite_class', [
@@ -70,7 +70,7 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'index'     => 'rewrite_class',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateRewriteClass']
+			'frame_callback' => [$this, 'decorateRewriteClass'],
 		]);
 
 		$this->addColumn('status', [
@@ -79,12 +79,12 @@ class Luigifab_Modules_Block_Adminhtml_Rewrites_Grid extends Mage_Adminhtml_Bloc
 			'type'      => 'options',
 			'options'   => [
 				'enabled'  => $this->helper('modules')->_('Enabled'),
-				'disabled' => $this->__('Conflict')
+				'disabled' => $this->__('Conflict'),
 			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateStatus']
+			'frame_callback' => [$this, 'decorateStatus'],
 		]);
 
 		return parent::_prepareColumns();

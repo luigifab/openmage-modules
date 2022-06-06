@@ -1,7 +1,7 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated D/07/02/2021
+ * Updated S/19/02/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -44,7 +44,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('scope', [
@@ -53,14 +53,14 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'align'     => 'center',
 			'width'     => '90px',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('event', [
 			'header'    => $this->__('Event'),
 			'index'     => 'event',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('model', [
@@ -68,7 +68,7 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'index'     => 'model',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateModel']
+			'frame_callback' => [$this, 'decorateModel'],
 		]);
 
 		$this->addColumn('status', [
@@ -77,12 +77,12 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 			'type'      => 'options',
 			'options'   => [
 				'enabled'  => $this->__('Enabled'),
-				'disabled' => $this->__('Disabled')
+				'disabled' => $this->__('Disabled'),
 			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateStatus']
+			'frame_callback' => [$this, 'decorateStatus'],
 		]);
 
 		return parent::_prepareColumns();

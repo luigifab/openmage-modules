@@ -1,6 +1,6 @@
 /**
  * Created D/28/02/2016
- * Updated D/05/09/2021
+ * Updated M/22/03/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -91,7 +91,7 @@ var modules = new (function () {
 						}
 						else if (word.charAt(0) === '-') {
 							size--;
-							if (text.indexOf(word.substr(1)) > -1)
+							if (text.indexOf(word.substring(1)) > -1)
 								size = -1;
 						}
 						else if (word.indexOf('|') > -1) {

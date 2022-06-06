@@ -1,7 +1,7 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated D/07/02/2021
+ * Updated S/19/02/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -44,7 +44,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'header'    => $this->__('Module name'),
 			'index'     => 'module',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('job_code', [
@@ -52,14 +52,14 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'index'     => 'job_code',
 			'width'     => '30%',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('cron_expr', [
 			'header'    => $this->__('Configuration'),
 			'index'     => 'cron_expr',
 			'filter'    => false,
-			'sortable'  => false
+			'sortable'  => false,
 		]);
 
 		$this->addColumn('model', [
@@ -68,7 +68,7 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateModel']
+			'frame_callback' => [$this, 'decorateModel'],
 		]);
 
 		$this->addColumn('status', [
@@ -77,12 +77,12 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'type'      => 'options',
 			'options'   => [
 				'enabled'  => $this->helper('modules')->_('Enabled'),
-				'disabled' => $this->helper('modules')->_('Disabled')
+				'disabled' => $this->helper('modules')->_('Disabled'),
 			],
 			'width'     => '120px',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateStatus']
+			'frame_callback' => [$this, 'decorateStatus'],
 		]);
 
 		return parent::_prepareColumns();
