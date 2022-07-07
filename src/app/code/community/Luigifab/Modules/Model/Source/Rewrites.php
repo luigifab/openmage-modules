@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated S/02/10/2021
+ * Updated V/24/06/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -117,7 +117,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 	protected function getShortClassName(object $xml, string $name, string $scope = 'models') {
 
 		// $name = Luigifab_Modules_Model_Rewrite_Demo
-		if (mb_strpos($name, '/') !== false)
+		if (str_contains($name, '/'))
 			return $name;
 
 		// module actif
@@ -138,7 +138,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 	protected function getFullClassName(object $xml, string $name, string $scope = 'models') {
 
 		// $name = modules/rewrite_demo
-		if (mb_strpos($name, '/') === false)
+		if (!str_contains($name, '/'))
 			return $name;
 
 		// module actif
@@ -158,7 +158,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		}
 
 		// module inactif
-		return (mb_strpos($name, '_'.$type.'_') === false) ? '*'.$name : $name;
+		return str_contains($name, '_'.$type.'_') ? $name : '*'.$name;
 	}
 
 	protected function searchAllRewrites() {

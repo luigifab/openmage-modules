@@ -1,7 +1,7 @@
 <?php
 /**
  * Created W/29/02/2012
- * Updated S/19/02/2022
+ * Updated J/09/06/2022
  *
  * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://www.luigifab.fr/openmage/modules
@@ -50,7 +50,6 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		$this->addColumn('job_code', [
 			'header'    => $this->__('Job'),
 			'index'     => 'job_code',
-			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
 		]);
@@ -65,7 +64,6 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 		$this->addColumn('model', [
 			'header'    => 'Model',
 			'index'     => 'model',
-			'width'     => '30%',
 			'filter'    => false,
 			'sortable'  => false,
 			'frame_callback' => [$this, 'decorateModel'],

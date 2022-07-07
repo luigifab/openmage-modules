@@ -68,7 +68,7 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 	protected function getShortClassName(object $xml, string $name, string $scope = 'models') {
 
 		// $name = Luigifab_Modules_Model_Rewrite_Demo
-		if (mb_strpos($name, '/') !== false)
+		if (str_contains($name, '/'))
 			return $name;
 
 		// module actif
