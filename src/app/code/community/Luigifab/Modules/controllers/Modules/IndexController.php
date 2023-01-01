@@ -1,10 +1,10 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated V/24/07/2020
+ * Updated S/19/11/2022
  *
- * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
- * https://www.luigifab.fr/openmage/modules
+ * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -28,9 +28,8 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 	}
 
 	public function loadLayout($ids = null, $generateBlocks = true, $generateXml = true) {
-		$this->_title($this->__('Tools'))->_title($this->__('Installed modules'));
 		parent::loadLayout($ids, $generateBlocks, $generateXml);
-		$this->_setActiveMenu('tools/modules');
+		$this->_title($this->__('Tools'))->_title($this->__('Installed modules'))->_setActiveMenu('tools/modules');
 		return $this;
 	}
 

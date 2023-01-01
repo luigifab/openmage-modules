@@ -1,10 +1,10 @@
 <?php
 /**
  * Created M/02/01/2018
- * Updated M/24/09/2019
+ * Updated S/03/12/2022
  *
- * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
- * https://www.luigifab.fr/openmage/modules
+ * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -20,7 +20,7 @@
 class Luigifab_Modules_Block_Adminhtml_Config_Test extends Mage_Adminhtml_Block_System_Config_Form_Field {
 
 	public function render(Varien_Data_Form_Element_Abstract $element) {
-		$element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+		$element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue()->unsPath();
 		return parent::render($element);
 	}
 

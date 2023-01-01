@@ -1,10 +1,10 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated J/30/12/2021
+ * Updated V/09/12/2022
  *
- * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
- * https://www.luigifab.fr/openmage/modules
+ * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -111,7 +111,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 			$user = $action->getFullActionName();
 		// frontend
 		else
-			$user = sprintf('frontend %d', Mage::app()->getStore()->getData('code'));
+			$user = sprintf('frontend %s', Mage::app()->getStore()->getData('code'));
 
 		return $user;
 	}

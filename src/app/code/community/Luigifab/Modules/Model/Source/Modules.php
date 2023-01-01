@@ -1,10 +1,10 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/13/05/2022
+ * Updated L/14/11/2022
  *
- * Copyright 2012-2022 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
- * https://www.luigifab.fr/openmage/modules
+ * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
  * it under the terms of the GNU General Public License (GPL) as published
@@ -18,6 +18,8 @@
  */
 
 class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
+
+	protected $_cache = [];
 
 	public function getCollection() {
 
@@ -86,7 +88,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			try {
 				$result = $this->sendRequest('https://api.github.com/repos/OpenMage/magento-lts/releases');
 
-				if (stripos($result, '"tag_name": "') !== false) {
+				if (str_contains($result, '"tag_name": "')) {
 					$result = @json_decode($result, true);
 					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
 						$check['version'] = preg_replace('#[^\d.]+#', '', $result[0]['tag_name']);
@@ -117,16 +119,13 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$key  = md5($url);
 
 		try {
-			if (empty($this->cache) || !is_array($this->cache))
-				$this->cache = [];
+			if (empty($this->_cache[$key]))
+				$this->_cache[$key] = $this->sendRequest($url);
 
-			if (empty($this->cache[$key]))
-				$this->cache[$key] = $this->sendRequest($url);
-
-			$result = $this->cache[$key];
+			$result = $this->_cache[$key];
 
 			// lecture du fichier XML de la balise <update>
-			if ((stripos($result, '<modules>') !== false) && (stripos($result, '</modules>') !== false)) {
+			if (str_contains($result, '<modules>') && str_contains($result, '</modules>')) {
 
 				$dom = new DomDocument();
 				$dom->loadXML($result);
@@ -162,6 +161,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+		curl_setopt($ch, CURLOPT_ENCODING , ''); // https://stackoverflow.com/q/17744112/2980105
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0');
 
 		$result = curl_exec($ch);
