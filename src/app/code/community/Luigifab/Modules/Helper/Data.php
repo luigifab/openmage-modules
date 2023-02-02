@@ -1,7 +1,7 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated V/09/12/2022
+ * Updated J/05/01/2023
  *
  * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
@@ -63,7 +63,7 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function getNumber($value, array $options = []) {
-		$options['locale'] = Mage::getSingleton('core/translate')->getLocale();
+		$options['locale'] = Mage::getSingleton('core/locale')->getLocaleCode();
 		return Zend_Locale_Format::toNumber($value, $options);
 	}
 
