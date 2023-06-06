@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated L/14/11/2022
+ * Updated V/10/03/2023
  *
  * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
@@ -19,7 +19,7 @@
 
 class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
-	protected $_cache = [];
+	protected static $_cache = [];
 
 	public function getCollection() {
 
@@ -91,7 +91,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				if (str_contains($result, '"tag_name": "')) {
 					$result = @json_decode($result, true);
 					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
-						$check['version'] = preg_replace('#[^\d.]+#', '', $result[0]['tag_name']);
+						$check['version'] = substr($result[0]['tag_name'], 1); // vx.x.x-rcx
 						$check['date'] = $result[0]['created_at'];
 					}
 				}
@@ -119,10 +119,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		$key  = md5($url);
 
 		try {
-			if (empty($this->_cache[$key]))
-				$this->_cache[$key] = $this->sendRequest($url);
+			if (empty(self::$_cache[$key]))
+				self::$_cache[$key] = $this->sendRequest($url);
 
-			$result = $this->_cache[$key];
+			$result = self::$_cache[$key];
 
 			// lecture du fichier XML de la balise <update>
 			if (str_contains($result, '<modules>') && str_contains($result, '</modules>')) {
