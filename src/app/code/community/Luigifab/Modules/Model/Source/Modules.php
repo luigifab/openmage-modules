@@ -1,7 +1,7 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated V/10/03/2023
+ * Updated J/21/09/2023
  *
  * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
@@ -91,7 +91,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				if (str_contains($result, '"tag_name": "')) {
 					$result = @json_decode($result, true);
 					if (!empty($result[0]['tag_name']) && !empty($result[0]['created_at'])) {
-						$check['version'] = substr($result[0]['tag_name'], 1); // vx.x.x-rcx
+						$check['version'] = substr($result[0]['tag_name'], 1); // vx.x.x-rcx // not mb_substr
 						$check['date'] = $result[0]['created_at'];
 					}
 				}
@@ -131,7 +131,7 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 				$dom->loadXML($result);
 				$qry = new DOMXPath($dom);
 
-				$nodes = $qry->query('/modules/'.strtolower($name).'/*');
+				$nodes = $qry->query('/modules/'.strtolower($name).'/*'); // not mb_strtolower
 				foreach ($nodes as $node)
 					$data[$node->nodeName] = $node->nodeValue;
 

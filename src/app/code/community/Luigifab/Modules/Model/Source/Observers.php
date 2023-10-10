@@ -1,7 +1,7 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/30/09/2021
+ * Updated J/21/09/2023
  *
  * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
@@ -78,7 +78,7 @@ class Luigifab_Modules_Model_Source_Observers extends Varien_Data_Collection {
 			// $node->getName = modules
 			// $node->class   = Luigifab_Modules_Model
 			// résultat       = modules/rewrite_demo
-			if (!empty($node->class) && (mb_stripos($name, (string) $node->class) !== false))
+			if (!empty($node->class) && (mb_stripos($name, (string) $node->class) === 0))
 				return $node->getName().'/'.implode('_', array_map('lcfirst', explode('_', str_replace($node->class.'_', '', $name))));
 		}
 
