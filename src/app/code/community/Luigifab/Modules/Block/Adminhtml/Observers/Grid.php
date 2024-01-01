@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/22/07/2014
- * Updated S/19/02/2022
+ * Updated D/03/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -115,6 +115,17 @@ class Luigifab_Modules_Block_Adminhtml_Observers_Grid extends Mage_Adminhtml_Blo
 	}
 
 	public function decorateModel($value, $row, $column, $isExport) {
-		return $isExport ? $value : sprintf('%s <div>%s</div>', $value, str_replace('_Model_', '_<b>Model</b>_', $row->getData('class_name')));
+
+		if ($isExport)
+			return $value;
+
+		$class = str_replace('_Model_', '_<b>Model</b>_', $row->getData('class_name'));
+		$file  = $row->getData('ofe_file');
+		if (empty($file))
+			return sprintf('%s <div>%s</div>', $value, $class);
+
+		// @see https://github.com/luigifab/webext-openfileeditor
+		$line = $row->getData('ofe_line');
+		return sprintf('%s <div><span class="openfileeditor" data-file="%s" data-line="%d">%s</span></div>', $value, $file, $line, $class);
 	}
 }

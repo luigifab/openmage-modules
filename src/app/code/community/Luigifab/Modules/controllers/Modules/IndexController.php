@@ -1,9 +1,9 @@
 <?php
 /**
  * Created V/21/11/2014
- * Updated S/19/11/2022
+ * Updated D/17/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -36,16 +36,18 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 	public function indexAction() {
 
 		$this->loadLayout();
-
 		$block = $this->getLayout()->createBlock('adminhtml/widget_button')
 			->setData('type', 'button')
 			->setData('label', $this->__('Reset Filter'))
 			->setData('onclick', 'modules.reset();');
 
-		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head head-adminhtml-modules">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" spellcheck="false" autocomplete="off" class="input-text" oninput="modules.action(this);" placeholder="'.$this->__('Search').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
+		$html = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head">'.$this->__('Installed modules').'</h3></td><td class="form-buttons"><input type="search" spellcheck="false" autocomplete="off" class="input-text" oninput="modules.action(this);" placeholder="'.$this->__('Search').'" /> '.$block->toHtml().'</td></tr></tbody></table></div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_modules_grid');
 		$html .= '<div class="modules"><h4>'.$this->__('Modules list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
+
+		$block = Mage::getBlockSingleton('modules/adminhtml_routes_grid');
+		$html .= '<div class="routes"><h4>'.$this->__('Routes list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_jobs_grid');
 		$html .= '<div class="jobs"><h4>'.$this->__('Cron jobs list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
@@ -55,6 +57,22 @@ class Luigifab_Modules_Modules_IndexController extends Mage_Adminhtml_Controller
 
 		$block = Mage::getBlockSingleton('modules/adminhtml_rewrites_grid');
 		$html .= '<div class="rewrites"><h4>'.$this->__('Rewrites list').' ('.$block->getCount().')</h4> '.$block->toHtml().'</div>';
+
+		$this->getLayout()->getBlock('content')->append($this->getLayout()->createBlock('core/text')->setText($html));
+		$this->renderLayout();
+	}
+
+	public function previewAction() {
+
+		$this->loadLayout();
+		$block = $this->getLayout()->createBlock('adminhtml/widget_button')
+			->setData('type', 'button')
+			->setData('label', $this->__('Back'))
+			->setData('class', 'back')
+			->setData('onclick', 'setLocation(\''.$this->getUrl('*/system_config/edit', ['section' => 'modules']).'\');');
+
+		$html  = '<div class="content-header"><table cellspacing="0"><tbody><tr><td><h3 class="icon-head">'.$this->__('Installed modules').'</h3></td><td class="form-buttons">'.$block->toHtml().'</td></tr></tbody></table></div>';
+		$html .= '<div class="eprev">'.Mage::getSingleton('modules/report')->send(null, true, true).'</div>';
 
 		$this->getLayout()->getBlock('content')->append($this->getLayout()->createBlock('core/text')->setText($html));
 		$this->renderLayout();

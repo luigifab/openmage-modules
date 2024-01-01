@@ -1,9 +1,9 @@
 <?php
 /**
  * Created M/02/01/2018
- * Updated S/03/12/2022
+ * Updated S/09/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -25,6 +25,7 @@ class Luigifab_Modules_Block_Adminhtml_Config_Test extends Mage_Adminhtml_Block_
 	}
 
 	protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) {
-		return sprintf('<input type="checkbox" name="%s" id="%s" />', $element->getHtmlId(), $element->getHtmlId());
+		return sprintf('<input type="checkbox" name="%s" id="%s" />', $element->getHtmlId(), $element->getHtmlId()).' '.
+			sprintf('<a href="%s" class="f-right">%s</a>', $this->getUrl('*/modules_index/preview'), $this->__('See a preview (after saving)'));
 	}
 }

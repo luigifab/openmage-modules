@@ -1,9 +1,9 @@
 <?php
 /**
  * Created V/20/07/2012
- * Updated J/05/01/2023
+ * Updated D/12/11/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -67,8 +67,9 @@ class Luigifab_Modules_Helper_Data extends Mage_Core_Helper_Abstract {
 		return Zend_Locale_Format::toNumber($value, $options);
 	}
 
-	public function getNumberToHumanSize(int $number) {
+	public function getNumberToHumanSize($number) {
 
+		$number = (float) $number;
 		if ($number < 1) {
 			$data = '';
 		}

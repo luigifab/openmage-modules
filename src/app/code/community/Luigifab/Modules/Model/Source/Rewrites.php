@@ -1,9 +1,9 @@
 <?php
 /**
  * Created S/02/08/2014
- * Updated J/21/09/2023
+ * Updated S/02/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -23,7 +23,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 		$rewrites = $this->searchAllRewrites();
 
-		// getName() = le nom du tag xml
+		// getName() = xml tag name
 		// => /config/global/models/cron/rewrite/observer
 		// <global>                                          <= $node/../../../../$scope
 		//  <models>                                         <= $node/../../../$type
@@ -59,7 +59,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 				$item->setData('module', $moduleName);
 				$item->setData('scope', $type);
 				$item->setData('type', 'router');
-				$item->setData('core_class', $node->getAttribute('before'));
+				$item->setData('source_class', $node->getAttribute('before'));
 				$item->setData('rewrite_class', $moduleName);
 				$item->setData('status', 'enabled');
 			}
@@ -71,7 +71,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 				$dstClass      = $this->getShortClassName($xml, (string) $node, $type); // full/short => short
 				$dstClassName  = $this->getFullClassName($xml, $dstClass, $type);       // short => full
-				//$dstModule   = mb_substr($dstClass, 0, mb_strpos($dstClass, '/'));          // short
+				//$dstModule   = mb_substr($dstClass, 0, mb_strpos($dstClass, '/'));    // short
 				$dstModuleName = mb_substr($dstClassName, 0, mb_strpos($dstClassName, '_', mb_strpos($dstClassName, '_') + 1)); // full
 
 				// surcharge en conflit
@@ -81,12 +81,14 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 
 				// item
 				$item = new Varien_Object();
+				$item->setData('source_ofe_file', $this->getOpenFileEditorData($srcClassName));
+				$item->setData('source_class_name', $srcClassName);
+				$item->setData('rewrite_ofe_file', $this->getOpenFileEditorData($dstClassName));
 				$item->setData('rewrite_class_name', $dstClassName);
-				$item->setData('core_class_name', $srcClassName);
 				$item->setData('module', $dstModuleName);
 				$item->setData('scope', $scope);
 				$item->setData('type', mb_substr($type, 0, -1));
-				$item->setData('core_class', $srcModule.'/'.$srcClass);
+				$item->setData('source_class', $srcModule.'/'.$srcClass);
 
 				if ($isConflict) {
 					$text = $dstClass.'<br />- '.implode('<br />- ', array_keys($rewrites[$type][$srcModule.'/'.$srcClass]));
@@ -107,10 +109,11 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 			if ($test == 0)
 				$test = strnatcasecmp($a->getData('type'), $b->getData('type'));
 			if ($test == 0)
-				$test = strnatcasecmp($a->getData('core_class'), $b->getData('core_class'));
+				$test = strnatcasecmp($a->getData('source_class'), $b->getData('source_class'));
 			return $test;
 		});
 
+		$this->_setIsLoaded();
 		return $this;
 	}
 
@@ -126,7 +129,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		foreach ($nodes as $node) {
 			// $node->getName = modules
 			// $node->class   = Luigifab_Modules_Model
-			// résultat       = modules/rewrite_demo
+			// result         = modules/rewrite_demo
 			if (!empty($node->class) && (mb_stripos($name, (string) $node->class) === 0))
 				return $node->getName().'/'.implode('_', array_map('lcfirst', explode('_', str_replace($node->class.'_', '', $name))));
 		}
@@ -149,7 +152,7 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		foreach ($nodes as $node) {
 			// $node->getName = modules
 			// $node->class   = Luigifab_Modules_Model
-			// résultat       = Mage_Modules_Model_Rewrite_Demo, Luigifab_Modules_Model_Rewrite_Demo
+			// result         = Mage_Modules_Model_Rewrite_Demo, Luigifab_Modules_Model_Rewrite_Demo
 			if ($key == $node->getName()) {
 				return empty($node->class) ?
 					'Mage_'.uc_words($key.'_'.$type.'_'.mb_substr($name, mb_strpos($name, '/') + 1)) :
@@ -195,5 +198,16 @@ class Luigifab_Modules_Model_Source_Rewrites extends Varien_Data_Collection {
 		}
 
 		return $rewrites;
+	}
+
+	protected function getOpenFileEditorData(string $className) {
+
+		try {
+			$reflector = new ReflectionClass($className);
+			return $reflector->getFileName();
+		}
+		catch (Throwable $t) {
+			return null;
+		}
 	}
 }

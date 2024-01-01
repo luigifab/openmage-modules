@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  * Created V/20/07/2012
- * Updated J/21/09/2023
+ * Updated D/17/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -20,7 +20,7 @@
 <config>
 	<modules>
 		<Luigifab_Modules>
-			<version>4.5.3</version>
+			<version>4.6.0</version>
 		</Luigifab_Modules>
 	</modules>
 	<global>
@@ -92,7 +92,7 @@
 		<jobs>
 			<modules_send_report>
 				<run>
-					<model>modules/observer::sendEmailReport</model>
+					<model>modules/report::send</model>
 				</run>
 			</modules_send_report>
 		</jobs>
@@ -104,7 +104,6 @@
 			</general>
 			<email>
 				<enabled>0</enabled>
-				<recipient_email>hello@example.org</recipient_email>
 				<sender_email_identity>general</sender_email_identity>
 			</email>
 		</modules>

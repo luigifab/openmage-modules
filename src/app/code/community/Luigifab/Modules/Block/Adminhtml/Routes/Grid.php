@@ -1,7 +1,7 @@
 <?php
 /**
- * Created W/29/02/2012
- * Updated D/03/12/2023
+ * Created J/23/11/2023
+ * Updated S/25/11/2023
  *
  * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
@@ -17,20 +17,20 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Luigifab_Modules_Block_Adminhtml_Routes_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
 	public function __construct() {
 
 		parent::__construct();
 
-		$this->setId('modules_jobs_grid');
+		$this->setId('modules_routes_grid');
 
 		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(false);
 		$this->setPagerVisibility(false);
 		$this->setFilterVisibility(true);
 
-		$this->setCollection(Mage::getModel('modules/source_jobs')->getCollection());
+		$this->setCollection(Mage::getModel('modules/source_routes')->getCollection());
 	}
 
 	protected function _prepareCollection() {
@@ -47,26 +47,29 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 			'sortable'  => false,
 		]);
 
-		$this->addColumn('job_code', [
-			'header'    => $this->__('Job'),
-			'index'     => 'job_code',
+		$this->addColumn('scope', [
+			'header'    => $this->__('Scope'),
+			'index'     => 'scope',
+			'align'     => 'center',
+			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false,
 		]);
 
-		$this->addColumn('cron_expr', [
-			'header'    => $this->__('Configuration'),
-			'index'     => 'cron_expr',
+		$this->addColumn('type', [
+			'header'    => $this->__('Type'),
+			'index'     => 'type',
+			'align'     => 'center',
+			'width'     => '90px',
 			'filter'    => false,
 			'sortable'  => false,
 		]);
 
-		$this->addColumn('model', [
-			'header'    => 'Model',
-			'index'     => 'model',
+		$this->addColumn('route', [
+			'header'    => $this->__('Name').' (front name)',
+			'index'     => 'route',
 			'filter'    => false,
 			'sortable'  => false,
-			'frame_callback' => [$this, 'decorateModel'],
 		]);
 
 		$this->addColumn('status', [
@@ -110,20 +113,5 @@ class Luigifab_Modules_Block_Adminhtml_Jobs_Grid extends Mage_Adminhtml_Block_Wi
 
 	public function decorateStatus($value, $row, $column, $isExport) {
 		return $isExport ? $value : sprintf('<span class="modules-status grid-%s">%s</span>', $row->getData('status'), $value);
-	}
-
-	public function decorateModel($value, $row, $column, $isExport) {
-
-		if ($isExport)
-			return $value;
-
-		$class = str_replace('_Model_', '_<b>Model</b>_', $row->getData('class_name'));
-		$file  = $row->getData('ofe_file');
-		if (empty($file))
-			return sprintf('%s <div>%s</div>', $value, $class);
-
-		// @see https://github.com/luigifab/webext-openfileeditor
-		$line = $row->getData('ofe_line');
-		return sprintf('%s <div><span class="openfileeditor" data-file="%s" data-line="%d">%s</span></div>', $value, $file, $line, $class);
 	}
 }

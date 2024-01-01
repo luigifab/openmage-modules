@@ -1,9 +1,9 @@
 <?php
 /**
  * Created L/21/07/2014
- * Updated J/21/09/2023
+ * Updated D/03/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -23,9 +23,10 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 	public function getCollection() {
 
-		$this->addOpenMage();
+		$search = Mage::getStoreConfigFlag('modules/general/last');
+		$this->addOpenMage($search);
 
-		// getName() = le nom du tag xml
+		// getName() = xml tag name
 		// => /config/modules/Luigifab_Modules
 		// <modules>
 		//  <Luigifab_Modules>                               <= $node
@@ -43,13 +44,13 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			$moduleName = $node->getName();
 			$check = ['status' => ($node->active != 'true') ? 'disabled' : 'unknown'];
 
-			if (!empty($node->update) && Mage::getStoreConfigFlag('modules/general/last'))
-				$check = array_merge($check, $this->checkUpdate($moduleName, $node->update));
+			if ($search && !empty($node->update))
+				$check = array_merge($check, $this->checkUpdate($moduleName, (string) $node->update));
 
 			$item = new Varien_Object();
 			$item->setData('name', $moduleName);
-			$item->setData('code_pool', $node->codePool);
-			$item->setData('current_version', $node->version);
+			$item->setData('code_pool', (string) $node->codePool);
+			$item->setData('current_version', (string) $node->version);
 			$item->setData('last_version', empty($check['version']) ? false : $check['version']);
 			$item->setData('last_date', empty($check['date']) ? false : $check['date']);
 			$item->setData('url', empty($check['url']) ? false : $check['url']);
@@ -76,14 +77,15 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 			return ($test == 0) ? strnatcasecmp($a->getData('name'), $b->getData('name')) : $test;
 		});
 
+		$this->_setIsLoaded();
 		return $this;
 	}
 
-	protected function addOpenMage() {
+	protected function addOpenMage(bool $search) {
 
 		$check = ['status' => 'unknown'];
 
-		if (Mage::getStoreConfigFlag('modules/general/last')) {
+		if ($search) {
 
 			try {
 				$result = $this->sendRequest('https://api.github.com/repos/OpenMage/magento-lts/releases');
@@ -124,7 +126,6 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 
 			$result = self::$_cache[$key];
 
-			// lecture du fichier XML de la balise <update>
 			if (str_contains($result, '<modules>') && str_contains($result, '</modules>')) {
 
 				$dom = new DomDocument();
@@ -161,8 +162,8 @@ class Luigifab_Modules_Model_Source_Modules extends Varien_Data_Collection {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-		curl_setopt($ch, CURLOPT_ENCODING , ''); // https://stackoverflow.com/q/17744112/2980105
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0');
+		curl_setopt($ch, CURLOPT_ENCODING , ''); // @see https://stackoverflow.com/q/17744112/2980105
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0');
 
 		$result = curl_exec($ch);
 		$result = (($result === false) || (curl_errno($ch) !== 0)) ? trim('CURL_ERROR '.curl_errno($ch).' '.curl_error($ch)) : $result;

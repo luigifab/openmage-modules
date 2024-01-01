@@ -1,9 +1,9 @@
 <?php
 /**
  * Created D/10/02/2013
- * Updated V/15/10/2021
+ * Updated S/02/12/2023
  *
- * Copyright 2012-2023 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
+ * Copyright 2012-2024 | Fabrice Creuzot (luigifab) <code~luigifab~fr>
  * https://github.com/luigifab/openmage-modules
  *
  * This program is free software, you can redistribute it or modify
@@ -21,7 +21,7 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 
 	public function getCollection($type = null) {
 
-		// getName() = le nom du tag xml
+		// getName() = xml tag name
 		// => /config/crontab/jobs/modules_send_report
 		// <crontab>
 		//  <jobs>
@@ -42,31 +42,36 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			$expr = empty($node->schedule->cron_expr)   ? $expr : $node->schedule->cron_expr;
 			$expr = empty($config->schedule->config_path) ? $expr : Mage::getStoreConfig((string) $config->schedule->config_path);
 			$expr = empty($config->schedule->cron_expr)   ? $expr : $config->schedule->cron_expr;
-			$expr = empty($expr) ? null : trim($expr);
+			$expr = empty($expr) ? null : trim((string) $expr);
 
 			$model = empty($node->run->model) ? null : $node->run->model;
 			$model = empty($config->run->model) ? $model : $config->run->model;
+			$model = (string) $model;
 
 			$className  = Mage::getConfig()->getModelClassName($model);
+			$methodName = mb_substr($className, mb_strpos($className, ':') + 2);
 			$className  = mb_substr($className, 0, mb_strpos($className, ':'));
 			$moduleName = mb_substr($className, 0, mb_strpos($className, '_', mb_strpos($className, '_') + 1));
 
 			// tâche désactivée si
+			// - pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
 			// - balise disabled
-			// - ou configuration disabled
-			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isDisabled = (!empty($node->schedule->disabled) || !empty($config->schedule->disabled) || empty($expr)) ?
+			// - configuration disabled
+			$isDisabled = (empty($expr) || !empty($node->schedule->disabled) || !empty($config->schedule->disabled)) ?
 				'disabled' : 'enabled';
 
 			// tâche en lecture seule si
+			// - pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
 			// - balise disabled
-			// - ou pas de balise de programmation (= pas de balise config_path/cron_expr)
-			// - ou pas de programmation (= ni balise config_path/cron_expr, ni configuration config_path/cron_expr)
-			$isReadOnly = !empty($node->schedule->disabled) ||
-			              (empty($node->schedule->config_path) && empty($node->schedule->cron_expr)) ||
-			               empty($expr);
+			// - pas de balise de programmation (= pas de balise config_path/cron_expr)
+			$isReadOnly = empty($expr) ||
+			              !empty($node->schedule->disabled) ||
+			              (empty($node->schedule->config_path) && empty($node->schedule->cron_expr));
 
+			$ofe  = $this->getOpenFileEditorData($className, $methodName);
 			$item = new Varien_Object();
+			$item->setData('ofe_file', $ofe['file'] ?? null);
+			$item->setData('ofe_line', $ofe['line'] ?? null);
 			$item->setData('class_name', $className);
 			$item->setData('module', $moduleName);
 			$item->setData('job_code', $key);
@@ -83,7 +88,30 @@ class Luigifab_Modules_Model_Source_Jobs extends Varien_Data_Collection {
 			return strnatcasecmp($a->getData('job_code'), $b->getData('job_code'));
 		});
 
+		$this->_setIsLoaded();
 		return $this;
+	}
+
+	protected function getOpenFileEditorData(string $className, string $methodName) {
+
+		try {
+			$reflector = new ReflectionClass($className);
+			$file = $reflector->getFileName();
+			try {
+				$reflector = $reflector->getMethod($methodName);
+				$line = empty($methodName) ? 0 : (int) $reflector->getStartLine();
+				if ($line > 0)
+					$file = $reflector->getFileName();
+			}
+			catch (Throwable $tm) {
+				$line = 0;
+			}
+
+			return ['file' => $file, 'line' => $line];
+		}
+		catch (Throwable $t) {
+			return [];
+		}
 	}
 
 	public function toOptionArray() {
